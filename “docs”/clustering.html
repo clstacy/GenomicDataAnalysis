@@ -1,0 +1,953 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>Chapter 11 Clustering | Genomic Data Analysis Course Exercises</title>
+  <meta name="description" content="These are exercises created for the 2023 course: Genomic Data Analysis at the University of Arkansas." />
+  <meta name="generator" content="bookdown 0.36 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="Chapter 11 Clustering | Genomic Data Analysis Course Exercises" />
+  <meta property="og:type" content="book" />
+  
+  <meta property="og:description" content="These are exercises created for the 2023 course: Genomic Data Analysis at the University of Arkansas." />
+  <meta name="github-repo" content="clstacy/GenomicDataAnalysis" />
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Chapter 11 Clustering | Genomic Data Analysis Course Exercises" />
+  
+  <meta name="twitter:description" content="These are exercises created for the 2023 course: Genomic Data Analysis at the University of Arkansas." />
+  
+
+<meta name="author" content="Carson Stacy" />
+
+
+<meta name="date" content="2023-10-26" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="visualizing-differential-expression-results.html"/>
+
+<script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+<link href="libs/anchor-sections-1.1.0/anchor-sections.css" rel="stylesheet" />
+<link href="libs/anchor-sections-1.1.0/anchor-sections-hash.css" rel="stylesheet" />
+<script src="libs/anchor-sections-1.1.0/anchor-sections.js"></script>
+<script src="libs/core-js-2.5.3/shim.min.js"></script>
+<script src="libs/react-18.2.0/react.min.js"></script>
+<script src="libs/react-18.2.0/react-dom.min.js"></script>
+<script src="libs/reactwidget-1.0.0/react-tools.js"></script>
+<script src="libs/htmlwidgets-1.6.2/htmlwidgets.js"></script>
+<link href="libs/reactable-0.4.4/reactable.css" rel="stylesheet" />
+<script src="libs/reactable-binding-0.4.4/reactable.js"></script>
+<link href="libs/datatables-1/datatables.css" rel="stylesheet" />
+<script src="libs/datatables-1/datatables.min.js"></script>
+<link href="libs/vega-1/vega_plots.css" rel="stylesheet" />
+<script src="libs/vega-1/vega.min.js"></script>
+<link href="libs/vega-tooltip-1/vega-tooltip.css" rel="stylesheet" />
+<script src="libs/vega-tooltip-1/vega-tooltip.js"></script>
+<script src="libs/FileSaver-1/FileSaver.js"></script>
+<script src="libs/GlimmaV2-1/XYSpecs.js"></script>
+<script src="libs/GlimmaV2-1/MDSSpecs.js"></script>
+<script src="libs/GlimmaV2-1/expressionSpec.js"></script>
+<script src="libs/GlimmaV2-1/makeTooltip.js"></script>
+<script src="libs/GlimmaV2-1/saveTools.js"></script>
+<script src="libs/glimmaXY-binding-2.10.0/glimmaXY.js"></script>
+
+
+<style type="text/css">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+<style type="text/css">
+  
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+</style>
+
+<link rel="stylesheet" href="style.css" type="text/css" />
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li><a href="./">A Minimal Book Example</a></li>
+
+<li class="divider"></li>
+<li class="chapter" data-level="1" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i><b>1</b> About</a>
+<ul>
+<li class="chapter" data-level="1.1" data-path="index.html"><a href="index.html#usage"><i class="fa fa-check"></i><b>1.1</b> Usage</a></li>
+<li class="chapter" data-level="1.2" data-path="index.html"><a href="index.html#render-book"><i class="fa fa-check"></i><b>1.2</b> Render book</a></li>
+<li class="chapter" data-level="1.3" data-path="index.html"><a href="index.html#preview-book"><i class="fa fa-check"></i><b>1.3</b> Preview book</a></li>
+</ul></li>
+<li class="chapter" data-level="2" data-path="getting-started-in-r.html"><a href="getting-started-in-r.html"><i class="fa fa-check"></i><b>2</b> Getting Started in R</a>
+<ul>
+<li class="chapter" data-level="2.1" data-path="getting-started-in-r.html"><a href="getting-started-in-r.html#exercise-description"><i class="fa fa-check"></i><b>2.1</b> Exercise Description</a></li>
+<li class="chapter" data-level="2.2" data-path="getting-started-in-r.html"><a href="getting-started-in-r.html#learning-outcomes"><i class="fa fa-check"></i><b>2.2</b> Learning outcomes</a></li>
+<li class="chapter" data-level="2.3" data-path="getting-started-in-r.html"><a href="getting-started-in-r.html#using-r-and-rstudio"><i class="fa fa-check"></i><b>2.3</b> Using R and RStudio</a></li>
+<li class="chapter" data-level="2.4" data-path="getting-started-in-r.html"><a href="getting-started-in-r.html#load-data-directly-from-the-url"><i class="fa fa-check"></i><b>2.4</b> Load data directly from the URL</a></li>
+<li class="chapter" data-level="2.5" data-path="getting-started-in-r.html"><a href="getting-started-in-r.html#working-with-data-in-r"><i class="fa fa-check"></i><b>2.5</b> Working with data in R</a></li>
+<li class="chapter" data-level="2.6" data-path="getting-started-in-r.html"><a href="getting-started-in-r.html#looking-at-data-in-rstudio"><i class="fa fa-check"></i><b>2.6</b> Looking at Data in RStudio</a></li>
+<li class="chapter" data-level="2.7" data-path="getting-started-in-r.html"><a href="getting-started-in-r.html#exploring-the-data"><i class="fa fa-check"></i><b>2.7</b> Exploring the data</a></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="gene-ontology.html"><a href="gene-ontology.html"><i class="fa fa-check"></i><b>3</b> Gene Ontology</a>
+<ul>
+<li class="chapter" data-level="3.1" data-path="gene-ontology.html"><a href="gene-ontology.html#description"><i class="fa fa-check"></i><b>3.1</b> Description</a></li>
+<li class="chapter" data-level="3.2" data-path="gene-ontology.html"><a href="gene-ontology.html#learning-outcomes-1"><i class="fa fa-check"></i><b>3.2</b> Learning outcomes</a></li>
+<li class="chapter" data-level="3.3" data-path="gene-ontology.html"><a href="gene-ontology.html#analysis-workflow"><i class="fa fa-check"></i><b>3.3</b> Analysis Workflow</a></li>
+<li class="chapter" data-level="3.4" data-path="gene-ontology.html"><a href="gene-ontology.html#get-de-gene-list"><i class="fa fa-check"></i><b>3.4</b> Get DE gene list</a>
+<ul>
+<li class="chapter" data-level="3.4.1" data-path="gene-ontology.html"><a href="gene-ontology.html#saving-ggplot-output-to-a-file"><i class="fa fa-check"></i><b>3.4.1</b> Saving ggplot output to a file</a></li>
+</ul></li>
+<li class="chapter" data-level="3.5" data-path="gene-ontology.html"><a href="gene-ontology.html#the-hypergeometric-distribution-in-practice"><i class="fa fa-check"></i><b>3.5</b> The Hypergeometric Distribution in practice</a></li>
+<li class="chapter" data-level="3.6" data-path="gene-ontology.html"><a href="gene-ontology.html#now-it-is-your-turn"><i class="fa fa-check"></i><b>3.6</b> Now it is your turn</a>
+<ul>
+<li class="chapter" data-level="3.6.1" data-path="gene-ontology.html"><a href="gene-ontology.html#run-enrichment"><i class="fa fa-check"></i><b>3.6.1</b> Run Enrichment</a></li>
+<li class="chapter" data-level="3.6.2" data-path="gene-ontology.html"><a href="gene-ontology.html#see-the-data"><i class="fa fa-check"></i><b>3.6.2</b> see the data</a></li>
+<li class="chapter" data-level="3.6.3" data-path="gene-ontology.html"><a href="gene-ontology.html#create-plots"><i class="fa fa-check"></i><b>3.6.3</b> create plots</a></li>
+</ul></li>
+<li class="chapter" data-level="3.7" data-path="gene-ontology.html"><a href="gene-ontology.html#questions"><i class="fa fa-check"></i><b>3.7</b> Questions</a></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="working-with-sequences-raw-data-quality-control.html"><a href="working-with-sequences-raw-data-quality-control.html"><i class="fa fa-check"></i><b>4</b> Working with Sequences: Raw Data &amp; Quality Control</a>
+<ul>
+<li class="chapter" data-level="4.1" data-path="working-with-sequences-raw-data-quality-control.html"><a href="working-with-sequences-raw-data-quality-control.html#description-1"><i class="fa fa-check"></i><b>4.1</b> Description</a></li>
+<li class="chapter" data-level="4.2" data-path="working-with-sequences-raw-data-quality-control.html"><a href="working-with-sequences-raw-data-quality-control.html#learning-outcomes-2"><i class="fa fa-check"></i><b>4.2</b> Learning outcomes</a></li>
+<li class="chapter" data-level="4.3" data-path="working-with-sequences-raw-data-quality-control.html"><a href="working-with-sequences-raw-data-quality-control.html#download-fastq"><i class="fa fa-check"></i><b>4.3</b> Download fastq</a></li>
+<li class="chapter" data-level="4.4" data-path="working-with-sequences-raw-data-quality-control.html"><a href="working-with-sequences-raw-data-quality-control.html#examining-fastq"><i class="fa fa-check"></i><b>4.4</b> Examining fastq</a></li>
+<li class="chapter" data-level="4.5" data-path="working-with-sequences-raw-data-quality-control.html"><a href="working-with-sequences-raw-data-quality-control.html#trimming"><i class="fa fa-check"></i><b>4.5</b> Trimming</a>
+<ul>
+<li class="chapter" data-level="4.5.1" data-path="working-with-sequences-raw-data-quality-control.html"><a href="working-with-sequences-raw-data-quality-control.html#automate-for-list-of-files"><i class="fa fa-check"></i><b>4.5.1</b> Automate for list of files</a></li>
+</ul></li>
+<li class="chapter" data-level="4.6" data-path="working-with-sequences-raw-data-quality-control.html"><a href="working-with-sequences-raw-data-quality-control.html#batch-file-processing"><i class="fa fa-check"></i><b>4.6</b> Batch file processing</a>
+<ul>
+<li class="chapter" data-level="4.6.1" data-path="working-with-sequences-raw-data-quality-control.html"><a href="working-with-sequences-raw-data-quality-control.html#running-rfastp-creates-several-files"><i class="fa fa-check"></i><b>4.6.1</b> Running RfastP creates several files:</a></li>
+</ul></li>
+<li class="chapter" data-level="4.7" data-path="working-with-sequences-raw-data-quality-control.html"><a href="working-with-sequences-raw-data-quality-control.html#qc-and-adapters"><i class="fa fa-check"></i><b>4.7</b> QC and adapters</a></li>
+<li class="chapter" data-level="4.8" data-path="working-with-sequences-raw-data-quality-control.html"><a href="working-with-sequences-raw-data-quality-control.html#running-fastqc"><i class="fa fa-check"></i><b>4.8</b> Running fastqc</a></li>
+<li class="chapter" data-level="4.9" data-path="working-with-sequences-raw-data-quality-control.html"><a href="working-with-sequences-raw-data-quality-control.html#multiqc-for-qc-on-mutliple-samples"><i class="fa fa-check"></i><b>4.9</b> Multiqc for QC on mutliple samples</a></li>
+</ul></li>
+<li class="chapter" data-level="5" data-path="read-mapping.html"><a href="read-mapping.html"><i class="fa fa-check"></i><b>5</b> Read Mapping</a>
+<ul>
+<li class="chapter" data-level="5.1" data-path="read-mapping.html"><a href="read-mapping.html#alignment"><i class="fa fa-check"></i><b>5.1</b> Alignment</a></li>
+<li class="chapter" data-level="5.2" data-path="read-mapping.html"><a href="read-mapping.html#retrieve-the-genome"><i class="fa fa-check"></i><b>5.2</b> Retrieve the genome</a></li>
+<li class="chapter" data-level="5.3" data-path="read-mapping.html"><a href="read-mapping.html#build-rsubread-index"><i class="fa fa-check"></i><b>5.3</b> Build Rsubread Index</a></li>
+<li class="chapter" data-level="5.4" data-path="read-mapping.html"><a href="read-mapping.html#pseudomapping-with-salmon"><i class="fa fa-check"></i><b>5.4</b> Pseudomapping with Salmon</a>
+<ul>
+<li class="chapter" data-level="5.4.1" data-path="read-mapping.html"><a href="read-mapping.html#create-conda-env"><i class="fa fa-check"></i><b>5.4.1</b> Create Conda Env</a></li>
+<li class="chapter" data-level="5.4.2" data-path="read-mapping.html"><a href="read-mapping.html#download-transcriptome"><i class="fa fa-check"></i><b>5.4.2</b> Download transcriptome</a></li>
+<li class="chapter" data-level="5.4.3" data-path="read-mapping.html"><a href="read-mapping.html#building-the-salmon-index"><i class="fa fa-check"></i><b>5.4.3</b> Building the Salmon index</a></li>
+</ul></li>
+<li class="chapter" data-level="5.5" data-path="read-mapping.html"><a href="read-mapping.html#questions-1"><i class="fa fa-check"></i><b>5.5</b> Questions</a>
+<ul>
+<li class="chapter" data-level="5.5.1" data-path="read-mapping.html"><a href="read-mapping.html#with-rsubread"><i class="fa fa-check"></i><b>5.5.1</b> With Rsubread:</a></li>
+<li class="chapter" data-level="5.5.2" data-path="read-mapping.html"><a href="read-mapping.html#with-salmon"><i class="fa fa-check"></i><b>5.5.2</b> With Salmon:</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="6" data-path="read-counting.html"><a href="read-counting.html"><i class="fa fa-check"></i><b>6</b> Read Counting</a>
+<ul>
+<li class="chapter" data-level="6.1" data-path="read-counting.html"><a href="read-counting.html#featurecounts"><i class="fa fa-check"></i><b>6.1</b> featureCounts</a>
+<ul>
+<li class="chapter" data-level="6.1.1" data-path="read-counting.html"><a href="read-counting.html#locate-bam-files"><i class="fa fa-check"></i><b>6.1.1</b> Locate BAM files</a></li>
+<li class="chapter" data-level="6.1.2" data-path="read-counting.html"><a href="read-counting.html#retrieve-the-genome-annotation"><i class="fa fa-check"></i><b>6.1.2</b> Retrieve the genome annotation</a></li>
+<li class="chapter" data-level="6.1.3" data-path="read-counting.html"><a href="read-counting.html#counting-with-featurecounts"><i class="fa fa-check"></i><b>6.1.3</b> Counting with FeatureCounts</a></li>
+<li class="chapter" data-level="6.1.4" data-path="read-counting.html"><a href="read-counting.html#counts-object"><i class="fa fa-check"></i><b>6.1.4</b> Counts object</a></li>
+<li class="chapter" data-level="6.1.5" data-path="read-counting.html"><a href="read-counting.html#saving-fc-object-for-future-use"><i class="fa fa-check"></i><b>6.1.5</b> Saving <code>fc</code> object for future use</a></li>
+<li class="chapter" data-level="6.1.6" data-path="read-counting.html"><a href="read-counting.html#rsubread-qc"><i class="fa fa-check"></i><b>6.1.6</b> RSubread QC</a></li>
+</ul></li>
+<li class="chapter" data-level="6.2" data-path="read-counting.html"><a href="read-counting.html#salmon"><i class="fa fa-check"></i><b>6.2</b> Salmon</a>
+<ul>
+<li class="chapter" data-level="6.2.1" data-path="read-counting.html"><a href="read-counting.html#pseudomapping-counting"><i class="fa fa-check"></i><b>6.2.1</b> Pseudomapping &amp; Counting</a></li>
+</ul></li>
+<li class="chapter" data-level="6.3" data-path="read-counting.html"><a href="read-counting.html#questions-2"><i class="fa fa-check"></i><b>6.3</b> Questions</a></li>
+</ul></li>
+<li class="chapter" data-level="7" data-path="differential-expression-edger.html"><a href="differential-expression-edger.html"><i class="fa fa-check"></i><b>7</b> Differential Expression: EdgeR</a>
+<ul>
+<li class="chapter" data-level="7.1" data-path="differential-expression-edger.html"><a href="differential-expression-edger.html#description-2"><i class="fa fa-check"></i><b>7.1</b> Description</a></li>
+<li class="chapter" data-level="7.2" data-path="differential-expression-edger.html"><a href="differential-expression-edger.html#learning-outcomes-3"><i class="fa fa-check"></i><b>7.2</b> Learning outcomes</a></li>
+<li class="chapter" data-level="7.3" data-path="differential-expression-edger.html"><a href="differential-expression-edger.html#loading-in-the-featurecounts-object"><i class="fa fa-check"></i><b>7.3</b> Loading in the featureCounts object</a></li>
+<li class="chapter" data-level="7.4" data-path="differential-expression-edger.html"><a href="differential-expression-edger.html#count-loading-and-annotation"><i class="fa fa-check"></i><b>7.4</b> Count loading and Annotation</a></li>
+<li class="chapter" data-level="7.5" data-path="differential-expression-edger.html"><a href="differential-expression-edger.html#filtering-to-remove-low-counts"><i class="fa fa-check"></i><b>7.5</b> Filtering to remove low counts</a></li>
+<li class="chapter" data-level="7.6" data-path="differential-expression-edger.html"><a href="differential-expression-edger.html#normalization-for-composition-bias"><i class="fa fa-check"></i><b>7.6</b> Normalization for composition bias</a></li>
+<li class="chapter" data-level="7.7" data-path="differential-expression-edger.html"><a href="differential-expression-edger.html#mds-plots"><i class="fa fa-check"></i><b>7.7</b> MDS plots</a></li>
+<li class="chapter" data-level="7.8" data-path="differential-expression-edger.html"><a href="differential-expression-edger.html#exploring-differences-between-libraries"><i class="fa fa-check"></i><b>7.8</b> Exploring differences between libraries</a></li>
+<li class="chapter" data-level="7.9" data-path="differential-expression-edger.html"><a href="differential-expression-edger.html#estimate-dispersion"><i class="fa fa-check"></i><b>7.9</b> Estimate Dispersion</a></li>
+<li class="chapter" data-level="7.10" data-path="differential-expression-edger.html"><a href="differential-expression-edger.html#testing-for-differential-expression"><i class="fa fa-check"></i><b>7.10</b> Testing for differential expression</a></li>
+<li class="chapter" data-level="7.11" data-path="differential-expression-edger.html"><a href="differential-expression-edger.html#looking-at-all-contrasts-at-once"><i class="fa fa-check"></i><b>7.11</b> Looking at all contrasts at once</a></li>
+<li class="chapter" data-level="7.12" data-path="differential-expression-edger.html"><a href="differential-expression-edger.html#questions-3"><i class="fa fa-check"></i><b>7.12</b> Questions</a></li>
+<li class="chapter" data-level="7.13" data-path="differential-expression-edger.html"><a href="differential-expression-edger.html#a-template-set-of-code-chunks-for-doing-this-is-below"><i class="fa fa-check"></i><b>7.13</b> A template set of code chunks for doing this is below:</a></li>
+</ul></li>
+<li class="chapter" data-level="8" data-path="differential-expression-deseq2.html"><a href="differential-expression-deseq2.html"><i class="fa fa-check"></i><b>8</b> Differential Expression: DESeq2</a>
+<ul>
+<li class="chapter" data-level="8.1" data-path="differential-expression-deseq2.html"><a href="differential-expression-deseq2.html#description-3"><i class="fa fa-check"></i><b>8.1</b> Description</a></li>
+<li class="chapter" data-level="8.2" data-path="differential-expression-deseq2.html"><a href="differential-expression-deseq2.html#learning-outcomes-4"><i class="fa fa-check"></i><b>8.2</b> Learning outcomes</a></li>
+<li class="chapter" data-level="8.3" data-path="differential-expression-deseq2.html"><a href="differential-expression-deseq2.html#loading-in-the-featurecounts-object-1"><i class="fa fa-check"></i><b>8.3</b> Loading in the featureCounts object</a></li>
+<li class="chapter" data-level="8.4" data-path="differential-expression-deseq2.html"><a href="differential-expression-deseq2.html#count-loading-and-annotation-1"><i class="fa fa-check"></i><b>8.4</b> Count loading and Annotation</a></li>
+<li class="chapter" data-level="8.5" data-path="differential-expression-deseq2.html"><a href="differential-expression-deseq2.html#filtering-to-remove-low-counts-1"><i class="fa fa-check"></i><b>8.5</b> Filtering to remove low counts</a></li>
+<li class="chapter" data-level="8.6" data-path="differential-expression-deseq2.html"><a href="differential-expression-deseq2.html#testing-for-differential-expression-1"><i class="fa fa-check"></i><b>8.6</b> Testing for differential expression</a></li>
+<li class="chapter" data-level="8.7" data-path="differential-expression-deseq2.html"><a href="differential-expression-deseq2.html#questions-4"><i class="fa fa-check"></i><b>8.7</b> Questions</a></li>
+</ul></li>
+<li class="chapter" data-level="9" data-path="differential-expression-limma.html"><a href="differential-expression-limma.html"><i class="fa fa-check"></i><b>9</b> Differential Expression: limma</a>
+<ul>
+<li class="chapter" data-level="9.1" data-path="differential-expression-limma.html"><a href="differential-expression-limma.html#description-4"><i class="fa fa-check"></i><b>9.1</b> Description</a></li>
+<li class="chapter" data-level="9.2" data-path="differential-expression-limma.html"><a href="differential-expression-limma.html#learning-objectives"><i class="fa fa-check"></i><b>9.2</b> Learning Objectives</a></li>
+<li class="chapter" data-level="9.3" data-path="differential-expression-limma.html"><a href="differential-expression-limma.html#loading-in-the-count-data-file"><i class="fa fa-check"></i><b>9.3</b> Loading in the count data file</a></li>
+<li class="chapter" data-level="9.4" data-path="differential-expression-limma.html"><a href="differential-expression-limma.html#count-loading-and-annotation-2"><i class="fa fa-check"></i><b>9.4</b> Count loading and Annotation</a></li>
+<li class="chapter" data-level="9.5" data-path="differential-expression-limma.html"><a href="differential-expression-limma.html#filtering-to-remove-low-counts-2"><i class="fa fa-check"></i><b>9.5</b> Filtering to remove low counts</a></li>
+<li class="chapter" data-level="9.6" data-path="differential-expression-limma.html"><a href="differential-expression-limma.html#normalization-for-composition-bias-1"><i class="fa fa-check"></i><b>9.6</b> Normalization for composition bias</a></li>
+<li class="chapter" data-level="9.7" data-path="differential-expression-limma.html"><a href="differential-expression-limma.html#exploring-differences-between-libraries-1"><i class="fa fa-check"></i><b>9.7</b> Exploring differences between libraries</a></li>
+<li class="chapter" data-level="9.8" data-path="differential-expression-limma.html"><a href="differential-expression-limma.html#estimate-dispersion-1"><i class="fa fa-check"></i><b>9.8</b> Estimate Dispersion</a></li>
+<li class="chapter" data-level="9.9" data-path="differential-expression-limma.html"><a href="differential-expression-limma.html#testing-for-differential-expression-2"><i class="fa fa-check"></i><b>9.9</b> Testing for differential expression</a></li>
+<li class="chapter" data-level="9.10" data-path="differential-expression-limma.html"><a href="differential-expression-limma.html#examining-a-specific-contrast"><i class="fa fa-check"></i><b>9.10</b> Examining a specific contrast</a></li>
+<li class="chapter" data-level="9.11" data-path="differential-expression-limma.html"><a href="differential-expression-limma.html#visualization"><i class="fa fa-check"></i><b>9.11</b> Visualization</a>
+<ul>
+<li class="chapter" data-level="9.11.1" data-path="differential-expression-limma.html"><a href="differential-expression-limma.html#ma-lot"><i class="fa fa-check"></i><b>9.11.1</b> MA lot</a></li>
+</ul></li>
+<li class="chapter" data-level="9.12" data-path="differential-expression-limma.html"><a href="differential-expression-limma.html#treat-testing"><i class="fa fa-check"></i><b>9.12</b> <code>treat()</code> testing</a>
+<ul>
+<li class="chapter" data-level="9.12.1" data-path="differential-expression-limma.html"><a href="differential-expression-limma.html#visualize-de-genes-from-treat-using-lfc1"><i class="fa fa-check"></i><b>9.12.1</b> Visualize DE genes from <code>Treat</code> using lfc=1</a></li>
+</ul></li>
+<li class="chapter" data-level="9.13" data-path="differential-expression-limma.html"><a href="differential-expression-limma.html#comparing-de-analysis-softwares"><i class="fa fa-check"></i><b>9.13</b> Comparing DE analysis softwares</a></li>
+<li class="chapter" data-level="9.14" data-path="differential-expression-limma.html"><a href="differential-expression-limma.html#correlation-between-logfc-estimates-across-softwares"><i class="fa fa-check"></i><b>9.14</b> Correlation between logFC estimates across softwares</a></li>
+<li class="chapter" data-level="9.15" data-path="differential-expression-limma.html"><a href="differential-expression-limma.html#questions-5"><i class="fa fa-check"></i><b>9.15</b> Questions</a></li>
+</ul></li>
+<li class="chapter" data-level="10" data-path="visualizing-differential-expression-results.html"><a href="visualizing-differential-expression-results.html"><i class="fa fa-check"></i><b>10</b> Visualizing Differential Expression Results</a>
+<ul>
+<li class="chapter" data-level="10.1" data-path="visualizing-differential-expression-results.html"><a href="visualizing-differential-expression-results.html#description-5"><i class="fa fa-check"></i><b>10.1</b> Description</a></li>
+<li class="chapter" data-level="10.2" data-path="visualizing-differential-expression-results.html"><a href="visualizing-differential-expression-results.html#learning-outcomes-5"><i class="fa fa-check"></i><b>10.2</b> Learning Outcomes</a></li>
+<li class="chapter" data-level="10.3" data-path="visualizing-differential-expression-results.html"><a href="visualizing-differential-expression-results.html#ma-plot"><i class="fa fa-check"></i><b>10.3</b> MA-plot</a></li>
+<li class="chapter" data-level="10.4" data-path="visualizing-differential-expression-results.html"><a href="visualizing-differential-expression-results.html#volcano-plot"><i class="fa fa-check"></i><b>10.4</b> Volcano Plot</a></li>
+<li class="chapter" data-level="10.5" data-path="visualizing-differential-expression-results.html"><a href="visualizing-differential-expression-results.html#using-glimma-for-an-interactive-visualization"><i class="fa fa-check"></i><b>10.5</b> Using Glimma for an interactive visualization</a>
+<ul>
+<li class="chapter" data-level="10.5.1" data-path="visualizing-differential-expression-results.html"><a href="visualizing-differential-expression-results.html#ma-plots"><i class="fa fa-check"></i><b>10.5.1</b> MA plots</a></li>
+<li class="chapter" data-level="10.5.2" data-path="visualizing-differential-expression-results.html"><a href="visualizing-differential-expression-results.html#volcano-plots"><i class="fa fa-check"></i><b>10.5.2</b> Volcano Plots</a></li>
+</ul></li>
+<li class="chapter" data-level="10.6" data-path="visualizing-differential-expression-results.html"><a href="visualizing-differential-expression-results.html#generating-bar-graph-summaries"><i class="fa fa-check"></i><b>10.6</b> Generating bar graph summaries</a></li>
+<li class="chapter" data-level="10.7" data-path="visualizing-differential-expression-results.html"><a href="visualizing-differential-expression-results.html#exercise"><i class="fa fa-check"></i><b>10.7</b> Exercise</a></li>
+</ul></li>
+<li class="chapter" data-level="11" data-path="clustering.html"><a href="clustering.html"><i class="fa fa-check"></i><b>11</b> Clustering</a>
+<ul>
+<li class="chapter" data-level="11.1" data-path="clustering.html"><a href="clustering.html#description-6"><i class="fa fa-check"></i><b>11.1</b> Description</a></li>
+<li class="chapter" data-level="11.2" data-path="clustering.html"><a href="clustering.html#learning-outcomes-6"><i class="fa fa-check"></i><b>11.2</b> Learning outcomes</a></li>
+<li class="chapter" data-level="11.3" data-path="clustering.html"><a href="clustering.html#cluster-3.0"><i class="fa fa-check"></i><b>11.3</b> Cluster 3.0</a>
+<ul>
+<li class="chapter" data-level="11.3.1" data-path="clustering.html"><a href="clustering.html#generating-a-pcl-file"><i class="fa fa-check"></i><b>11.3.1</b> Generating a PCL file</a></li>
+<li class="chapter" data-level="11.3.2" data-path="clustering.html"><a href="clustering.html#filtering-data"><i class="fa fa-check"></i><b>11.3.2</b> Filtering data</a></li>
+<li class="chapter" data-level="11.3.3" data-path="clustering.html"><a href="clustering.html#hierarchical-clustering"><i class="fa fa-check"></i><b>11.3.3</b> Hierarchical Clustering</a></li>
+<li class="chapter" data-level="11.3.4" data-path="clustering.html"><a href="clustering.html#k-means-clustering"><i class="fa fa-check"></i><b>11.3.4</b> <em>K</em>-Means Clustering</a></li>
+</ul></li>
+<li class="chapter" data-level="11.4" data-path="clustering.html"><a href="clustering.html#visualizing-clusters-with-java-treeview"><i class="fa fa-check"></i><b>11.4</b> Visualizing Clusters with Java TreeView</a>
+<ul>
+<li class="chapter" data-level="11.4.1" data-path="clustering.html"><a href="clustering.html#changing-pixel-settings."><i class="fa fa-check"></i><b>11.4.1</b> Changing pixel settings.</a></li>
+<li class="chapter" data-level="11.4.2" data-path="clustering.html"><a href="clustering.html#selecting-groups-of-genes."><i class="fa fa-check"></i><b>11.4.2</b> Selecting groups of genes.</a></li>
+</ul></li>
+<li class="chapter" data-level="11.5" data-path="clustering.html"><a href="clustering.html#performing-clustering-on-yeast-stress-data"><i class="fa fa-check"></i><b>11.5</b> Performing clustering on yeast stress data</a></li>
+<li class="chapter" data-level="11.6" data-path="clustering.html"><a href="clustering.html#questions-6"><i class="fa fa-check"></i><b>11.6</b> Questions</a></li>
+</ul></li>
+<li class="divider"></li>
+<li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
+
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Genomic Data Analysis Course Exercises</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="clustering" class="section level1 hasAnchor" number="11">
+<h1><span class="header-section-number">Chapter 11</span> Clustering<a href="clustering.html#clustering" class="anchor-section" aria-label="Anchor link to header"></a></h1>
+<p>last updated: 2023-10-26</p>
+<div id="description-6" class="section level2 hasAnchor" number="11.1">
+<h2><span class="header-section-number">11.1</span> Description<a href="clustering.html#description-6" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>This activity is intended to familiarize you with hierarchical clustering using Cluster 3.0 and visualization using Java TreeView.</p>
+</div>
+<div id="learning-outcomes-6" class="section level2 hasAnchor" number="11.2">
+<h2><span class="header-section-number">11.2</span> Learning outcomes<a href="clustering.html#learning-outcomes-6" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>At the end of this exercise, you should be able to:</p>
+<ul>
+<li>Create a preclustering (PCL) file to load into Cluster 3.0.</li>
+<li>Perform hierarchical clustering with different settings.</li>
+<li>Visualize clustered data with TreeView</li>
+<li>Generate gene lists for clusters of interest for downstream functional analysis (e.g., GO enrichment)</li>
+</ul>
+</div>
+<div id="cluster-3.0" class="section level2 hasAnchor" number="11.3">
+<h2><span class="header-section-number">11.3</span> Cluster 3.0<a href="clustering.html#cluster-3.0" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>There are lots of software packages that will perform clustering analysis. One of the original programs for hierarchical clustering was designed by Michael Eisen, which has been converted to an open source package with the current version of 3.0. Files generated following clustering analysis can be visualized using Java TreeView.</p>
+<div id="generating-a-pcl-file" class="section level3 hasAnchor" number="11.3.1">
+<h3><span class="header-section-number">11.3.1</span> Generating a PCL file<a href="clustering.html#generating-a-pcl-file" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Cluster reads in tab-delimited text files with a minimum of 1 column with the gene IDs, columns of your expression values (generally logFC, but can be TPMs), and then a row with column names. I also include an extra column with gene annotations and gene weight (GWEIGHT, all set to 1 to start) and experiment weight (EWEIGHT, also set to 1 for all). More on what weights are to follow. To open a PCL file, select from the Cluster drop-down menu “File” -&gt; “Open Data.”</p>
+<p><img src="https://github.com/clstacy/GenomicDataAnalysis_Fa23/raw/main/figures/PCL_File.png" width="750" /></p>
+</div>
+<div id="filtering-data" class="section level3 hasAnchor" number="11.3.2">
+<h3><span class="header-section-number">11.3.2</span> Filtering data<a href="clustering.html#filtering-data" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Cluster allows filtering on:</p>
+<ul>
+<li><p><strong>% Present &gt;= X.</strong> Genes with missing values above that cutoff are removed from the analysis.</p></li>
+<li><p><strong>SD (Gene Vector) &gt;= X.</strong> Genes with standard deviations above that cutoff are removed from the analysis.</p></li>
+<li><p><strong>At least X Observations with abs(Val) &gt;= Y.</strong> Genes with fewer than the selected number of observations above a cutoff are removed from the analysis. E.g., At least 1 observation with a logFC of +/- 1.</p></li>
+<li><p><strong>MaxVal-MinVal &gt;= X.</strong> Genes whose maximum minus minimum values are less than the cutoff are removed.</p></li>
+</ul>
+<p>I generally filter on 80% or 100% present, and will often only include significantly differentially expressed genes in my PCL file (instead of applying a specific filter).</p>
+<p><img src="https://github.com/clstacy/GenomicDataAnalysis_Fa23/raw/main/figures/Filter_Data.png" width="500" /></p>
+</div>
+<div id="hierarchical-clustering" class="section level3 hasAnchor" number="11.3.3">
+<h3><span class="header-section-number">11.3.3</span> Hierarchical Clustering<a href="clustering.html#hierarchical-clustering" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Cluster allows you to perform hierarchical clustering on genes, arrays (i.e., samples/experiments), or both. Check the “Cluster” box for one or both, and then choose your similarity metric. The most common are Pearson correlation (either centered or uncentered) and Euclidian distance. Finally, you click on the linkage type to start the clustering (centroid, single, complete, or average).</p>
+<p>By default, all experiments (arrays) are treated equally (set to 1). Sometimes you have more than one type of sample than another (e.g., 6 treatments and 3 controls). This unbalanced design means that the treatment groups will disproportionately influence the clustering. The “Calculate weights” tab reapportions how much each experiment affects the clustering, ideally up-weighting the controls and down-weighting the treatments.</p>
+<p>This is implemented through the following equation, where L is the local density score for each row (i):</p>
+<p><img src="https://github.com/clstacy/GenomicDataAnalysis_Fa23/raw/main/figures/Weight_equation.png" width="300" /></p>
+<p>The user supplies the exponent value (n) and the cutoff (k). Common values for the cutoff are 0.7 to 1, and 0.4 to 0.8 for the exponent. The clustered data file will show the re-calculated weights, which you can use to refine your weighting choices.</p>
+<p>The outputs of Cluster will be a clustered data table (JobName.cdt), and the gene (g) and/or array (a)tree files (JobName.gtr, JobName.atr).</p>
+<p><strong>Make sure your job name is informative (e.g., EtOH_Response_CenteredPearson_CentroidDistance).</strong></p>
+<p><img src="https://github.com/clstacy/GenomicDataAnalysis_Fa23/raw/main/figures/Calculating_Weights.png" width="500" /></p>
+</div>
+<div id="k-means-clustering" class="section level3 hasAnchor" number="11.3.4">
+<h3><span class="header-section-number">11.3.4</span> <em>K</em>-Means Clustering<a href="clustering.html#k-means-clustering" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Cluster also allows for <em>k</em>-means clustering, where you can organize genes into <em>k</em> clusters using the same similarity metric options as for hierarchical clustering. You can use the following code to estimate the optimal number of clusters via three methods (wss, silhouette, and gap statistic):</p>
+<div class="sourceCode" id="cb346"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb346-1"><a href="clustering.html#cb346-1" tabindex="-1"></a><span class="cf">if</span> (<span class="sc">!</span><span class="fu">require</span>(<span class="st">&quot;pacman&quot;</span>)) <span class="fu">install.packages</span>(<span class="st">&quot;pacman&quot;</span>); <span class="fu">library</span>(pacman)</span>
+<span id="cb346-2"><a href="clustering.html#cb346-2" tabindex="-1"></a></span>
+<span id="cb346-3"><a href="clustering.html#cb346-3" tabindex="-1"></a><span class="co"># let&#39;s load all of the files we were using and want to have again today</span></span>
+<span id="cb346-4"><a href="clustering.html#cb346-4" tabindex="-1"></a><span class="fu">p_load</span>(<span class="st">&quot;readr&quot;</span>, <span class="st">&quot;factoextra&quot;</span>, <span class="st">&quot;NbClust&quot;</span>) </span>
+<span id="cb346-5"><a href="clustering.html#cb346-5" tabindex="-1"></a></span>
+<span id="cb346-6"><a href="clustering.html#cb346-6" tabindex="-1"></a><span class="co"># Import From Text (readr) to load the pcl file. Change code below to PCL_file &lt;- read_delim(PATH TO YOUR FILE)</span></span>
+<span id="cb346-7"><a href="clustering.html#cb346-7" tabindex="-1"></a>PCL_file <span class="ot">&lt;-</span> data.table<span class="sc">::</span><span class="fu">fread</span>(<span class="st">&quot;https://github.com/clstacy/GenomicDataAnalysis_Fa23/raw/main/data/DE_yeast_TF_stress.txt.gz&quot;</span>) <span class="sc">|&gt;</span> <span class="fu">as_tibble</span>()</span>
+<span id="cb346-8"><a href="clustering.html#cb346-8" tabindex="-1"></a></span>
+<span id="cb346-9"><a href="clustering.html#cb346-9" tabindex="-1"></a><span class="co"># removing the 3 columns and 1 row that do not contain logFC data</span></span>
+<span id="cb346-10"><a href="clustering.html#cb346-10" tabindex="-1"></a>PCL_nbclust <span class="ot">=</span> PCL_file[,<span class="sc">-</span><span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">3</span>)]</span>
+<span id="cb346-11"><a href="clustering.html#cb346-11" tabindex="-1"></a>PCL_nbclust <span class="ot">=</span> PCL_nbclust[<span class="sc">-</span><span class="dv">1</span>,]</span>
+<span id="cb346-12"><a href="clustering.html#cb346-12" tabindex="-1"></a></span>
+<span id="cb346-13"><a href="clustering.html#cb346-13" tabindex="-1"></a></span>
+<span id="cb346-14"><a href="clustering.html#cb346-14" tabindex="-1"></a><span class="co"># Elbow method</span></span>
+<span id="cb346-15"><a href="clustering.html#cb346-15" tabindex="-1"></a><span class="fu">fviz_nbclust</span>(PCL_nbclust, kmeans, <span class="at">method =</span> <span class="st">&quot;wss&quot;</span>) <span class="sc">+</span></span>
+<span id="cb346-16"><a href="clustering.html#cb346-16" tabindex="-1"></a>    <span class="fu">geom_vline</span>(<span class="at">xintercept =</span> <span class="dv">4</span>, <span class="at">linetype =</span> <span class="dv">2</span>)<span class="sc">+</span></span>
+<span id="cb346-17"><a href="clustering.html#cb346-17" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">subtitle =</span> <span class="st">&quot;Elbow method&quot;</span>)</span></code></pre></div>
+<p><img src="_main_files/figure-html/kmeans-clustering-1.png" width="672" /></p>
+<div class="sourceCode" id="cb347"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb347-1"><a href="clustering.html#cb347-1" tabindex="-1"></a><span class="co"># Silhouette method</span></span>
+<span id="cb347-2"><a href="clustering.html#cb347-2" tabindex="-1"></a><span class="fu">fviz_nbclust</span>(PCL_nbclust, kmeans, <span class="at">method =</span> <span class="st">&quot;silhouette&quot;</span>)<span class="sc">+</span></span>
+<span id="cb347-3"><a href="clustering.html#cb347-3" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">subtitle =</span> <span class="st">&quot;Silhouette method&quot;</span>)</span></code></pre></div>
+<p><img src="_main_files/figure-html/kmeans-clustering-2.png" width="672" /></p>
+<div class="sourceCode" id="cb348"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb348-1"><a href="clustering.html#cb348-1" tabindex="-1"></a><span class="co"># Gap statistic</span></span>
+<span id="cb348-2"><a href="clustering.html#cb348-2" tabindex="-1"></a><span class="co"># nboot = 50 to keep the function speedy. </span></span>
+<span id="cb348-3"><a href="clustering.html#cb348-3" tabindex="-1"></a><span class="co"># recommended value: nboot= 500 for your analysis.</span></span>
+<span id="cb348-4"><a href="clustering.html#cb348-4" tabindex="-1"></a><span class="co"># Use verbose = FALSE to hide computing progression.</span></span>
+<span id="cb348-5"><a href="clustering.html#cb348-5" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">123</span>)</span>
+<span id="cb348-6"><a href="clustering.html#cb348-6" tabindex="-1"></a><span class="fu">fviz_nbclust</span>(PCL_nbclust, kmeans, <span class="at">nstart =</span> <span class="dv">25</span>,  <span class="at">method =</span> <span class="st">&quot;gap_stat&quot;</span>, <span class="at">nboot =</span> <span class="dv">50</span>)<span class="sc">+</span></span>
+<span id="cb348-7"><a href="clustering.html#cb348-7" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">subtitle =</span> <span class="st">&quot;Gap statistic method&quot;</span>)</span></code></pre></div>
+<pre><code>## Warning: did not converge in 10 iterations
+
+## Warning: did not converge in 10 iterations
+
+## Warning: did not converge in 10 iterations
+
+## Warning: did not converge in 10 iterations
+
+## Warning: did not converge in 10 iterations
+
+## Warning: did not converge in 10 iterations
+
+## Warning: did not converge in 10 iterations
+
+## Warning: did not converge in 10 iterations
+
+## Warning: did not converge in 10 iterations
+
+## Warning: did not converge in 10 iterations
+
+## Warning: did not converge in 10 iterations
+
+## Warning: did not converge in 10 iterations
+
+## Warning: did not converge in 10 iterations
+
+## Warning: did not converge in 10 iterations
+
+## Warning: did not converge in 10 iterations
+
+## Warning: did not converge in 10 iterations
+
+## Warning: did not converge in 10 iterations
+
+## Warning: did not converge in 10 iterations
+
+## Warning: did not converge in 10 iterations
+
+## Warning: did not converge in 10 iterations
+
+## Warning: did not converge in 10 iterations
+
+## Warning: did not converge in 10 iterations
+
+## Warning: did not converge in 10 iterations
+
+## Warning: did not converge in 10 iterations
+
+## Warning: did not converge in 10 iterations
+
+## Warning: did not converge in 10 iterations
+
+## Warning: did not converge in 10 iterations
+
+## Warning: did not converge in 10 iterations
+
+## Warning: did not converge in 10 iterations
+
+## Warning: did not converge in 10 iterations
+
+## Warning: did not converge in 10 iterations
+
+## Warning: did not converge in 10 iterations
+
+## Warning: did not converge in 10 iterations
+
+## Warning: did not converge in 10 iterations
+
+## Warning: did not converge in 10 iterations
+
+## Warning: did not converge in 10 iterations
+
+## Warning: did not converge in 10 iterations
+
+## Warning: did not converge in 10 iterations
+
+## Warning: did not converge in 10 iterations
+
+## Warning: did not converge in 10 iterations
+
+## Warning: did not converge in 10 iterations
+
+## Warning: did not converge in 10 iterations
+
+## Warning: did not converge in 10 iterations
+
+## Warning: did not converge in 10 iterations
+
+## Warning: did not converge in 10 iterations
+
+## Warning: did not converge in 10 iterations
+
+## Warning: did not converge in 10 iterations
+
+## Warning: did not converge in 10 iterations
+
+## Warning: did not converge in 10 iterations
+
+## Warning: did not converge in 10 iterations
+
+## Warning: did not converge in 10 iterations
+
+## Warning: did not converge in 10 iterations
+
+## Warning: did not converge in 10 iterations
+
+## Warning: did not converge in 10 iterations
+
+## Warning: did not converge in 10 iterations
+
+## Warning: did not converge in 10 iterations
+
+## Warning: did not converge in 10 iterations
+
+## Warning: did not converge in 10 iterations
+
+## Warning: did not converge in 10 iterations
+
+## Warning: did not converge in 10 iterations
+
+## Warning: did not converge in 10 iterations
+
+## Warning: did not converge in 10 iterations
+
+## Warning: did not converge in 10 iterations
+
+## Warning: did not converge in 10 iterations
+
+## Warning: did not converge in 10 iterations
+
+## Warning: did not converge in 10 iterations
+
+## Warning: did not converge in 10 iterations
+
+## Warning: did not converge in 10 iterations
+
+## Warning: did not converge in 10 iterations
+
+## Warning: did not converge in 10 iterations
+
+## Warning: did not converge in 10 iterations
+
+## Warning: did not converge in 10 iterations
+
+## Warning: did not converge in 10 iterations
+
+## Warning: did not converge in 10 iterations
+
+## Warning: did not converge in 10 iterations
+
+## Warning: did not converge in 10 iterations
+
+## Warning: did not converge in 10 iterations
+
+## Warning: did not converge in 10 iterations
+
+## Warning: did not converge in 10 iterations
+
+## Warning: did not converge in 10 iterations
+
+## Warning: did not converge in 10 iterations
+
+## Warning: did not converge in 10 iterations
+
+## Warning: did not converge in 10 iterations
+
+## Warning: did not converge in 10 iterations
+
+## Warning: did not converge in 10 iterations
+
+## Warning: did not converge in 10 iterations
+
+## Warning: did not converge in 10 iterations
+
+## Warning: did not converge in 10 iterations
+
+## Warning: did not converge in 10 iterations
+
+## Warning: did not converge in 10 iterations
+
+## Warning: did not converge in 10 iterations
+
+## Warning: did not converge in 10 iterations
+
+## Warning: did not converge in 10 iterations
+
+## Warning: did not converge in 10 iterations
+
+## Warning: did not converge in 10 iterations
+
+## Warning: did not converge in 10 iterations
+
+## Warning: did not converge in 10 iterations
+
+## Warning: did not converge in 10 iterations
+
+## Warning: did not converge in 10 iterations
+
+## Warning: did not converge in 10 iterations
+
+## Warning: did not converge in 10 iterations
+
+## Warning: did not converge in 10 iterations
+
+## Warning: did not converge in 10 iterations
+
+## Warning: did not converge in 10 iterations
+
+## Warning: did not converge in 10 iterations
+
+## Warning: did not converge in 10 iterations
+
+## Warning: did not converge in 10 iterations
+
+## Warning: did not converge in 10 iterations
+
+## Warning: did not converge in 10 iterations
+
+## Warning: did not converge in 10 iterations
+
+## Warning: did not converge in 10 iterations
+
+## Warning: did not converge in 10 iterations
+
+## Warning: did not converge in 10 iterations
+
+## Warning: did not converge in 10 iterations
+
+## Warning: did not converge in 10 iterations
+
+## Warning: did not converge in 10 iterations
+
+## Warning: did not converge in 10 iterations
+
+## Warning: did not converge in 10 iterations
+
+## Warning: did not converge in 10 iterations
+
+## Warning: did not converge in 10 iterations
+
+## Warning: did not converge in 10 iterations
+
+## Warning: did not converge in 10 iterations
+
+## Warning: did not converge in 10 iterations
+
+## Warning: did not converge in 10 iterations
+
+## Warning: did not converge in 10 iterations
+
+## Warning: did not converge in 10 iterations
+
+## Warning: did not converge in 10 iterations
+
+## Warning: did not converge in 10 iterations
+
+## Warning: did not converge in 10 iterations
+
+## Warning: did not converge in 10 iterations
+
+## Warning: did not converge in 10 iterations
+
+## Warning: did not converge in 10 iterations
+
+## Warning: did not converge in 10 iterations
+
+## Warning: did not converge in 10 iterations
+
+## Warning: did not converge in 10 iterations
+
+## Warning: did not converge in 10 iterations
+
+## Warning: did not converge in 10 iterations
+
+## Warning: did not converge in 10 iterations
+
+## Warning: did not converge in 10 iterations
+
+## Warning: did not converge in 10 iterations
+
+## Warning: did not converge in 10 iterations
+
+## Warning: did not converge in 10 iterations
+
+## Warning: did not converge in 10 iterations
+
+## Warning: did not converge in 10 iterations
+
+## Warning: did not converge in 10 iterations
+
+## Warning: did not converge in 10 iterations
+
+## Warning: did not converge in 10 iterations
+
+## Warning: did not converge in 10 iterations
+
+## Warning: did not converge in 10 iterations
+
+## Warning: did not converge in 10 iterations
+
+## Warning: did not converge in 10 iterations
+
+## Warning: did not converge in 10 iterations
+
+## Warning: did not converge in 10 iterations
+
+## Warning: did not converge in 10 iterations
+
+## Warning: did not converge in 10 iterations
+
+## Warning: did not converge in 10 iterations
+
+## Warning: did not converge in 10 iterations
+
+## Warning: did not converge in 10 iterations
+
+## Warning: did not converge in 10 iterations
+
+## Warning: did not converge in 10 iterations
+
+## Warning: did not converge in 10 iterations
+
+## Warning: did not converge in 10 iterations
+
+## Warning: did not converge in 10 iterations
+
+## Warning: did not converge in 10 iterations
+
+## Warning: did not converge in 10 iterations
+
+## Warning: did not converge in 10 iterations
+
+## Warning: did not converge in 10 iterations
+
+## Warning: did not converge in 10 iterations
+
+## Warning: did not converge in 10 iterations
+
+## Warning: did not converge in 10 iterations
+
+## Warning: did not converge in 10 iterations
+
+## Warning: did not converge in 10 iterations
+
+## Warning: did not converge in 10 iterations
+
+## Warning: did not converge in 10 iterations
+
+## Warning: did not converge in 10 iterations
+
+## Warning: did not converge in 10 iterations
+
+## Warning: did not converge in 10 iterations
+
+## Warning: did not converge in 10 iterations
+
+## Warning: did not converge in 10 iterations
+
+## Warning: did not converge in 10 iterations
+
+## Warning: did not converge in 10 iterations
+
+## Warning: did not converge in 10 iterations
+
+## Warning: did not converge in 10 iterations
+
+## Warning: did not converge in 10 iterations
+
+## Warning: did not converge in 10 iterations
+
+## Warning: did not converge in 10 iterations
+
+## Warning: did not converge in 10 iterations
+
+## Warning: did not converge in 10 iterations
+
+## Warning: did not converge in 10 iterations
+
+## Warning: did not converge in 10 iterations
+
+## Warning: did not converge in 10 iterations</code></pre>
+<pre><code>## Warning: Quick-TRANSfer stage steps exceeded maximum (= 287750)</code></pre>
+<pre><code>## Warning: did not converge in 10 iterations
+
+## Warning: did not converge in 10 iterations
+
+## Warning: did not converge in 10 iterations
+
+## Warning: did not converge in 10 iterations
+
+## Warning: did not converge in 10 iterations
+
+## Warning: did not converge in 10 iterations
+
+## Warning: did not converge in 10 iterations
+
+## Warning: did not converge in 10 iterations
+
+## Warning: did not converge in 10 iterations
+
+## Warning: did not converge in 10 iterations
+
+## Warning: did not converge in 10 iterations
+
+## Warning: did not converge in 10 iterations
+
+## Warning: did not converge in 10 iterations
+
+## Warning: did not converge in 10 iterations
+
+## Warning: did not converge in 10 iterations
+
+## Warning: did not converge in 10 iterations</code></pre>
+<p><img src="_main_files/figure-html/kmeans-clustering-3.png" width="672" /></p>
+</div>
+</div>
+<div id="visualizing-clusters-with-java-treeview" class="section level2 hasAnchor" number="11.4">
+<h2><span class="header-section-number">11.4</span> Visualizing Clusters with Java TreeView<a href="clustering.html#visualizing-clusters-with-java-treeview" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Treeview uses the cdt file to generate a heat map of the clustered data and the gtr/atr files to draw the tree (similar to a phylogenetic tree). Here’s an example heat map.</p>
+<p><img src="https://github.com/clstacy/GenomicDataAnalysis_Fa23/raw/main/figures/TreeView_Heatmap.png" /></p>
+<p>The large panel in the middle is the heat map of all the data (global), with each row being the expression values for a single gene, and each column being a single experiment/sample. The inset shows a zoomed image for a selected portion of the tree, and those are obtained by clicking on the heat map to select a single gene, and then moving the cursor into the tree region and pressing the “up” arrow on the keyboard to move node-by-node up the tree. On top of the inset heat map are the sample names, and to the right are the gene names and annotations. The far top left shows the correlation value for that particular node the tree.</p>
+<div id="changing-pixel-settings." class="section level3 hasAnchor" number="11.4.1">
+<h3><span class="header-section-number">11.4.1</span> Changing pixel settings.<a href="clustering.html#changing-pixel-settings." class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>The colors on the heat map are user defined by the pixel settings tab, where you can set the max logFC for the color scheme and change the colors for the positive, negative, and zero values. The default for the global tree is to not show the full scale, but you can set it to “fill” to fit the entire screen.</p>
+<p><img src="https://github.com/clstacy/GenomicDataAnalysis_Fa23/raw/main/figures/Pixel_Settings.png" width="500" /></p>
+</div>
+<div id="selecting-groups-of-genes." class="section level3 hasAnchor" number="11.4.2">
+<h3><span class="header-section-number">11.4.2</span> Selecting groups of genes.<a href="clustering.html#selecting-groups-of-genes." class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>When picking out clusters of genes, we often want to know their functional enrichments. We can select groups of genes by clicking on the “Export” tab and then “Save List.”</p>
+<p><img src="https://github.com/clstacy/GenomicDataAnalysis_Fa23/raw/main/figures/Exporting_List.png" width="500" /></p>
+<p>The resulting list can then be either copy and pasted into Excel or saved directly as a text file. The lists can then be used as inputs for clusterProfiler or online enrichment analysis tools (such as the Princeton Go Finder).</p>
+<p><img src="https://github.com/clstacy/GenomicDataAnalysis_Fa23/raw/main/figures/Exported_Gene_List.png" width="500" /></p>
+</div>
+</div>
+<div id="performing-clustering-on-yeast-stress-data" class="section level2 hasAnchor" number="11.5">
+<h2><span class="header-section-number">11.5</span> Performing clustering on yeast stress data<a href="clustering.html#performing-clustering-on-yeast-stress-data" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Now it’s your turn to play around with data. Download the Gasch_2000_stress.pcl file from OneDrive (Data Files -&gt; Msn24_EtOH -&gt; Clustering) and visualize clustering outputs using different methods:</p>
+<ol style="list-style-type: decimal">
+<li><p>Compare with and without filtering on 80% present, and compare with and without filtering on having a certain number of values above an logFC of |1|.</p></li>
+<li><p>Compare different similarity metrics. The ones most commonly used are (Pearson) correlation (centered or uncentered) and Euclidean difference, but see what clustering with other metrics looks like.</p></li>
+<li><p>What happens to the heat map and tree look when you use different linkage methods (centroid, single, complete, or average)?</p></li>
+</ol>
+</div>
+<div id="questions-6" class="section level2 hasAnchor" number="11.6">
+<h2><span class="header-section-number">11.6</span> Questions<a href="clustering.html#questions-6" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<ol style="list-style-type: decimal">
+<li><p>Using the Gasch_2000 dataset, filter the data on 80% present, and then cluster with uncentered correlation, calculated weights on arrays (so click on the box in “Genes”) with a cutoff of 0.7 and an exponent of 1, and click centroid linkage.</p>
+<p>Search for the gene <em>DCG1</em> (a gene of unknown function). Based on the genes immediately surround <em>DCG1</em> in the heat map, what would you predict the function of <em>DCG1</em> to be and why?</p></li>
+<li><p>Download the DE_yeast_TF_stress.txt dataset from the OneDrive (in the same Clustering folder as for the Gasch_2000 dataset). These data include logFC and FDR corrected-pvalues for both the NaCl (salt) response and the EtOH response for WT yeast, an <em>msn2/4∆</em>∆ deletion mutant (which we’ve looked at before), and deletion mutants for two other transcription factors, <em>yap1</em>∆, and <em>skn7</em>∆.</p>
+<p>Create a PCL file combining just the logFC data for the EtOH and NaCl responses for the WT and mutant strains (so, leave out the WT vs mutant comparisons). Cluster the genes using the Correlation (uncentered), which is the uncentered Pearson correlation, and click “Centroid linkage.” Save the job with a name that denotes those choices. Then, change the similarity metric to Euclidean distance and repeat the clustering (still Centroid linkage).</p>
+<p>How does using Euclidean distance affect the clustering and why? When might you want to use Euclidean distance as your similarity metric?</p></li>
+<li><p>Repeat the clustering using Absolute correlation (uncentered) and Centroid linkage. How does this affect the clustering and why? Can you think of a circumstance where Absolute correlation would be useful?</p></li>
+<li><p>Make two new PCL files separating the ethanol responses and salt responses, and cluster the data separately. This time cluster on arrays as well as genes. Try different filters and clustering methods until you find one that you feel captures the data, and note your clustering parameters.</p>
+<p>Based on your clustering, which transcription factor looks to be most responsible for the regulating the ethanol response? Which transcription factors seems most responsibel for the salt response? Looking back at the FDR corrected p-values for each TF’s response (WT v mutant comparisons), does this match your expectations from the clustering. Why might clustering and differential expression analysis yield different answers to the question of which TF is most important for a response?</p></li>
+<li><p>Using the clustering that you settled on for question #4, identify the single main cluster for each that contains genes affected by the muations in <em>msn2/4</em>. Make a figure highlighting those clusters by exporting the thumbnail images and importing into PowerPoint (or another graphics program if you prefer) and drawing a line next to the clusters (e.g., Figure 4 <a href="https://pubmed.ncbi.nlm.nih.gov/32027144/">from this paper</a>). Use the <a href="https://go.princeton.edu/cgi-bin/GOTermFinder">Princeton GO term Finder</a> to identify BP enrichments for those clusters, and annotate the top 5 terms to the figure. Save as a PDF to embed into your homework document.</p></li>
+</ol>
+
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="visualizing-differential-expression-results.html" class="navigation navigation-prev navigation-unique" aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": false,
+"facebook": true,
+"twitter": true,
+"linkedin": false,
+"weibo": false,
+"instapaper": false,
+"vk": false,
+"whatsapp": false,
+"all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": "https://github.com/USERNAME/REPO/edit/BRANCH/10-Clustering.Rmd",
+"text": "Edit"
+},
+"history": {
+"link": null,
+"text": null
+},
+"view": {
+"link": null,
+"text": null
+},
+"download": ["_main.pdf", "_main.epub"],
+"search": {
+"engine": "fuse",
+"options": null
+},
+"toc": {
+"collapse": "subsection"
+}
+});
+});
+</script>
+
+</body>
+
+</html>

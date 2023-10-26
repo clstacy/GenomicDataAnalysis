@@ -1,0 +1,1247 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>Chapter 6 Batch file processing | Genomic Data Analysis Course Exercises</title>
+  <meta name="description" content="These are exercises created for the 2023 course: Genomic Data Analysis at the University of Arkansas." />
+  <meta name="generator" content="bookdown 0.36 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="Chapter 6 Batch file processing | Genomic Data Analysis Course Exercises" />
+  <meta property="og:type" content="book" />
+  
+  <meta property="og:description" content="These are exercises created for the 2023 course: Genomic Data Analysis at the University of Arkansas." />
+  <meta name="github-repo" content="clstacy/GenomicDataAnalysis" />
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Chapter 6 Batch file processing | Genomic Data Analysis Course Exercises" />
+  
+  <meta name="twitter:description" content="These are exercises created for the 2023 course: Genomic Data Analysis at the University of Arkansas." />
+  
+
+<meta name="author" content="Carson Stacy" />
+
+
+<meta name="date" content="2023-10-26" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="trimming.html"/>
+<link rel="next" href="read-mapping.html"/>
+<script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+<link href="libs/anchor-sections-1.1.0/anchor-sections.css" rel="stylesheet" />
+<link href="libs/anchor-sections-1.1.0/anchor-sections-hash.css" rel="stylesheet" />
+<script src="libs/anchor-sections-1.1.0/anchor-sections.js"></script>
+
+
+<style type="text/css">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+<style type="text/css">
+  
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+</style>
+
+<link rel="stylesheet" href="style.css" type="text/css" />
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li><a href="./">A Minimal Book Example</a></li>
+
+<li class="divider"></li>
+<li class="chapter" data-level="1" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i><b>1</b> About</a>
+<ul>
+<li class="chapter" data-level="1.1" data-path="index.html"><a href="index.html#usage"><i class="fa fa-check"></i><b>1.1</b> Usage</a></li>
+<li class="chapter" data-level="1.2" data-path="index.html"><a href="index.html#render-book"><i class="fa fa-check"></i><b>1.2</b> Render book</a></li>
+<li class="chapter" data-level="1.3" data-path="index.html"><a href="index.html#preview-book"><i class="fa fa-check"></i><b>1.3</b> Preview book</a></li>
+</ul></li>
+<li class="chapter" data-level="2" data-path="getting-started-in-r.html"><a href="getting-started-in-r.html"><i class="fa fa-check"></i><b>2</b> Getting Started in R</a>
+<ul>
+<li class="chapter" data-level="2.1" data-path="getting-started-in-r.html"><a href="getting-started-in-r.html#installing-packages"><i class="fa fa-check"></i><b>2.1</b> Installing Packages</a></li>
+<li class="chapter" data-level="2.2" data-path="getting-started-in-r.html"><a href="getting-started-in-r.html#exercise-description"><i class="fa fa-check"></i><b>2.2</b> Exercise Description</a></li>
+<li class="chapter" data-level="2.3" data-path="getting-started-in-r.html"><a href="getting-started-in-r.html#learning-outcomes"><i class="fa fa-check"></i><b>2.3</b> Learning outcomes</a></li>
+<li class="chapter" data-level="2.4" data-path="getting-started-in-r.html"><a href="getting-started-in-r.html#using-r-and-rstudio"><i class="fa fa-check"></i><b>2.4</b> Using R and RStudio</a></li>
+<li class="chapter" data-level="2.5" data-path="getting-started-in-r.html"><a href="getting-started-in-r.html#load-data-directly-from-the-url"><i class="fa fa-check"></i><b>2.5</b> Load data directly from the URL</a></li>
+<li class="chapter" data-level="2.6" data-path="getting-started-in-r.html"><a href="getting-started-in-r.html#working-with-data-in-r"><i class="fa fa-check"></i><b>2.6</b> Working with data in R</a></li>
+<li class="chapter" data-level="2.7" data-path="getting-started-in-r.html"><a href="getting-started-in-r.html#looking-at-data-in-rstudio"><i class="fa fa-check"></i><b>2.7</b> Looking at Data in RStudio</a></li>
+<li class="chapter" data-level="2.8" data-path="getting-started-in-r.html"><a href="getting-started-in-r.html#exploring-the-data"><i class="fa fa-check"></i><b>2.8</b> Exploring the data</a></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="gene-ontology.html"><a href="gene-ontology.html"><i class="fa fa-check"></i><b>3</b> Gene Ontology</a>
+<ul>
+<li class="chapter" data-level="3.1" data-path="gene-ontology.html"><a href="gene-ontology.html#installing-packages-1"><i class="fa fa-check"></i><b>3.1</b> Installing Packages</a></li>
+<li class="chapter" data-level="3.2" data-path="gene-ontology.html"><a href="gene-ontology.html#description"><i class="fa fa-check"></i><b>3.2</b> Description</a></li>
+<li class="chapter" data-level="3.3" data-path="gene-ontology.html"><a href="gene-ontology.html#learning-outcomes-1"><i class="fa fa-check"></i><b>3.3</b> Learning outcomes</a></li>
+<li class="chapter" data-level="3.4" data-path="gene-ontology.html"><a href="gene-ontology.html#analysis-workflow"><i class="fa fa-check"></i><b>3.4</b> Analysis Workflow</a></li>
+<li class="chapter" data-level="3.5" data-path="gene-ontology.html"><a href="gene-ontology.html#get-de-gene-list"><i class="fa fa-check"></i><b>3.5</b> Get DE gene list</a>
+<ul>
+<li class="chapter" data-level="3.5.1" data-path="gene-ontology.html"><a href="gene-ontology.html#saving-ggplot-output-to-a-file"><i class="fa fa-check"></i><b>3.5.1</b> Saving ggplot output to a file</a></li>
+</ul></li>
+<li class="chapter" data-level="3.6" data-path="gene-ontology.html"><a href="gene-ontology.html#the-hypergeometric-distribution-in-practice"><i class="fa fa-check"></i><b>3.6</b> The Hypergeometric Distribution in practice</a></li>
+<li class="chapter" data-level="3.7" data-path="gene-ontology.html"><a href="gene-ontology.html#now-it-is-your-turn"><i class="fa fa-check"></i><b>3.7</b> Now it is your turn</a>
+<ul>
+<li class="chapter" data-level="3.7.1" data-path="gene-ontology.html"><a href="gene-ontology.html#run-enrichment"><i class="fa fa-check"></i><b>3.7.1</b> Run Enrichment</a></li>
+<li class="chapter" data-level="3.7.2" data-path="gene-ontology.html"><a href="gene-ontology.html#see-the-data"><i class="fa fa-check"></i><b>3.7.2</b> see the data</a></li>
+<li class="chapter" data-level="3.7.3" data-path="gene-ontology.html"><a href="gene-ontology.html#create-plots"><i class="fa fa-check"></i><b>3.7.3</b> create plots</a></li>
+</ul></li>
+<li class="chapter" data-level="3.8" data-path="gene-ontology.html"><a href="gene-ontology.html#questions"><i class="fa fa-check"></i><b>3.8</b> Questions</a></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="working-with-sequences-raw-data-quality-control.html"><a href="working-with-sequences-raw-data-quality-control.html"><i class="fa fa-check"></i><b>4</b> Working with Sequences: Raw Data &amp; Quality Control</a>
+<ul>
+<li class="chapter" data-level="4.1" data-path="working-with-sequences-raw-data-quality-control.html"><a href="working-with-sequences-raw-data-quality-control.html#package-install"><i class="fa fa-check"></i><b>4.1</b> Package Install</a></li>
+<li class="chapter" data-level="4.2" data-path="working-with-sequences-raw-data-quality-control.html"><a href="working-with-sequences-raw-data-quality-control.html#description-1"><i class="fa fa-check"></i><b>4.2</b> Description</a></li>
+<li class="chapter" data-level="4.3" data-path="working-with-sequences-raw-data-quality-control.html"><a href="working-with-sequences-raw-data-quality-control.html#learning-outcomes-2"><i class="fa fa-check"></i><b>4.3</b> Learning outcomes</a></li>
+<li class="chapter" data-level="4.4" data-path="working-with-sequences-raw-data-quality-control.html"><a href="working-with-sequences-raw-data-quality-control.html#download-fastq"><i class="fa fa-check"></i><b>4.4</b> Download fastq</a></li>
+<li class="chapter" data-level="4.5" data-path="working-with-sequences-raw-data-quality-control.html"><a href="working-with-sequences-raw-data-quality-control.html#examining-fastq"><i class="fa fa-check"></i><b>4.5</b> Examining fastq</a></li>
+</ul></li>
+<li class="chapter" data-level="5" data-path="trimming.html"><a href="trimming.html"><i class="fa fa-check"></i><b>5</b> Trimming</a>
+<ul>
+<li class="chapter" data-level="5.1" data-path="trimming.html"><a href="trimming.html#is-there-any-way-we-can-automate-some-of-this"><i class="fa fa-check"></i><b>5.1</b> Is there any way we can automate some of this?</a></li>
+</ul></li>
+<li class="chapter" data-level="6" data-path="batch-file-processing.html"><a href="batch-file-processing.html"><i class="fa fa-check"></i><b>6</b> Batch file processing</a>
+<ul>
+<li class="chapter" data-level="6.0.1" data-path="batch-file-processing.html"><a href="batch-file-processing.html#running-rfastp-creates-several-files"><i class="fa fa-check"></i><b>6.0.1</b> Running RfastP creates several files:</a></li>
+<li class="chapter" data-level="6.1" data-path="batch-file-processing.html"><a href="batch-file-processing.html#qc-and-adapters"><i class="fa fa-check"></i><b>6.1</b> QC and adapters</a></li>
+<li class="chapter" data-level="6.2" data-path="batch-file-processing.html"><a href="batch-file-processing.html#running-fastqc"><i class="fa fa-check"></i><b>6.2</b> Running fastqc</a></li>
+<li class="chapter" data-level="6.3" data-path="batch-file-processing.html"><a href="batch-file-processing.html#multiqc-for-qc-on-mutliple-samples"><i class="fa fa-check"></i><b>6.3</b> Multiqc for QC on mutliple samples</a></li>
+</ul></li>
+<li class="chapter" data-level="7" data-path="read-mapping.html"><a href="read-mapping.html"><i class="fa fa-check"></i><b>7</b> Read Mapping</a>
+<ul>
+<li class="chapter" data-level="7.1" data-path="read-mapping.html"><a href="read-mapping.html#alignment"><i class="fa fa-check"></i><b>7.1</b> Alignment</a></li>
+<li class="chapter" data-level="7.2" data-path="read-mapping.html"><a href="read-mapping.html#retrieve-the-genome"><i class="fa fa-check"></i><b>7.2</b> Retrieve the genome</a></li>
+<li class="chapter" data-level="7.3" data-path="read-mapping.html"><a href="read-mapping.html#build-rsubread-index"><i class="fa fa-check"></i><b>7.3</b> Build Rsubread Index</a></li>
+<li class="chapter" data-level="7.4" data-path="read-mapping.html"><a href="read-mapping.html#pseudomapping-with-salmon"><i class="fa fa-check"></i><b>7.4</b> Pseudomapping with Salmon</a>
+<ul>
+<li class="chapter" data-level="7.4.1" data-path="read-mapping.html"><a href="read-mapping.html#create-conda-env"><i class="fa fa-check"></i><b>7.4.1</b> Create Conda Env</a></li>
+<li class="chapter" data-level="7.4.2" data-path="read-mapping.html"><a href="read-mapping.html#download-transcriptome"><i class="fa fa-check"></i><b>7.4.2</b> Download transcriptome</a></li>
+<li class="chapter" data-level="7.4.3" data-path="read-mapping.html"><a href="read-mapping.html#building-the-salmon-index"><i class="fa fa-check"></i><b>7.4.3</b> Building the Salmon index</a></li>
+</ul></li>
+<li class="chapter" data-level="7.5" data-path="read-mapping.html"><a href="read-mapping.html#questions-1"><i class="fa fa-check"></i><b>7.5</b> Questions</a>
+<ul>
+<li class="chapter" data-level="7.5.1" data-path="read-mapping.html"><a href="read-mapping.html#with-rsubread"><i class="fa fa-check"></i><b>7.5.1</b> With Rsubread:</a></li>
+<li class="chapter" data-level="7.5.2" data-path="read-mapping.html"><a href="read-mapping.html#with-salmon"><i class="fa fa-check"></i><b>7.5.2</b> With Salmon:</a></li>
+</ul></li>
+</ul></li>
+<li class="divider"></li>
+<li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
+
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Genomic Data Analysis Course Exercises</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="batch-file-processing" class="section level1 hasAnchor" number="6">
+<h1><span class="header-section-number">Chapter 6</span> Batch file processing<a href="batch-file-processing.html#batch-file-processing" class="anchor-section" aria-label="Anchor link to header"></a></h1>
+<p>That’s nice, but we rarely just have a single fastq file, and we’d like to look at them all at once. Luckily, we can do that with rfastp.</p>
+<p>First, we need to get the locations of all of the files we downloaded earlier</p>
+<div class="sourceCode" id="cb86"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb86-1"><a href="batch-file-processing.html#cb86-1" tabindex="-1"></a><span class="co"># adjust to the path where you assigned in RAW_DATA_DIR if using different than default</span></span>
+<span id="cb86-2"><a href="batch-file-processing.html#cb86-2" tabindex="-1"></a>fq_file_dir <span class="ot">&lt;-</span> <span class="fu">dirname</span>(path_fastq_WT_MOCK_REP1) <span class="co"># this just gets the path file is in.</span></span>
+<span id="cb86-3"><a href="batch-file-processing.html#cb86-3" tabindex="-1"></a><span class="co"># crate a list of all of the files</span></span>
+<span id="cb86-4"><a href="batch-file-processing.html#cb86-4" tabindex="-1"></a>fastq.files <span class="ot">&lt;-</span> <span class="fu">list.files</span>(<span class="at">path =</span> fq_file_dir, <span class="co"># where to look</span></span>
+<span id="cb86-5"><a href="batch-file-processing.html#cb86-5" tabindex="-1"></a>                          <span class="at">pattern =</span> <span class="st">&quot;REP[0-9].fastq.gz$&quot;</span>, <span class="co"># the pattern of file name to find</span></span>
+<span id="cb86-6"><a href="batch-file-processing.html#cb86-6" tabindex="-1"></a>                                  <span class="co"># Note, if you have other fastq files in the folder, they will also be included.</span></span>
+<span id="cb86-7"><a href="batch-file-processing.html#cb86-7" tabindex="-1"></a>                          <span class="at">full.names =</span> <span class="cn">TRUE</span>) <span class="co"># save the full path to the file</span></span>
+<span id="cb86-8"><a href="batch-file-processing.html#cb86-8" tabindex="-1"></a></span>
+<span id="cb86-9"><a href="batch-file-processing.html#cb86-9" tabindex="-1"></a><span class="fu">print</span>(fastq.files)</span></code></pre></div>
+<pre><code>##  [1] &quot;/Users/clstacy/Desktop/Genomic_Data_Analysis/Data/Raw/YPS606_MSN24_ETOH_REP1.fastq.gz&quot;
+##  [2] &quot;/Users/clstacy/Desktop/Genomic_Data_Analysis/Data/Raw/YPS606_MSN24_ETOH_REP2.fastq.gz&quot;
+##  [3] &quot;/Users/clstacy/Desktop/Genomic_Data_Analysis/Data/Raw/YPS606_MSN24_ETOH_REP3.fastq.gz&quot;
+##  [4] &quot;/Users/clstacy/Desktop/Genomic_Data_Analysis/Data/Raw/YPS606_MSN24_ETOH_REP4.fastq.gz&quot;
+##  [5] &quot;/Users/clstacy/Desktop/Genomic_Data_Analysis/Data/Raw/YPS606_MSN24_MOCK_REP1.fastq.gz&quot;
+##  [6] &quot;/Users/clstacy/Desktop/Genomic_Data_Analysis/Data/Raw/YPS606_MSN24_MOCK_REP2.fastq.gz&quot;
+##  [7] &quot;/Users/clstacy/Desktop/Genomic_Data_Analysis/Data/Raw/YPS606_MSN24_MOCK_REP3.fastq.gz&quot;
+##  [8] &quot;/Users/clstacy/Desktop/Genomic_Data_Analysis/Data/Raw/YPS606_MSN24_MOCK_REP4.fastq.gz&quot;
+##  [9] &quot;/Users/clstacy/Desktop/Genomic_Data_Analysis/Data/Raw/YPS606_WT_ETOH_REP1.fastq.gz&quot;   
+## [10] &quot;/Users/clstacy/Desktop/Genomic_Data_Analysis/Data/Raw/YPS606_WT_ETOH_REP2.fastq.gz&quot;   
+## [11] &quot;/Users/clstacy/Desktop/Genomic_Data_Analysis/Data/Raw/YPS606_WT_ETOH_REP3.fastq.gz&quot;   
+## [12] &quot;/Users/clstacy/Desktop/Genomic_Data_Analysis/Data/Raw/YPS606_WT_ETOH_REP4.fastq.gz&quot;   
+## [13] &quot;/Users/clstacy/Desktop/Genomic_Data_Analysis/Data/Raw/YPS606_WT_MOCK_REP1.fastq.gz&quot;   
+## [14] &quot;/Users/clstacy/Desktop/Genomic_Data_Analysis/Data/Raw/YPS606_WT_MOCK_REP2.fastq.gz&quot;   
+## [15] &quot;/Users/clstacy/Desktop/Genomic_Data_Analysis/Data/Raw/YPS606_WT_MOCK_REP3.fastq.gz&quot;   
+## [16] &quot;/Users/clstacy/Desktop/Genomic_Data_Analysis/Data/Raw/YPS606_WT_MOCK_REP4.fastq.gz&quot;</code></pre>
+<p>Now we have all of the file paths</p>
+<p>We can loop through all of the files to perform filtering and trimming. Note there are many arguments that can be modified. Use ?rfastp to learn more.</p>
+<div class="sourceCode" id="cb88"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb88-1"><a href="batch-file-processing.html#cb88-1" tabindex="-1"></a><span class="co"># run rfastp on all fastq files</span></span>
+<span id="cb88-2"><a href="batch-file-processing.html#cb88-2" tabindex="-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">length</span>(fastq.files)) {</span>
+<span id="cb88-3"><a href="batch-file-processing.html#cb88-3" tabindex="-1"></a>  <span class="co"># file path to single end read</span></span>
+<span id="cb88-4"><a href="batch-file-processing.html#cb88-4" tabindex="-1"></a>  read1 <span class="ot">&lt;-</span> fastq.files[i]</span>
+<span id="cb88-5"><a href="batch-file-processing.html#cb88-5" tabindex="-1"></a>  <span class="co"># assign output file (putting it inside of Data/Trimmed folder)</span></span>
+<span id="cb88-6"><a href="batch-file-processing.html#cb88-6" tabindex="-1"></a>  output_name <span class="ot">&lt;-</span> <span class="fu">paste0</span>(output_dir,</span>
+<span id="cb88-7"><a href="batch-file-processing.html#cb88-7" tabindex="-1"></a>                        <span class="st">&quot;/&quot;</span>,</span>
+<span id="cb88-8"><a href="batch-file-processing.html#cb88-8" tabindex="-1"></a>                        <span class="fu">basename</span>(fastq.files[i]))</span>
+<span id="cb88-9"><a href="batch-file-processing.html#cb88-9" tabindex="-1"></a>  json_report <span class="ot">&lt;-</span> <span class="fu">rfastp</span>(</span>
+<span id="cb88-10"><a href="batch-file-processing.html#cb88-10" tabindex="-1"></a>    <span class="at">read1 =</span> read1,</span>
+<span id="cb88-11"><a href="batch-file-processing.html#cb88-11" tabindex="-1"></a>    <span class="at">outputFastq =</span> <span class="fu">str_split</span>(output_name, <span class="fu">fixed</span>(<span class="st">&quot;.&quot;</span>))[[<span class="dv">1</span>]][<span class="dv">1</span>],</span>
+<span id="cb88-12"><a href="batch-file-processing.html#cb88-12" tabindex="-1"></a>    <span class="at">disableTrimPolyG =</span> <span class="cn">FALSE</span>,</span>
+<span id="cb88-13"><a href="batch-file-processing.html#cb88-13" tabindex="-1"></a>    <span class="co"># cutLowQualFront = TRUE,</span></span>
+<span id="cb88-14"><a href="batch-file-processing.html#cb88-14" tabindex="-1"></a>    <span class="co"># cutFrontWindowSize = 3,</span></span>
+<span id="cb88-15"><a href="batch-file-processing.html#cb88-15" tabindex="-1"></a>    <span class="co"># cutFrontMeanQual = 10,</span></span>
+<span id="cb88-16"><a href="batch-file-processing.html#cb88-16" tabindex="-1"></a>    <span class="co"># cutLowQualTail = TRUE,</span></span>
+<span id="cb88-17"><a href="batch-file-processing.html#cb88-17" tabindex="-1"></a>    <span class="at">cutTailWindowSize =</span> <span class="dv">1</span>,</span>
+<span id="cb88-18"><a href="batch-file-processing.html#cb88-18" tabindex="-1"></a>    <span class="co"># cutTailMeanQual = 5,</span></span>
+<span id="cb88-19"><a href="batch-file-processing.html#cb88-19" tabindex="-1"></a>    <span class="at">minReadLength =</span> <span class="dv">15</span>,</span>
+<span id="cb88-20"><a href="batch-file-processing.html#cb88-20" tabindex="-1"></a>    <span class="co"># trimFrontRead1 = 10,</span></span>
+<span id="cb88-21"><a href="batch-file-processing.html#cb88-21" tabindex="-1"></a>    <span class="co"># adapterSequenceRead1 = &#39;GTGTCAGTCACTTCCAGCGG&#39;</span></span>
+<span id="cb88-22"><a href="batch-file-processing.html#cb88-22" tabindex="-1"></a>  )</span>
+<span id="cb88-23"><a href="batch-file-processing.html#cb88-23" tabindex="-1"></a>  </span>
+<span id="cb88-24"><a href="batch-file-processing.html#cb88-24" tabindex="-1"></a>  <span class="co"># Print the output file link in the R Markdown document</span></span>
+<span id="cb88-25"><a href="batch-file-processing.html#cb88-25" tabindex="-1"></a>  <span class="fu">cat</span>(<span class="fu">paste0</span>(</span>
+<span id="cb88-26"><a href="batch-file-processing.html#cb88-26" tabindex="-1"></a>    <span class="st">&quot;[Processing Complete - &quot;</span>,</span>
+<span id="cb88-27"><a href="batch-file-processing.html#cb88-27" tabindex="-1"></a>    <span class="fu">basename</span>(output_name),</span>
+<span id="cb88-28"><a href="batch-file-processing.html#cb88-28" tabindex="-1"></a>    <span class="st">&quot;](&quot;</span>,</span>
+<span id="cb88-29"><a href="batch-file-processing.html#cb88-29" tabindex="-1"></a>    output_name,</span>
+<span id="cb88-30"><a href="batch-file-processing.html#cb88-30" tabindex="-1"></a>    <span class="st">&quot;)</span><span class="sc">\n\n</span><span class="st">&quot;</span></span>
+<span id="cb88-31"><a href="batch-file-processing.html#cb88-31" tabindex="-1"></a>  ))</span>
+<span id="cb88-32"><a href="batch-file-processing.html#cb88-32" tabindex="-1"></a>}</span></code></pre></div>
+<pre><code>## [Processing Complete - YPS606_MSN24_ETOH_REP1.fastq.gz](/Users/clstacy/Desktop/Genomic_Data_Analysis/Data/Trimmed_rfastp/YPS606_MSN24_ETOH_REP1.fastq.gz)
+## 
+## [Processing Complete - YPS606_MSN24_ETOH_REP2.fastq.gz](/Users/clstacy/Desktop/Genomic_Data_Analysis/Data/Trimmed_rfastp/YPS606_MSN24_ETOH_REP2.fastq.gz)
+## 
+## [Processing Complete - YPS606_MSN24_ETOH_REP3.fastq.gz](/Users/clstacy/Desktop/Genomic_Data_Analysis/Data/Trimmed_rfastp/YPS606_MSN24_ETOH_REP3.fastq.gz)
+## 
+## [Processing Complete - YPS606_MSN24_ETOH_REP4.fastq.gz](/Users/clstacy/Desktop/Genomic_Data_Analysis/Data/Trimmed_rfastp/YPS606_MSN24_ETOH_REP4.fastq.gz)
+## 
+## [Processing Complete - YPS606_MSN24_MOCK_REP1.fastq.gz](/Users/clstacy/Desktop/Genomic_Data_Analysis/Data/Trimmed_rfastp/YPS606_MSN24_MOCK_REP1.fastq.gz)
+## 
+## [Processing Complete - YPS606_MSN24_MOCK_REP2.fastq.gz](/Users/clstacy/Desktop/Genomic_Data_Analysis/Data/Trimmed_rfastp/YPS606_MSN24_MOCK_REP2.fastq.gz)
+## 
+## [Processing Complete - YPS606_MSN24_MOCK_REP3.fastq.gz](/Users/clstacy/Desktop/Genomic_Data_Analysis/Data/Trimmed_rfastp/YPS606_MSN24_MOCK_REP3.fastq.gz)
+## 
+## [Processing Complete - YPS606_MSN24_MOCK_REP4.fastq.gz](/Users/clstacy/Desktop/Genomic_Data_Analysis/Data/Trimmed_rfastp/YPS606_MSN24_MOCK_REP4.fastq.gz)
+## 
+## [Processing Complete - YPS606_WT_ETOH_REP1.fastq.gz](/Users/clstacy/Desktop/Genomic_Data_Analysis/Data/Trimmed_rfastp/YPS606_WT_ETOH_REP1.fastq.gz)
+## 
+## [Processing Complete - YPS606_WT_ETOH_REP2.fastq.gz](/Users/clstacy/Desktop/Genomic_Data_Analysis/Data/Trimmed_rfastp/YPS606_WT_ETOH_REP2.fastq.gz)
+## 
+## [Processing Complete - YPS606_WT_ETOH_REP3.fastq.gz](/Users/clstacy/Desktop/Genomic_Data_Analysis/Data/Trimmed_rfastp/YPS606_WT_ETOH_REP3.fastq.gz)
+## 
+## [Processing Complete - YPS606_WT_ETOH_REP4.fastq.gz](/Users/clstacy/Desktop/Genomic_Data_Analysis/Data/Trimmed_rfastp/YPS606_WT_ETOH_REP4.fastq.gz)
+## 
+## [Processing Complete - YPS606_WT_MOCK_REP1.fastq.gz](/Users/clstacy/Desktop/Genomic_Data_Analysis/Data/Trimmed_rfastp/YPS606_WT_MOCK_REP1.fastq.gz)
+## 
+## [Processing Complete - YPS606_WT_MOCK_REP2.fastq.gz](/Users/clstacy/Desktop/Genomic_Data_Analysis/Data/Trimmed_rfastp/YPS606_WT_MOCK_REP2.fastq.gz)
+## 
+## [Processing Complete - YPS606_WT_MOCK_REP3.fastq.gz](/Users/clstacy/Desktop/Genomic_Data_Analysis/Data/Trimmed_rfastp/YPS606_WT_MOCK_REP3.fastq.gz)
+## 
+## [Processing Complete - YPS606_WT_MOCK_REP4.fastq.gz](/Users/clstacy/Desktop/Genomic_Data_Analysis/Data/Trimmed_rfastp/YPS606_WT_MOCK_REP4.fastq.gz)</code></pre>
+<div id="running-rfastp-creates-several-files" class="section level3 hasAnchor" number="6.0.1">
+<h3><span class="header-section-number">6.0.1</span> Running RfastP creates several files:<a href="batch-file-processing.html#running-rfastp-creates-several-files" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<ol style="list-style-type: decimal">
+<li><p>XXX_R1.fastq.gz - FASTQ with poor quality reads filtered out</p></li>
+<li><p>XXX.html - HTML file contains a QC report</p></li>
+<li><p>XXX.json - JSON file with all the summary statistics</p></li>
+</ol>
+</div>
+<div id="qc-and-adapters" class="section level2 hasAnchor" number="6.1">
+<h2><span class="header-section-number">6.1</span> QC and adapters<a href="batch-file-processing.html#qc-and-adapters" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Another common tool for quality control is called FastQC, useable via command line or GUI, available at <a href="https://www.bioinformatics.babraham.ac.uk/projects/fastqc/" class="uri">https://www.bioinformatics.babraham.ac.uk/projects/fastqc/</a> or via pip or conda install in the command line.</p>
+<p>To use this tool, let’s get conda running on your computer. NOTE: Anaconda is already installed on computers in the computer lab. If you are using your own computer, you’ll need to have conda installed (<a href="https://docs.conda.io/en/main/miniconda.html">link to learn more</a>)</p>
+<p>First, we need to open a terminal window. We will copy code from the below code chunk into the terminal window.</p>
+<div class="sourceCode" id="cb90"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb90-1"><a href="batch-file-processing.html#cb90-1" tabindex="-1"></a><span class="bu">.</span> /opt/anaconda3/bin/activate <span class="kw">&amp;&amp;</span> <span class="ex">conda</span> init</span>
+<span id="cb90-2"><a href="batch-file-processing.html#cb90-2" tabindex="-1"></a><span class="co">#. /opt/anaconda3/bin/activate &amp;&amp; conda activate /opt/anaconda3;</span></span>
+<span id="cb90-3"><a href="batch-file-processing.html#cb90-3" tabindex="-1"></a></span>
+<span id="cb90-4"><a href="batch-file-processing.html#cb90-4" tabindex="-1"></a><span class="co"># run this command in terminal to make sure conda is activated</span></span>
+<span id="cb90-5"><a href="batch-file-processing.html#cb90-5" tabindex="-1"></a><span class="fu">which</span> conda</span>
+<span id="cb90-6"><a href="batch-file-processing.html#cb90-6" tabindex="-1"></a></span>
+<span id="cb90-7"><a href="batch-file-processing.html#cb90-7" tabindex="-1"></a><span class="co"># copy these 4 lines into terminal and run them</span></span>
+<span id="cb90-8"><a href="batch-file-processing.html#cb90-8" tabindex="-1"></a><span class="ex">conda</span> config <span class="at">--add</span> channels defaults</span>
+<span id="cb90-9"><a href="batch-file-processing.html#cb90-9" tabindex="-1"></a><span class="ex">conda</span> config <span class="at">--append</span> channels bioconda</span>
+<span id="cb90-10"><a href="batch-file-processing.html#cb90-10" tabindex="-1"></a><span class="ex">conda</span> config <span class="at">--append</span> channels conda-forge</span>
+<span id="cb90-11"><a href="batch-file-processing.html#cb90-11" tabindex="-1"></a><span class="ex">conda</span> config <span class="at">--set</span> channel_priority strict</span>
+<span id="cb90-12"><a href="batch-file-processing.html#cb90-12" tabindex="-1"></a></span>
+<span id="cb90-13"><a href="batch-file-processing.html#cb90-13" tabindex="-1"></a><span class="co"># check channel order</span></span>
+<span id="cb90-14"><a href="batch-file-processing.html#cb90-14" tabindex="-1"></a><span class="ex">conda</span> config <span class="at">--show</span> channels</span></code></pre></div>
+<p>Now, we need to create a conda environment with our packages. You can do so with the code below. This may take a couple of minutes the first time we run it.</p>
+<div class="sourceCode" id="cb91"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb91-1"><a href="batch-file-processing.html#cb91-1" tabindex="-1"></a><span class="co"># create an enviornment for our QC packages</span></span>
+<span id="cb91-2"><a href="batch-file-processing.html#cb91-2" tabindex="-1"></a><span class="cf">if</span> <span class="ex">conda</span> info <span class="at">--envs</span> <span class="kw">|</span> <span class="fu">grep</span> <span class="at">-q</span> QC<span class="kw">;</span> <span class="cf">then</span> <span class="bu">echo</span> <span class="st">&quot;environment &#39;QC&#39; already exists&quot;</span><span class="kw">;</span> <span class="cf">else</span> <span class="ex">conda</span> create <span class="at">-y</span> <span class="at">-n</span> QC fastqc multiqc<span class="kw">;</span> <span class="cf">fi</span></span>
+<span id="cb91-3"><a href="batch-file-processing.html#cb91-3" tabindex="-1"></a></span>
+<span id="cb91-4"><a href="batch-file-processing.html#cb91-4" tabindex="-1"></a><span class="co"># see available conda environments</span></span>
+<span id="cb91-5"><a href="batch-file-processing.html#cb91-5" tabindex="-1"></a><span class="ex">conda</span> env list</span>
+<span id="cb91-6"><a href="batch-file-processing.html#cb91-6" tabindex="-1"></a></span>
+<span id="cb91-7"><a href="batch-file-processing.html#cb91-7" tabindex="-1"></a><span class="co"># activate our QC environment</span></span>
+<span id="cb91-8"><a href="batch-file-processing.html#cb91-8" tabindex="-1"></a><span class="ex">conda</span> activate QC</span>
+<span id="cb91-9"><a href="batch-file-processing.html#cb91-9" tabindex="-1"></a></span>
+<span id="cb91-10"><a href="batch-file-processing.html#cb91-10" tabindex="-1"></a><span class="co"># make sure desired packages are working</span></span>
+<span id="cb91-11"><a href="batch-file-processing.html#cb91-11" tabindex="-1"></a><span class="fu">which</span> fastqc</span>
+<span id="cb91-12"><a href="batch-file-processing.html#cb91-12" tabindex="-1"></a><span class="fu">which</span> multiqc</span>
+<span id="cb91-13"><a href="batch-file-processing.html#cb91-13" tabindex="-1"></a></span>
+<span id="cb91-14"><a href="batch-file-processing.html#cb91-14" tabindex="-1"></a><span class="co"># get the versions of each software</span></span>
+<span id="cb91-15"><a href="batch-file-processing.html#cb91-15" tabindex="-1"></a><span class="ex">fastqc</span> <span class="at">-v</span></span>
+<span id="cb91-16"><a href="batch-file-processing.html#cb91-16" tabindex="-1"></a><span class="ex">multiqc</span> <span class="at">--version</span></span>
+<span id="cb91-17"><a href="batch-file-processing.html#cb91-17" tabindex="-1"></a></span>
+<span id="cb91-18"><a href="batch-file-processing.html#cb91-18" tabindex="-1"></a><span class="co"># it&#39;s always good coding practice to deactivate a conda environment at the end of a chunk</span></span>
+<span id="cb91-19"><a href="batch-file-processing.html#cb91-19" tabindex="-1"></a><span class="ex">conda</span> deactivate</span></code></pre></div>
+<pre><code>## environment &#39;QC&#39; already exists
+## # conda environments:
+## #
+##                          /Users/clstacy/Library/r-miniconda
+##                          /Users/clstacy/Library/r-miniconda-arm64
+##                          /Users/clstacy/Library/r-miniconda-arm64/envs/r-reticulate
+##                          /Users/clstacy/Library/r-miniconda/envs/r-reticulate
+## base                  *  /Users/clstacy/anaconda3
+## QC                       /Users/clstacy/anaconda3/envs/QC
+## mageck                   /Users/clstacy/anaconda3/envs/mageck
+## salmon                   /Users/clstacy/anaconda3/envs/salmon
+##                          /Users/clstacy/opt/anaconda3
+##                          /Users/clstacy/opt/anaconda3/envs/colony_count_nn
+##                          /Users/clstacy/opt/anaconda3/envs/tlcc
+## 
+## /Users/clstacy/anaconda3/envs/QC/bin/fastqc
+## /Users/clstacy/anaconda3/envs/QC/bin/multiqc
+## FastQC v0.12.1
+## multiqc, version 1.15</code></pre>
+</div>
+<div id="running-fastqc" class="section level2 hasAnchor" number="6.2">
+<h2><span class="header-section-number">6.2</span> Running fastqc<a href="batch-file-processing.html#running-fastqc" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div class="sourceCode" id="cb93"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb93-1"><a href="batch-file-processing.html#cb93-1" tabindex="-1"></a><span class="co">#WARNING: variables in bash you&#39;ve saved in previous chunks won&#39;t be retained in later chunks</span></span>
+<span id="cb93-2"><a href="batch-file-processing.html#cb93-2" tabindex="-1"></a><span class="co"># We need to set a variable for the folder above raw and trimmed files.</span></span>
+<span id="cb93-3"><a href="batch-file-processing.html#cb93-3" tabindex="-1"></a><span class="va">DATA_DIR</span><span class="op">=</span><span class="st">&quot;/Users/</span><span class="va">$USER</span><span class="st">/Desktop/Genomic_Data_Analysis/Data&quot;</span></span>
+<span id="cb93-4"><a href="batch-file-processing.html#cb93-4" tabindex="-1"></a><span class="va">QC_DIR</span><span class="op">=</span><span class="st">&quot;/Users/</span><span class="va">$USER</span><span class="st">/Desktop/Genomic_Data_Analysis/QC&quot;</span></span>
+<span id="cb93-5"><a href="batch-file-processing.html#cb93-5" tabindex="-1"></a><span class="co"># Activate conda QC environment</span></span>
+<span id="cb93-6"><a href="batch-file-processing.html#cb93-6" tabindex="-1"></a><span class="ex">conda</span> activate QC</span>
+<span id="cb93-7"><a href="batch-file-processing.html#cb93-7" tabindex="-1"></a></span>
+<span id="cb93-8"><a href="batch-file-processing.html#cb93-8" tabindex="-1"></a><span class="co"># show which version of fastqc is active</span></span>
+<span id="cb93-9"><a href="batch-file-processing.html#cb93-9" tabindex="-1"></a><span class="ex">fastqc</span> <span class="at">-v</span></span>
+<span id="cb93-10"><a href="batch-file-processing.html#cb93-10" tabindex="-1"></a></span>
+<span id="cb93-11"><a href="batch-file-processing.html#cb93-11" tabindex="-1"></a><span class="co"># Function to check if a command is installed, we use this next.</span></span>
+<span id="cb93-12"><a href="batch-file-processing.html#cb93-12" tabindex="-1"></a><span class="fu">command_exists()</span> <span class="kw">{</span></span>
+<span id="cb93-13"><a href="batch-file-processing.html#cb93-13" tabindex="-1"></a>  <span class="bu">command</span> <span class="at">-v</span> <span class="st">&quot;</span><span class="va">$1</span><span class="st">&quot;</span> <span class="op">&gt;</span>/dev/null <span class="dv">2</span><span class="op">&gt;&amp;</span><span class="dv">1</span></span>
+<span id="cb93-14"><a href="batch-file-processing.html#cb93-14" tabindex="-1"></a><span class="kw">}</span></span>
+<span id="cb93-15"><a href="batch-file-processing.html#cb93-15" tabindex="-1"></a></span>
+<span id="cb93-16"><a href="batch-file-processing.html#cb93-16" tabindex="-1"></a><span class="cf">if</span> <span class="ex">command_exists</span> fastqc<span class="kw">;</span> <span class="cf">then</span></span>
+<span id="cb93-17"><a href="batch-file-processing.html#cb93-17" tabindex="-1"></a>  <span class="co"># Continue if fastqc is installed</span></span>
+<span id="cb93-18"><a href="batch-file-processing.html#cb93-18" tabindex="-1"></a>  <span class="co"># first, make sure we have the folders to store the fastqc outputs</span></span>
+<span id="cb93-19"><a href="batch-file-processing.html#cb93-19" tabindex="-1"></a>  <span class="fu">mkdir</span> <span class="at">-p</span> <span class="va">$QC_DIR</span>/fastqc/Raw</span>
+<span id="cb93-20"><a href="batch-file-processing.html#cb93-20" tabindex="-1"></a>  <span class="fu">mkdir</span> <span class="at">-p</span> <span class="va">$QC_DIR</span>/fastqc/Trimmed</span>
+<span id="cb93-21"><a href="batch-file-processing.html#cb93-21" tabindex="-1"></a>  <span class="co"># run fastqc on the raw data files</span></span>
+<span id="cb93-22"><a href="batch-file-processing.html#cb93-22" tabindex="-1"></a>  <span class="ex">fastqc</span> <span class="va">$DATA_DIR</span>/Raw/<span class="pp">*</span>.fastq.gz <span class="at">-o</span> <span class="va">$QC_DIR</span>/fastqc/Raw</span>
+<span id="cb93-23"><a href="batch-file-processing.html#cb93-23" tabindex="-1"></a>  <span class="co"># run fastqc on the trimmed data files</span></span>
+<span id="cb93-24"><a href="batch-file-processing.html#cb93-24" tabindex="-1"></a>  <span class="ex">fastqc</span> <span class="va">$DATA_DIR</span>/Trimmed_rfastp/<span class="pp">*</span>.fastq.gz <span class="at">-o</span> <span class="va">$QC_DIR</span>/fastqc/Trimmed</span>
+<span id="cb93-25"><a href="batch-file-processing.html#cb93-25" tabindex="-1"></a>  <span class="cf">if</span> <span class="bu">[</span> <span class="va">$?</span> <span class="ot">-ne</span> 0 <span class="bu">]</span><span class="kw">;</span> <span class="cf">then</span></span>
+<span id="cb93-26"><a href="batch-file-processing.html#cb93-26" tabindex="-1"></a>    <span class="bu">echo</span> <span class="st">&quot;FastQC execution failed. It didn&#39;t work.&quot;</span></span>
+<span id="cb93-27"><a href="batch-file-processing.html#cb93-27" tabindex="-1"></a>  <span class="cf">fi</span></span>
+<span id="cb93-28"><a href="batch-file-processing.html#cb93-28" tabindex="-1"></a><span class="cf">else</span></span>
+<span id="cb93-29"><a href="batch-file-processing.html#cb93-29" tabindex="-1"></a>  <span class="bu">echo</span> <span class="st">&quot;FastQC is not installed.&quot;</span></span>
+<span id="cb93-30"><a href="batch-file-processing.html#cb93-30" tabindex="-1"></a><span class="cf">fi</span></span>
+<span id="cb93-31"><a href="batch-file-processing.html#cb93-31" tabindex="-1"></a></span>
+<span id="cb93-32"><a href="batch-file-processing.html#cb93-32" tabindex="-1"></a><span class="co"># deactivate QC conda environment</span></span>
+<span id="cb93-33"><a href="batch-file-processing.html#cb93-33" tabindex="-1"></a><span class="ex">conda</span> deactivate</span></code></pre></div>
+<pre><code>## FastQC v0.12.1
+## application/octet-stream
+## application/octet-stream
+## application/octet-stream
+## application/octet-stream
+## application/octet-stream
+## application/octet-stream
+## application/octet-stream
+## application/octet-stream
+## application/octet-stream
+## application/octet-stream
+## application/octet-stream
+## application/octet-stream
+## application/octet-stream
+## application/octet-stream
+## application/octet-stream
+## application/octet-stream
+## Started analysis of YPS606_MSN24_ETOH_REP1.fastq.gz
+## Approx 5% complete for YPS606_MSN24_ETOH_REP1.fastq.gz
+## Approx 10% complete for YPS606_MSN24_ETOH_REP1.fastq.gz
+## Approx 15% complete for YPS606_MSN24_ETOH_REP1.fastq.gz
+## Approx 20% complete for YPS606_MSN24_ETOH_REP1.fastq.gz
+## Approx 25% complete for YPS606_MSN24_ETOH_REP1.fastq.gz
+## Approx 30% complete for YPS606_MSN24_ETOH_REP1.fastq.gz
+## Approx 35% complete for YPS606_MSN24_ETOH_REP1.fastq.gz
+## Approx 40% complete for YPS606_MSN24_ETOH_REP1.fastq.gz
+## Approx 45% complete for YPS606_MSN24_ETOH_REP1.fastq.gz
+## Approx 50% complete for YPS606_MSN24_ETOH_REP1.fastq.gz
+## Approx 55% complete for YPS606_MSN24_ETOH_REP1.fastq.gz
+## Approx 60% complete for YPS606_MSN24_ETOH_REP1.fastq.gz
+## Approx 65% complete for YPS606_MSN24_ETOH_REP1.fastq.gz
+## Approx 70% complete for YPS606_MSN24_ETOH_REP1.fastq.gz
+## Approx 75% complete for YPS606_MSN24_ETOH_REP1.fastq.gz
+## Approx 80% complete for YPS606_MSN24_ETOH_REP1.fastq.gz
+## Approx 85% complete for YPS606_MSN24_ETOH_REP1.fastq.gz
+## Approx 90% complete for YPS606_MSN24_ETOH_REP1.fastq.gz
+## Approx 95% complete for YPS606_MSN24_ETOH_REP1.fastq.gz
+## Analysis complete for YPS606_MSN24_ETOH_REP1.fastq.gz
+## Warning: the fonts &quot;Times&quot; and &quot;Times&quot; are not available for the Java logical font &quot;Serif&quot;, which may have unexpected appearance or behavior. Re-enable the &quot;Times&quot; font to remove this warning.
+## Started analysis of YPS606_MSN24_ETOH_REP2.fastq.gz
+## Approx 5% complete for YPS606_MSN24_ETOH_REP2.fastq.gz
+## Approx 10% complete for YPS606_MSN24_ETOH_REP2.fastq.gz
+## Approx 15% complete for YPS606_MSN24_ETOH_REP2.fastq.gz
+## Approx 20% complete for YPS606_MSN24_ETOH_REP2.fastq.gz
+## Approx 25% complete for YPS606_MSN24_ETOH_REP2.fastq.gz
+## Approx 30% complete for YPS606_MSN24_ETOH_REP2.fastq.gz
+## Approx 35% complete for YPS606_MSN24_ETOH_REP2.fastq.gz
+## Approx 40% complete for YPS606_MSN24_ETOH_REP2.fastq.gz
+## Approx 45% complete for YPS606_MSN24_ETOH_REP2.fastq.gz
+## Approx 50% complete for YPS606_MSN24_ETOH_REP2.fastq.gz
+## Approx 55% complete for YPS606_MSN24_ETOH_REP2.fastq.gz
+## Approx 60% complete for YPS606_MSN24_ETOH_REP2.fastq.gz
+## Approx 65% complete for YPS606_MSN24_ETOH_REP2.fastq.gz
+## Approx 70% complete for YPS606_MSN24_ETOH_REP2.fastq.gz
+## Approx 75% complete for YPS606_MSN24_ETOH_REP2.fastq.gz
+## Approx 80% complete for YPS606_MSN24_ETOH_REP2.fastq.gz
+## Approx 85% complete for YPS606_MSN24_ETOH_REP2.fastq.gz
+## Approx 90% complete for YPS606_MSN24_ETOH_REP2.fastq.gz
+## Approx 95% complete for YPS606_MSN24_ETOH_REP2.fastq.gz
+## Analysis complete for YPS606_MSN24_ETOH_REP2.fastq.gz
+## Started analysis of YPS606_MSN24_ETOH_REP3.fastq.gz
+## Approx 5% complete for YPS606_MSN24_ETOH_REP3.fastq.gz
+## Approx 10% complete for YPS606_MSN24_ETOH_REP3.fastq.gz
+## Approx 15% complete for YPS606_MSN24_ETOH_REP3.fastq.gz
+## Approx 20% complete for YPS606_MSN24_ETOH_REP3.fastq.gz
+## Approx 25% complete for YPS606_MSN24_ETOH_REP3.fastq.gz
+## Approx 30% complete for YPS606_MSN24_ETOH_REP3.fastq.gz
+## Approx 35% complete for YPS606_MSN24_ETOH_REP3.fastq.gz
+## Approx 40% complete for YPS606_MSN24_ETOH_REP3.fastq.gz
+## Approx 45% complete for YPS606_MSN24_ETOH_REP3.fastq.gz
+## Approx 50% complete for YPS606_MSN24_ETOH_REP3.fastq.gz
+## Approx 55% complete for YPS606_MSN24_ETOH_REP3.fastq.gz
+## Approx 60% complete for YPS606_MSN24_ETOH_REP3.fastq.gz
+## Approx 65% complete for YPS606_MSN24_ETOH_REP3.fastq.gz
+## Approx 70% complete for YPS606_MSN24_ETOH_REP3.fastq.gz
+## Approx 75% complete for YPS606_MSN24_ETOH_REP3.fastq.gz
+## Approx 80% complete for YPS606_MSN24_ETOH_REP3.fastq.gz
+## Approx 85% complete for YPS606_MSN24_ETOH_REP3.fastq.gz
+## Approx 90% complete for YPS606_MSN24_ETOH_REP3.fastq.gz
+## Approx 95% complete for YPS606_MSN24_ETOH_REP3.fastq.gz
+## Analysis complete for YPS606_MSN24_ETOH_REP3.fastq.gz
+## Started analysis of YPS606_MSN24_ETOH_REP4.fastq.gz
+## Approx 5% complete for YPS606_MSN24_ETOH_REP4.fastq.gz
+## Approx 10% complete for YPS606_MSN24_ETOH_REP4.fastq.gz
+## Approx 15% complete for YPS606_MSN24_ETOH_REP4.fastq.gz
+## Approx 20% complete for YPS606_MSN24_ETOH_REP4.fastq.gz
+## Approx 25% complete for YPS606_MSN24_ETOH_REP4.fastq.gz
+## Approx 30% complete for YPS606_MSN24_ETOH_REP4.fastq.gz
+## Approx 35% complete for YPS606_MSN24_ETOH_REP4.fastq.gz
+## Approx 40% complete for YPS606_MSN24_ETOH_REP4.fastq.gz
+## Approx 45% complete for YPS606_MSN24_ETOH_REP4.fastq.gz
+## Approx 50% complete for YPS606_MSN24_ETOH_REP4.fastq.gz
+## Approx 55% complete for YPS606_MSN24_ETOH_REP4.fastq.gz
+## Approx 60% complete for YPS606_MSN24_ETOH_REP4.fastq.gz
+## Approx 65% complete for YPS606_MSN24_ETOH_REP4.fastq.gz
+## Approx 70% complete for YPS606_MSN24_ETOH_REP4.fastq.gz
+## Approx 75% complete for YPS606_MSN24_ETOH_REP4.fastq.gz
+## Approx 80% complete for YPS606_MSN24_ETOH_REP4.fastq.gz
+## Approx 85% complete for YPS606_MSN24_ETOH_REP4.fastq.gz
+## Approx 90% complete for YPS606_MSN24_ETOH_REP4.fastq.gz
+## Approx 95% complete for YPS606_MSN24_ETOH_REP4.fastq.gz
+## Analysis complete for YPS606_MSN24_ETOH_REP4.fastq.gz
+## Started analysis of YPS606_MSN24_MOCK_REP1.fastq.gz
+## Approx 5% complete for YPS606_MSN24_MOCK_REP1.fastq.gz
+## Approx 10% complete for YPS606_MSN24_MOCK_REP1.fastq.gz
+## Approx 15% complete for YPS606_MSN24_MOCK_REP1.fastq.gz
+## Approx 20% complete for YPS606_MSN24_MOCK_REP1.fastq.gz
+## Approx 25% complete for YPS606_MSN24_MOCK_REP1.fastq.gz
+## Approx 30% complete for YPS606_MSN24_MOCK_REP1.fastq.gz
+## Approx 35% complete for YPS606_MSN24_MOCK_REP1.fastq.gz
+## Approx 40% complete for YPS606_MSN24_MOCK_REP1.fastq.gz
+## Approx 45% complete for YPS606_MSN24_MOCK_REP1.fastq.gz
+## Approx 50% complete for YPS606_MSN24_MOCK_REP1.fastq.gz
+## Approx 55% complete for YPS606_MSN24_MOCK_REP1.fastq.gz
+## Approx 60% complete for YPS606_MSN24_MOCK_REP1.fastq.gz
+## Approx 65% complete for YPS606_MSN24_MOCK_REP1.fastq.gz
+## Approx 70% complete for YPS606_MSN24_MOCK_REP1.fastq.gz
+## Approx 75% complete for YPS606_MSN24_MOCK_REP1.fastq.gz
+## Approx 80% complete for YPS606_MSN24_MOCK_REP1.fastq.gz
+## Approx 85% complete for YPS606_MSN24_MOCK_REP1.fastq.gz
+## Approx 90% complete for YPS606_MSN24_MOCK_REP1.fastq.gz
+## Approx 95% complete for YPS606_MSN24_MOCK_REP1.fastq.gz
+## Analysis complete for YPS606_MSN24_MOCK_REP1.fastq.gz
+## Started analysis of YPS606_MSN24_MOCK_REP2.fastq.gz
+## Approx 5% complete for YPS606_MSN24_MOCK_REP2.fastq.gz
+## Approx 10% complete for YPS606_MSN24_MOCK_REP2.fastq.gz
+## Approx 15% complete for YPS606_MSN24_MOCK_REP2.fastq.gz
+## Approx 20% complete for YPS606_MSN24_MOCK_REP2.fastq.gz
+## Approx 25% complete for YPS606_MSN24_MOCK_REP2.fastq.gz
+## Approx 30% complete for YPS606_MSN24_MOCK_REP2.fastq.gz
+## Approx 35% complete for YPS606_MSN24_MOCK_REP2.fastq.gz
+## Approx 40% complete for YPS606_MSN24_MOCK_REP2.fastq.gz
+## Approx 45% complete for YPS606_MSN24_MOCK_REP2.fastq.gz
+## Approx 50% complete for YPS606_MSN24_MOCK_REP2.fastq.gz
+## Approx 55% complete for YPS606_MSN24_MOCK_REP2.fastq.gz
+## Approx 60% complete for YPS606_MSN24_MOCK_REP2.fastq.gz
+## Approx 65% complete for YPS606_MSN24_MOCK_REP2.fastq.gz
+## Approx 70% complete for YPS606_MSN24_MOCK_REP2.fastq.gz
+## Approx 75% complete for YPS606_MSN24_MOCK_REP2.fastq.gz
+## Approx 80% complete for YPS606_MSN24_MOCK_REP2.fastq.gz
+## Approx 85% complete for YPS606_MSN24_MOCK_REP2.fastq.gz
+## Approx 90% complete for YPS606_MSN24_MOCK_REP2.fastq.gz
+## Approx 95% complete for YPS606_MSN24_MOCK_REP2.fastq.gz
+## Analysis complete for YPS606_MSN24_MOCK_REP2.fastq.gz
+## Started analysis of YPS606_MSN24_MOCK_REP3.fastq.gz
+## Approx 5% complete for YPS606_MSN24_MOCK_REP3.fastq.gz
+## Approx 10% complete for YPS606_MSN24_MOCK_REP3.fastq.gz
+## Approx 15% complete for YPS606_MSN24_MOCK_REP3.fastq.gz
+## Approx 20% complete for YPS606_MSN24_MOCK_REP3.fastq.gz
+## Approx 25% complete for YPS606_MSN24_MOCK_REP3.fastq.gz
+## Approx 30% complete for YPS606_MSN24_MOCK_REP3.fastq.gz
+## Approx 35% complete for YPS606_MSN24_MOCK_REP3.fastq.gz
+## Approx 40% complete for YPS606_MSN24_MOCK_REP3.fastq.gz
+## Approx 45% complete for YPS606_MSN24_MOCK_REP3.fastq.gz
+## Approx 50% complete for YPS606_MSN24_MOCK_REP3.fastq.gz
+## Approx 55% complete for YPS606_MSN24_MOCK_REP3.fastq.gz
+## Approx 60% complete for YPS606_MSN24_MOCK_REP3.fastq.gz
+## Approx 65% complete for YPS606_MSN24_MOCK_REP3.fastq.gz
+## Approx 70% complete for YPS606_MSN24_MOCK_REP3.fastq.gz
+## Approx 75% complete for YPS606_MSN24_MOCK_REP3.fastq.gz
+## Approx 80% complete for YPS606_MSN24_MOCK_REP3.fastq.gz
+## Approx 85% complete for YPS606_MSN24_MOCK_REP3.fastq.gz
+## Approx 90% complete for YPS606_MSN24_MOCK_REP3.fastq.gz
+## Approx 95% complete for YPS606_MSN24_MOCK_REP3.fastq.gz
+## Approx 100% complete for YPS606_MSN24_MOCK_REP3.fastq.gz
+## Analysis complete for YPS606_MSN24_MOCK_REP3.fastq.gz
+## Started analysis of YPS606_MSN24_MOCK_REP4.fastq.gz
+## Approx 5% complete for YPS606_MSN24_MOCK_REP4.fastq.gz
+## Approx 10% complete for YPS606_MSN24_MOCK_REP4.fastq.gz
+## Approx 15% complete for YPS606_MSN24_MOCK_REP4.fastq.gz
+## Approx 20% complete for YPS606_MSN24_MOCK_REP4.fastq.gz
+## Approx 25% complete for YPS606_MSN24_MOCK_REP4.fastq.gz
+## Approx 30% complete for YPS606_MSN24_MOCK_REP4.fastq.gz
+## Approx 35% complete for YPS606_MSN24_MOCK_REP4.fastq.gz
+## Approx 40% complete for YPS606_MSN24_MOCK_REP4.fastq.gz
+## Approx 45% complete for YPS606_MSN24_MOCK_REP4.fastq.gz
+## Approx 50% complete for YPS606_MSN24_MOCK_REP4.fastq.gz
+## Approx 55% complete for YPS606_MSN24_MOCK_REP4.fastq.gz
+## Approx 60% complete for YPS606_MSN24_MOCK_REP4.fastq.gz
+## Approx 65% complete for YPS606_MSN24_MOCK_REP4.fastq.gz
+## Approx 70% complete for YPS606_MSN24_MOCK_REP4.fastq.gz
+## Approx 75% complete for YPS606_MSN24_MOCK_REP4.fastq.gz
+## Approx 80% complete for YPS606_MSN24_MOCK_REP4.fastq.gz
+## Approx 85% complete for YPS606_MSN24_MOCK_REP4.fastq.gz
+## Approx 90% complete for YPS606_MSN24_MOCK_REP4.fastq.gz
+## Approx 95% complete for YPS606_MSN24_MOCK_REP4.fastq.gz
+## Analysis complete for YPS606_MSN24_MOCK_REP4.fastq.gz
+## Started analysis of YPS606_WT_ETOH_REP1.fastq.gz
+## Approx 5% complete for YPS606_WT_ETOH_REP1.fastq.gz
+## Approx 10% complete for YPS606_WT_ETOH_REP1.fastq.gz
+## Approx 15% complete for YPS606_WT_ETOH_REP1.fastq.gz
+## Approx 20% complete for YPS606_WT_ETOH_REP1.fastq.gz
+## Approx 25% complete for YPS606_WT_ETOH_REP1.fastq.gz
+## Approx 30% complete for YPS606_WT_ETOH_REP1.fastq.gz
+## Approx 35% complete for YPS606_WT_ETOH_REP1.fastq.gz
+## Approx 40% complete for YPS606_WT_ETOH_REP1.fastq.gz
+## Approx 45% complete for YPS606_WT_ETOH_REP1.fastq.gz
+## Approx 50% complete for YPS606_WT_ETOH_REP1.fastq.gz
+## Approx 55% complete for YPS606_WT_ETOH_REP1.fastq.gz
+## Approx 60% complete for YPS606_WT_ETOH_REP1.fastq.gz
+## Approx 65% complete for YPS606_WT_ETOH_REP1.fastq.gz
+## Approx 70% complete for YPS606_WT_ETOH_REP1.fastq.gz
+## Approx 75% complete for YPS606_WT_ETOH_REP1.fastq.gz
+## Approx 80% complete for YPS606_WT_ETOH_REP1.fastq.gz
+## Approx 85% complete for YPS606_WT_ETOH_REP1.fastq.gz
+## Approx 90% complete for YPS606_WT_ETOH_REP1.fastq.gz
+## Approx 95% complete for YPS606_WT_ETOH_REP1.fastq.gz
+## Analysis complete for YPS606_WT_ETOH_REP1.fastq.gz
+## Started analysis of YPS606_WT_ETOH_REP2.fastq.gz
+## Approx 5% complete for YPS606_WT_ETOH_REP2.fastq.gz
+## Approx 10% complete for YPS606_WT_ETOH_REP2.fastq.gz
+## Approx 15% complete for YPS606_WT_ETOH_REP2.fastq.gz
+## Approx 20% complete for YPS606_WT_ETOH_REP2.fastq.gz
+## Approx 25% complete for YPS606_WT_ETOH_REP2.fastq.gz
+## Approx 30% complete for YPS606_WT_ETOH_REP2.fastq.gz
+## Approx 35% complete for YPS606_WT_ETOH_REP2.fastq.gz
+## Approx 40% complete for YPS606_WT_ETOH_REP2.fastq.gz
+## Approx 45% complete for YPS606_WT_ETOH_REP2.fastq.gz
+## Approx 50% complete for YPS606_WT_ETOH_REP2.fastq.gz
+## Approx 55% complete for YPS606_WT_ETOH_REP2.fastq.gz
+## Approx 60% complete for YPS606_WT_ETOH_REP2.fastq.gz
+## Approx 65% complete for YPS606_WT_ETOH_REP2.fastq.gz
+## Approx 70% complete for YPS606_WT_ETOH_REP2.fastq.gz
+## Approx 75% complete for YPS606_WT_ETOH_REP2.fastq.gz
+## Approx 80% complete for YPS606_WT_ETOH_REP2.fastq.gz
+## Approx 85% complete for YPS606_WT_ETOH_REP2.fastq.gz
+## Approx 90% complete for YPS606_WT_ETOH_REP2.fastq.gz
+## Approx 95% complete for YPS606_WT_ETOH_REP2.fastq.gz
+## Analysis complete for YPS606_WT_ETOH_REP2.fastq.gz
+## Started analysis of YPS606_WT_ETOH_REP3.fastq.gz
+## Approx 5% complete for YPS606_WT_ETOH_REP3.fastq.gz
+## Approx 10% complete for YPS606_WT_ETOH_REP3.fastq.gz
+## Approx 15% complete for YPS606_WT_ETOH_REP3.fastq.gz
+## Approx 20% complete for YPS606_WT_ETOH_REP3.fastq.gz
+## Approx 25% complete for YPS606_WT_ETOH_REP3.fastq.gz
+## Approx 30% complete for YPS606_WT_ETOH_REP3.fastq.gz
+## Approx 35% complete for YPS606_WT_ETOH_REP3.fastq.gz
+## Approx 40% complete for YPS606_WT_ETOH_REP3.fastq.gz
+## Approx 45% complete for YPS606_WT_ETOH_REP3.fastq.gz
+## Approx 50% complete for YPS606_WT_ETOH_REP3.fastq.gz
+## Approx 55% complete for YPS606_WT_ETOH_REP3.fastq.gz
+## Approx 60% complete for YPS606_WT_ETOH_REP3.fastq.gz
+## Approx 65% complete for YPS606_WT_ETOH_REP3.fastq.gz
+## Approx 70% complete for YPS606_WT_ETOH_REP3.fastq.gz
+## Approx 75% complete for YPS606_WT_ETOH_REP3.fastq.gz
+## Approx 80% complete for YPS606_WT_ETOH_REP3.fastq.gz
+## Approx 85% complete for YPS606_WT_ETOH_REP3.fastq.gz
+## Approx 90% complete for YPS606_WT_ETOH_REP3.fastq.gz
+## Approx 95% complete for YPS606_WT_ETOH_REP3.fastq.gz
+## Analysis complete for YPS606_WT_ETOH_REP3.fastq.gz
+## Started analysis of YPS606_WT_ETOH_REP4.fastq.gz
+## Approx 5% complete for YPS606_WT_ETOH_REP4.fastq.gz
+## Approx 10% complete for YPS606_WT_ETOH_REP4.fastq.gz
+## Approx 15% complete for YPS606_WT_ETOH_REP4.fastq.gz
+## Approx 20% complete for YPS606_WT_ETOH_REP4.fastq.gz
+## Approx 25% complete for YPS606_WT_ETOH_REP4.fastq.gz
+## Approx 30% complete for YPS606_WT_ETOH_REP4.fastq.gz
+## Approx 35% complete for YPS606_WT_ETOH_REP4.fastq.gz
+## Approx 40% complete for YPS606_WT_ETOH_REP4.fastq.gz
+## Approx 45% complete for YPS606_WT_ETOH_REP4.fastq.gz
+## Approx 50% complete for YPS606_WT_ETOH_REP4.fastq.gz
+## Approx 55% complete for YPS606_WT_ETOH_REP4.fastq.gz
+## Approx 60% complete for YPS606_WT_ETOH_REP4.fastq.gz
+## Approx 65% complete for YPS606_WT_ETOH_REP4.fastq.gz
+## Approx 70% complete for YPS606_WT_ETOH_REP4.fastq.gz
+## Approx 75% complete for YPS606_WT_ETOH_REP4.fastq.gz
+## Approx 80% complete for YPS606_WT_ETOH_REP4.fastq.gz
+## Approx 85% complete for YPS606_WT_ETOH_REP4.fastq.gz
+## Approx 90% complete for YPS606_WT_ETOH_REP4.fastq.gz
+## Approx 95% complete for YPS606_WT_ETOH_REP4.fastq.gz
+## Analysis complete for YPS606_WT_ETOH_REP4.fastq.gz
+## Started analysis of YPS606_WT_MOCK_REP1.fastq.gz
+## Approx 5% complete for YPS606_WT_MOCK_REP1.fastq.gz
+## Approx 10% complete for YPS606_WT_MOCK_REP1.fastq.gz
+## Approx 15% complete for YPS606_WT_MOCK_REP1.fastq.gz
+## Approx 20% complete for YPS606_WT_MOCK_REP1.fastq.gz
+## Approx 25% complete for YPS606_WT_MOCK_REP1.fastq.gz
+## Approx 30% complete for YPS606_WT_MOCK_REP1.fastq.gz
+## Approx 35% complete for YPS606_WT_MOCK_REP1.fastq.gz
+## Approx 40% complete for YPS606_WT_MOCK_REP1.fastq.gz
+## Approx 45% complete for YPS606_WT_MOCK_REP1.fastq.gz
+## Approx 50% complete for YPS606_WT_MOCK_REP1.fastq.gz
+## Approx 55% complete for YPS606_WT_MOCK_REP1.fastq.gz
+## Approx 60% complete for YPS606_WT_MOCK_REP1.fastq.gz
+## Approx 65% complete for YPS606_WT_MOCK_REP1.fastq.gz
+## Approx 70% complete for YPS606_WT_MOCK_REP1.fastq.gz
+## Approx 75% complete for YPS606_WT_MOCK_REP1.fastq.gz
+## Approx 80% complete for YPS606_WT_MOCK_REP1.fastq.gz
+## Approx 85% complete for YPS606_WT_MOCK_REP1.fastq.gz
+## Approx 90% complete for YPS606_WT_MOCK_REP1.fastq.gz
+## Approx 95% complete for YPS606_WT_MOCK_REP1.fastq.gz
+## Analysis complete for YPS606_WT_MOCK_REP1.fastq.gz
+## Started analysis of YPS606_WT_MOCK_REP2.fastq.gz
+## Approx 5% complete for YPS606_WT_MOCK_REP2.fastq.gz
+## Approx 10% complete for YPS606_WT_MOCK_REP2.fastq.gz
+## Approx 15% complete for YPS606_WT_MOCK_REP2.fastq.gz
+## Approx 20% complete for YPS606_WT_MOCK_REP2.fastq.gz
+## Approx 25% complete for YPS606_WT_MOCK_REP2.fastq.gz
+## Approx 30% complete for YPS606_WT_MOCK_REP2.fastq.gz
+## Approx 35% complete for YPS606_WT_MOCK_REP2.fastq.gz
+## Approx 40% complete for YPS606_WT_MOCK_REP2.fastq.gz
+## Approx 45% complete for YPS606_WT_MOCK_REP2.fastq.gz
+## Approx 50% complete for YPS606_WT_MOCK_REP2.fastq.gz
+## Approx 55% complete for YPS606_WT_MOCK_REP2.fastq.gz
+## Approx 60% complete for YPS606_WT_MOCK_REP2.fastq.gz
+## Approx 65% complete for YPS606_WT_MOCK_REP2.fastq.gz
+## Approx 70% complete for YPS606_WT_MOCK_REP2.fastq.gz
+## Approx 75% complete for YPS606_WT_MOCK_REP2.fastq.gz
+## Approx 80% complete for YPS606_WT_MOCK_REP2.fastq.gz
+## Approx 85% complete for YPS606_WT_MOCK_REP2.fastq.gz
+## Approx 90% complete for YPS606_WT_MOCK_REP2.fastq.gz
+## Approx 95% complete for YPS606_WT_MOCK_REP2.fastq.gz
+## Analysis complete for YPS606_WT_MOCK_REP2.fastq.gz
+## Started analysis of YPS606_WT_MOCK_REP3.fastq.gz
+## Approx 5% complete for YPS606_WT_MOCK_REP3.fastq.gz
+## Approx 10% complete for YPS606_WT_MOCK_REP3.fastq.gz
+## Approx 15% complete for YPS606_WT_MOCK_REP3.fastq.gz
+## Approx 20% complete for YPS606_WT_MOCK_REP3.fastq.gz
+## Approx 25% complete for YPS606_WT_MOCK_REP3.fastq.gz
+## Approx 30% complete for YPS606_WT_MOCK_REP3.fastq.gz
+## Approx 35% complete for YPS606_WT_MOCK_REP3.fastq.gz
+## Approx 40% complete for YPS606_WT_MOCK_REP3.fastq.gz
+## Approx 45% complete for YPS606_WT_MOCK_REP3.fastq.gz
+## Approx 50% complete for YPS606_WT_MOCK_REP3.fastq.gz
+## Approx 55% complete for YPS606_WT_MOCK_REP3.fastq.gz
+## Approx 60% complete for YPS606_WT_MOCK_REP3.fastq.gz
+## Approx 65% complete for YPS606_WT_MOCK_REP3.fastq.gz
+## Approx 70% complete for YPS606_WT_MOCK_REP3.fastq.gz
+## Approx 75% complete for YPS606_WT_MOCK_REP3.fastq.gz
+## Approx 80% complete for YPS606_WT_MOCK_REP3.fastq.gz
+## Approx 85% complete for YPS606_WT_MOCK_REP3.fastq.gz
+## Approx 90% complete for YPS606_WT_MOCK_REP3.fastq.gz
+## Approx 95% complete for YPS606_WT_MOCK_REP3.fastq.gz
+## Analysis complete for YPS606_WT_MOCK_REP3.fastq.gz
+## Started analysis of YPS606_WT_MOCK_REP4.fastq.gz
+## Approx 5% complete for YPS606_WT_MOCK_REP4.fastq.gz
+## Approx 10% complete for YPS606_WT_MOCK_REP4.fastq.gz
+## Approx 15% complete for YPS606_WT_MOCK_REP4.fastq.gz
+## Approx 20% complete for YPS606_WT_MOCK_REP4.fastq.gz
+## Approx 25% complete for YPS606_WT_MOCK_REP4.fastq.gz
+## Approx 30% complete for YPS606_WT_MOCK_REP4.fastq.gz
+## Approx 35% complete for YPS606_WT_MOCK_REP4.fastq.gz
+## Approx 40% complete for YPS606_WT_MOCK_REP4.fastq.gz
+## Approx 45% complete for YPS606_WT_MOCK_REP4.fastq.gz
+## Approx 50% complete for YPS606_WT_MOCK_REP4.fastq.gz
+## Approx 55% complete for YPS606_WT_MOCK_REP4.fastq.gz
+## Approx 60% complete for YPS606_WT_MOCK_REP4.fastq.gz
+## Approx 65% complete for YPS606_WT_MOCK_REP4.fastq.gz
+## Approx 70% complete for YPS606_WT_MOCK_REP4.fastq.gz
+## Approx 75% complete for YPS606_WT_MOCK_REP4.fastq.gz
+## Approx 80% complete for YPS606_WT_MOCK_REP4.fastq.gz
+## Approx 85% complete for YPS606_WT_MOCK_REP4.fastq.gz
+## Approx 90% complete for YPS606_WT_MOCK_REP4.fastq.gz
+## Approx 95% complete for YPS606_WT_MOCK_REP4.fastq.gz
+## Analysis complete for YPS606_WT_MOCK_REP4.fastq.gz
+## application/octet-stream
+## application/octet-stream
+## Started analysis of YPS606_MSN24_ETOH_REP1_R1.fastq.gz
+## application/octet-stream
+## application/octet-stream
+## application/octet-stream
+## application/octet-stream
+## application/octet-stream
+## application/octet-stream
+## application/octet-stream
+## application/octet-stream
+## application/octet-stream
+## application/octet-stream
+## application/octet-stream
+## application/octet-stream
+## application/octet-stream
+## application/octet-stream
+## Approx 5% complete for YPS606_MSN24_ETOH_REP1_R1.fastq.gz
+## Approx 10% complete for YPS606_MSN24_ETOH_REP1_R1.fastq.gz
+## Approx 15% complete for YPS606_MSN24_ETOH_REP1_R1.fastq.gz
+## Approx 20% complete for YPS606_MSN24_ETOH_REP1_R1.fastq.gz
+## Approx 25% complete for YPS606_MSN24_ETOH_REP1_R1.fastq.gz
+## Approx 30% complete for YPS606_MSN24_ETOH_REP1_R1.fastq.gz
+## Approx 35% complete for YPS606_MSN24_ETOH_REP1_R1.fastq.gz
+## Approx 40% complete for YPS606_MSN24_ETOH_REP1_R1.fastq.gz
+## Approx 45% complete for YPS606_MSN24_ETOH_REP1_R1.fastq.gz
+## Approx 50% complete for YPS606_MSN24_ETOH_REP1_R1.fastq.gz
+## Approx 55% complete for YPS606_MSN24_ETOH_REP1_R1.fastq.gz
+## Approx 60% complete for YPS606_MSN24_ETOH_REP1_R1.fastq.gz
+## Approx 65% complete for YPS606_MSN24_ETOH_REP1_R1.fastq.gz
+## Approx 70% complete for YPS606_MSN24_ETOH_REP1_R1.fastq.gz
+## Approx 75% complete for YPS606_MSN24_ETOH_REP1_R1.fastq.gz
+## Approx 80% complete for YPS606_MSN24_ETOH_REP1_R1.fastq.gz
+## Approx 85% complete for YPS606_MSN24_ETOH_REP1_R1.fastq.gz
+## Approx 90% complete for YPS606_MSN24_ETOH_REP1_R1.fastq.gz
+## Approx 95% complete for YPS606_MSN24_ETOH_REP1_R1.fastq.gz
+## Analysis complete for YPS606_MSN24_ETOH_REP1_R1.fastq.gz
+## Warning: the fonts &quot;Times&quot; and &quot;Times&quot; are not available for the Java logical font &quot;Serif&quot;, which may have unexpected appearance or behavior. Re-enable the &quot;Times&quot; font to remove this warning.
+## Started analysis of YPS606_MSN24_ETOH_REP2_R1.fastq.gz
+## Approx 5% complete for YPS606_MSN24_ETOH_REP2_R1.fastq.gz
+## Approx 10% complete for YPS606_MSN24_ETOH_REP2_R1.fastq.gz
+## Approx 15% complete for YPS606_MSN24_ETOH_REP2_R1.fastq.gz
+## Approx 20% complete for YPS606_MSN24_ETOH_REP2_R1.fastq.gz
+## Approx 25% complete for YPS606_MSN24_ETOH_REP2_R1.fastq.gz
+## Approx 30% complete for YPS606_MSN24_ETOH_REP2_R1.fastq.gz
+## Approx 35% complete for YPS606_MSN24_ETOH_REP2_R1.fastq.gz
+## Approx 40% complete for YPS606_MSN24_ETOH_REP2_R1.fastq.gz
+## Approx 45% complete for YPS606_MSN24_ETOH_REP2_R1.fastq.gz
+## Approx 50% complete for YPS606_MSN24_ETOH_REP2_R1.fastq.gz
+## Approx 55% complete for YPS606_MSN24_ETOH_REP2_R1.fastq.gz
+## Approx 60% complete for YPS606_MSN24_ETOH_REP2_R1.fastq.gz
+## Approx 65% complete for YPS606_MSN24_ETOH_REP2_R1.fastq.gz
+## Approx 70% complete for YPS606_MSN24_ETOH_REP2_R1.fastq.gz
+## Approx 75% complete for YPS606_MSN24_ETOH_REP2_R1.fastq.gz
+## Approx 80% complete for YPS606_MSN24_ETOH_REP2_R1.fastq.gz
+## Approx 85% complete for YPS606_MSN24_ETOH_REP2_R1.fastq.gz
+## Approx 90% complete for YPS606_MSN24_ETOH_REP2_R1.fastq.gz
+## Approx 95% complete for YPS606_MSN24_ETOH_REP2_R1.fastq.gz
+## Analysis complete for YPS606_MSN24_ETOH_REP2_R1.fastq.gz
+## Started analysis of YPS606_MSN24_ETOH_REP3_R1.fastq.gz
+## Approx 5% complete for YPS606_MSN24_ETOH_REP3_R1.fastq.gz
+## Approx 10% complete for YPS606_MSN24_ETOH_REP3_R1.fastq.gz
+## Approx 15% complete for YPS606_MSN24_ETOH_REP3_R1.fastq.gz
+## Approx 20% complete for YPS606_MSN24_ETOH_REP3_R1.fastq.gz
+## Approx 25% complete for YPS606_MSN24_ETOH_REP3_R1.fastq.gz
+## Approx 30% complete for YPS606_MSN24_ETOH_REP3_R1.fastq.gz
+## Approx 35% complete for YPS606_MSN24_ETOH_REP3_R1.fastq.gz
+## Approx 40% complete for YPS606_MSN24_ETOH_REP3_R1.fastq.gz
+## Approx 45% complete for YPS606_MSN24_ETOH_REP3_R1.fastq.gz
+## Approx 50% complete for YPS606_MSN24_ETOH_REP3_R1.fastq.gz
+## Approx 55% complete for YPS606_MSN24_ETOH_REP3_R1.fastq.gz
+## Approx 60% complete for YPS606_MSN24_ETOH_REP3_R1.fastq.gz
+## Approx 65% complete for YPS606_MSN24_ETOH_REP3_R1.fastq.gz
+## Approx 70% complete for YPS606_MSN24_ETOH_REP3_R1.fastq.gz
+## Approx 75% complete for YPS606_MSN24_ETOH_REP3_R1.fastq.gz
+## Approx 80% complete for YPS606_MSN24_ETOH_REP3_R1.fastq.gz
+## Approx 85% complete for YPS606_MSN24_ETOH_REP3_R1.fastq.gz
+## Approx 90% complete for YPS606_MSN24_ETOH_REP3_R1.fastq.gz
+## Approx 95% complete for YPS606_MSN24_ETOH_REP3_R1.fastq.gz
+## Analysis complete for YPS606_MSN24_ETOH_REP3_R1.fastq.gz
+## Started analysis of YPS606_MSN24_ETOH_REP4_R1.fastq.gz
+## Approx 5% complete for YPS606_MSN24_ETOH_REP4_R1.fastq.gz
+## Approx 10% complete for YPS606_MSN24_ETOH_REP4_R1.fastq.gz
+## Approx 15% complete for YPS606_MSN24_ETOH_REP4_R1.fastq.gz
+## Approx 20% complete for YPS606_MSN24_ETOH_REP4_R1.fastq.gz
+## Approx 25% complete for YPS606_MSN24_ETOH_REP4_R1.fastq.gz
+## Approx 30% complete for YPS606_MSN24_ETOH_REP4_R1.fastq.gz
+## Approx 35% complete for YPS606_MSN24_ETOH_REP4_R1.fastq.gz
+## Approx 40% complete for YPS606_MSN24_ETOH_REP4_R1.fastq.gz
+## Approx 45% complete for YPS606_MSN24_ETOH_REP4_R1.fastq.gz
+## Approx 50% complete for YPS606_MSN24_ETOH_REP4_R1.fastq.gz
+## Approx 55% complete for YPS606_MSN24_ETOH_REP4_R1.fastq.gz
+## Approx 60% complete for YPS606_MSN24_ETOH_REP4_R1.fastq.gz
+## Approx 65% complete for YPS606_MSN24_ETOH_REP4_R1.fastq.gz
+## Approx 70% complete for YPS606_MSN24_ETOH_REP4_R1.fastq.gz
+## Approx 75% complete for YPS606_MSN24_ETOH_REP4_R1.fastq.gz
+## Approx 80% complete for YPS606_MSN24_ETOH_REP4_R1.fastq.gz
+## Approx 85% complete for YPS606_MSN24_ETOH_REP4_R1.fastq.gz
+## Approx 90% complete for YPS606_MSN24_ETOH_REP4_R1.fastq.gz
+## Approx 95% complete for YPS606_MSN24_ETOH_REP4_R1.fastq.gz
+## Analysis complete for YPS606_MSN24_ETOH_REP4_R1.fastq.gz
+## Started analysis of YPS606_MSN24_MOCK_REP1_R1.fastq.gz
+## Approx 5% complete for YPS606_MSN24_MOCK_REP1_R1.fastq.gz
+## Approx 10% complete for YPS606_MSN24_MOCK_REP1_R1.fastq.gz
+## Approx 15% complete for YPS606_MSN24_MOCK_REP1_R1.fastq.gz
+## Approx 20% complete for YPS606_MSN24_MOCK_REP1_R1.fastq.gz
+## Approx 25% complete for YPS606_MSN24_MOCK_REP1_R1.fastq.gz
+## Approx 30% complete for YPS606_MSN24_MOCK_REP1_R1.fastq.gz
+## Approx 35% complete for YPS606_MSN24_MOCK_REP1_R1.fastq.gz
+## Approx 40% complete for YPS606_MSN24_MOCK_REP1_R1.fastq.gz
+## Approx 45% complete for YPS606_MSN24_MOCK_REP1_R1.fastq.gz
+## Approx 50% complete for YPS606_MSN24_MOCK_REP1_R1.fastq.gz
+## Approx 55% complete for YPS606_MSN24_MOCK_REP1_R1.fastq.gz
+## Approx 60% complete for YPS606_MSN24_MOCK_REP1_R1.fastq.gz
+## Approx 65% complete for YPS606_MSN24_MOCK_REP1_R1.fastq.gz
+## Approx 70% complete for YPS606_MSN24_MOCK_REP1_R1.fastq.gz
+## Approx 75% complete for YPS606_MSN24_MOCK_REP1_R1.fastq.gz
+## Approx 80% complete for YPS606_MSN24_MOCK_REP1_R1.fastq.gz
+## Approx 85% complete for YPS606_MSN24_MOCK_REP1_R1.fastq.gz
+## Approx 90% complete for YPS606_MSN24_MOCK_REP1_R1.fastq.gz
+## Approx 95% complete for YPS606_MSN24_MOCK_REP1_R1.fastq.gz
+## Analysis complete for YPS606_MSN24_MOCK_REP1_R1.fastq.gz
+## Started analysis of YPS606_MSN24_MOCK_REP2_R1.fastq.gz
+## Approx 5% complete for YPS606_MSN24_MOCK_REP2_R1.fastq.gz
+## Approx 10% complete for YPS606_MSN24_MOCK_REP2_R1.fastq.gz
+## Approx 15% complete for YPS606_MSN24_MOCK_REP2_R1.fastq.gz
+## Approx 20% complete for YPS606_MSN24_MOCK_REP2_R1.fastq.gz
+## Approx 25% complete for YPS606_MSN24_MOCK_REP2_R1.fastq.gz
+## Approx 30% complete for YPS606_MSN24_MOCK_REP2_R1.fastq.gz
+## Approx 35% complete for YPS606_MSN24_MOCK_REP2_R1.fastq.gz
+## Approx 40% complete for YPS606_MSN24_MOCK_REP2_R1.fastq.gz
+## Approx 45% complete for YPS606_MSN24_MOCK_REP2_R1.fastq.gz
+## Approx 50% complete for YPS606_MSN24_MOCK_REP2_R1.fastq.gz
+## Approx 55% complete for YPS606_MSN24_MOCK_REP2_R1.fastq.gz
+## Approx 60% complete for YPS606_MSN24_MOCK_REP2_R1.fastq.gz
+## Approx 65% complete for YPS606_MSN24_MOCK_REP2_R1.fastq.gz
+## Approx 70% complete for YPS606_MSN24_MOCK_REP2_R1.fastq.gz
+## Approx 75% complete for YPS606_MSN24_MOCK_REP2_R1.fastq.gz
+## Approx 80% complete for YPS606_MSN24_MOCK_REP2_R1.fastq.gz
+## Approx 85% complete for YPS606_MSN24_MOCK_REP2_R1.fastq.gz
+## Approx 90% complete for YPS606_MSN24_MOCK_REP2_R1.fastq.gz
+## Approx 95% complete for YPS606_MSN24_MOCK_REP2_R1.fastq.gz
+## Analysis complete for YPS606_MSN24_MOCK_REP2_R1.fastq.gz
+## Started analysis of YPS606_MSN24_MOCK_REP3_R1.fastq.gz
+## Approx 5% complete for YPS606_MSN24_MOCK_REP3_R1.fastq.gz
+## Approx 10% complete for YPS606_MSN24_MOCK_REP3_R1.fastq.gz
+## Approx 15% complete for YPS606_MSN24_MOCK_REP3_R1.fastq.gz
+## Approx 20% complete for YPS606_MSN24_MOCK_REP3_R1.fastq.gz
+## Approx 25% complete for YPS606_MSN24_MOCK_REP3_R1.fastq.gz
+## Approx 30% complete for YPS606_MSN24_MOCK_REP3_R1.fastq.gz
+## Approx 35% complete for YPS606_MSN24_MOCK_REP3_R1.fastq.gz
+## Approx 40% complete for YPS606_MSN24_MOCK_REP3_R1.fastq.gz
+## Approx 45% complete for YPS606_MSN24_MOCK_REP3_R1.fastq.gz
+## Approx 50% complete for YPS606_MSN24_MOCK_REP3_R1.fastq.gz
+## Approx 55% complete for YPS606_MSN24_MOCK_REP3_R1.fastq.gz
+## Approx 60% complete for YPS606_MSN24_MOCK_REP3_R1.fastq.gz
+## Approx 65% complete for YPS606_MSN24_MOCK_REP3_R1.fastq.gz
+## Approx 70% complete for YPS606_MSN24_MOCK_REP3_R1.fastq.gz
+## Approx 75% complete for YPS606_MSN24_MOCK_REP3_R1.fastq.gz
+## Approx 80% complete for YPS606_MSN24_MOCK_REP3_R1.fastq.gz
+## Approx 85% complete for YPS606_MSN24_MOCK_REP3_R1.fastq.gz
+## Approx 90% complete for YPS606_MSN24_MOCK_REP3_R1.fastq.gz
+## Approx 95% complete for YPS606_MSN24_MOCK_REP3_R1.fastq.gz
+## Approx 100% complete for YPS606_MSN24_MOCK_REP3_R1.fastq.gz
+## Analysis complete for YPS606_MSN24_MOCK_REP3_R1.fastq.gz
+## Started analysis of YPS606_MSN24_MOCK_REP4_R1.fastq.gz
+## Approx 5% complete for YPS606_MSN24_MOCK_REP4_R1.fastq.gz
+## Approx 10% complete for YPS606_MSN24_MOCK_REP4_R1.fastq.gz
+## Approx 15% complete for YPS606_MSN24_MOCK_REP4_R1.fastq.gz
+## Approx 20% complete for YPS606_MSN24_MOCK_REP4_R1.fastq.gz
+## Approx 25% complete for YPS606_MSN24_MOCK_REP4_R1.fastq.gz
+## Approx 30% complete for YPS606_MSN24_MOCK_REP4_R1.fastq.gz
+## Approx 35% complete for YPS606_MSN24_MOCK_REP4_R1.fastq.gz
+## Approx 40% complete for YPS606_MSN24_MOCK_REP4_R1.fastq.gz
+## Approx 45% complete for YPS606_MSN24_MOCK_REP4_R1.fastq.gz
+## Approx 50% complete for YPS606_MSN24_MOCK_REP4_R1.fastq.gz
+## Approx 55% complete for YPS606_MSN24_MOCK_REP4_R1.fastq.gz
+## Approx 60% complete for YPS606_MSN24_MOCK_REP4_R1.fastq.gz
+## Approx 65% complete for YPS606_MSN24_MOCK_REP4_R1.fastq.gz
+## Approx 70% complete for YPS606_MSN24_MOCK_REP4_R1.fastq.gz
+## Approx 75% complete for YPS606_MSN24_MOCK_REP4_R1.fastq.gz
+## Approx 80% complete for YPS606_MSN24_MOCK_REP4_R1.fastq.gz
+## Approx 85% complete for YPS606_MSN24_MOCK_REP4_R1.fastq.gz
+## Approx 90% complete for YPS606_MSN24_MOCK_REP4_R1.fastq.gz
+## Approx 95% complete for YPS606_MSN24_MOCK_REP4_R1.fastq.gz
+## Analysis complete for YPS606_MSN24_MOCK_REP4_R1.fastq.gz
+## Started analysis of YPS606_WT_ETOH_REP1_R1.fastq.gz
+## Approx 5% complete for YPS606_WT_ETOH_REP1_R1.fastq.gz
+## Approx 10% complete for YPS606_WT_ETOH_REP1_R1.fastq.gz
+## Approx 15% complete for YPS606_WT_ETOH_REP1_R1.fastq.gz
+## Approx 20% complete for YPS606_WT_ETOH_REP1_R1.fastq.gz
+## Approx 25% complete for YPS606_WT_ETOH_REP1_R1.fastq.gz
+## Approx 30% complete for YPS606_WT_ETOH_REP1_R1.fastq.gz
+## Approx 35% complete for YPS606_WT_ETOH_REP1_R1.fastq.gz
+## Approx 40% complete for YPS606_WT_ETOH_REP1_R1.fastq.gz
+## Approx 45% complete for YPS606_WT_ETOH_REP1_R1.fastq.gz
+## Approx 50% complete for YPS606_WT_ETOH_REP1_R1.fastq.gz
+## Approx 55% complete for YPS606_WT_ETOH_REP1_R1.fastq.gz
+## Approx 60% complete for YPS606_WT_ETOH_REP1_R1.fastq.gz
+## Approx 65% complete for YPS606_WT_ETOH_REP1_R1.fastq.gz
+## Approx 70% complete for YPS606_WT_ETOH_REP1_R1.fastq.gz
+## Approx 75% complete for YPS606_WT_ETOH_REP1_R1.fastq.gz
+## Approx 80% complete for YPS606_WT_ETOH_REP1_R1.fastq.gz
+## Approx 85% complete for YPS606_WT_ETOH_REP1_R1.fastq.gz
+## Approx 90% complete for YPS606_WT_ETOH_REP1_R1.fastq.gz
+## Approx 95% complete for YPS606_WT_ETOH_REP1_R1.fastq.gz
+## Analysis complete for YPS606_WT_ETOH_REP1_R1.fastq.gz
+## Started analysis of YPS606_WT_ETOH_REP2_R1.fastq.gz
+## Approx 5% complete for YPS606_WT_ETOH_REP2_R1.fastq.gz
+## Approx 10% complete for YPS606_WT_ETOH_REP2_R1.fastq.gz
+## Approx 15% complete for YPS606_WT_ETOH_REP2_R1.fastq.gz
+## Approx 20% complete for YPS606_WT_ETOH_REP2_R1.fastq.gz
+## Approx 25% complete for YPS606_WT_ETOH_REP2_R1.fastq.gz
+## Approx 30% complete for YPS606_WT_ETOH_REP2_R1.fastq.gz
+## Approx 35% complete for YPS606_WT_ETOH_REP2_R1.fastq.gz
+## Approx 40% complete for YPS606_WT_ETOH_REP2_R1.fastq.gz
+## Approx 45% complete for YPS606_WT_ETOH_REP2_R1.fastq.gz
+## Approx 50% complete for YPS606_WT_ETOH_REP2_R1.fastq.gz
+## Approx 55% complete for YPS606_WT_ETOH_REP2_R1.fastq.gz
+## Approx 60% complete for YPS606_WT_ETOH_REP2_R1.fastq.gz
+## Approx 65% complete for YPS606_WT_ETOH_REP2_R1.fastq.gz
+## Approx 70% complete for YPS606_WT_ETOH_REP2_R1.fastq.gz
+## Approx 75% complete for YPS606_WT_ETOH_REP2_R1.fastq.gz
+## Approx 80% complete for YPS606_WT_ETOH_REP2_R1.fastq.gz
+## Approx 85% complete for YPS606_WT_ETOH_REP2_R1.fastq.gz
+## Approx 90% complete for YPS606_WT_ETOH_REP2_R1.fastq.gz
+## Approx 95% complete for YPS606_WT_ETOH_REP2_R1.fastq.gz
+## Analysis complete for YPS606_WT_ETOH_REP2_R1.fastq.gz
+## Started analysis of YPS606_WT_ETOH_REP3_R1.fastq.gz
+## Approx 5% complete for YPS606_WT_ETOH_REP3_R1.fastq.gz
+## Approx 10% complete for YPS606_WT_ETOH_REP3_R1.fastq.gz
+## Approx 15% complete for YPS606_WT_ETOH_REP3_R1.fastq.gz
+## Approx 20% complete for YPS606_WT_ETOH_REP3_R1.fastq.gz
+## Approx 25% complete for YPS606_WT_ETOH_REP3_R1.fastq.gz
+## Approx 30% complete for YPS606_WT_ETOH_REP3_R1.fastq.gz
+## Approx 35% complete for YPS606_WT_ETOH_REP3_R1.fastq.gz
+## Approx 40% complete for YPS606_WT_ETOH_REP3_R1.fastq.gz
+## Approx 45% complete for YPS606_WT_ETOH_REP3_R1.fastq.gz
+## Approx 50% complete for YPS606_WT_ETOH_REP3_R1.fastq.gz
+## Approx 55% complete for YPS606_WT_ETOH_REP3_R1.fastq.gz
+## Approx 60% complete for YPS606_WT_ETOH_REP3_R1.fastq.gz
+## Approx 65% complete for YPS606_WT_ETOH_REP3_R1.fastq.gz
+## Approx 70% complete for YPS606_WT_ETOH_REP3_R1.fastq.gz
+## Approx 75% complete for YPS606_WT_ETOH_REP3_R1.fastq.gz
+## Approx 80% complete for YPS606_WT_ETOH_REP3_R1.fastq.gz
+## Approx 85% complete for YPS606_WT_ETOH_REP3_R1.fastq.gz
+## Approx 90% complete for YPS606_WT_ETOH_REP3_R1.fastq.gz
+## Approx 95% complete for YPS606_WT_ETOH_REP3_R1.fastq.gz
+## Analysis complete for YPS606_WT_ETOH_REP3_R1.fastq.gz
+## Started analysis of YPS606_WT_ETOH_REP4_R1.fastq.gz
+## Approx 5% complete for YPS606_WT_ETOH_REP4_R1.fastq.gz
+## Approx 10% complete for YPS606_WT_ETOH_REP4_R1.fastq.gz
+## Approx 15% complete for YPS606_WT_ETOH_REP4_R1.fastq.gz
+## Approx 20% complete for YPS606_WT_ETOH_REP4_R1.fastq.gz
+## Approx 25% complete for YPS606_WT_ETOH_REP4_R1.fastq.gz
+## Approx 30% complete for YPS606_WT_ETOH_REP4_R1.fastq.gz
+## Approx 35% complete for YPS606_WT_ETOH_REP4_R1.fastq.gz
+## Approx 40% complete for YPS606_WT_ETOH_REP4_R1.fastq.gz
+## Approx 45% complete for YPS606_WT_ETOH_REP4_R1.fastq.gz
+## Approx 50% complete for YPS606_WT_ETOH_REP4_R1.fastq.gz
+## Approx 55% complete for YPS606_WT_ETOH_REP4_R1.fastq.gz
+## Approx 60% complete for YPS606_WT_ETOH_REP4_R1.fastq.gz
+## Approx 65% complete for YPS606_WT_ETOH_REP4_R1.fastq.gz
+## Approx 70% complete for YPS606_WT_ETOH_REP4_R1.fastq.gz
+## Approx 75% complete for YPS606_WT_ETOH_REP4_R1.fastq.gz
+## Approx 80% complete for YPS606_WT_ETOH_REP4_R1.fastq.gz
+## Approx 85% complete for YPS606_WT_ETOH_REP4_R1.fastq.gz
+## Approx 90% complete for YPS606_WT_ETOH_REP4_R1.fastq.gz
+## Approx 95% complete for YPS606_WT_ETOH_REP4_R1.fastq.gz
+## Analysis complete for YPS606_WT_ETOH_REP4_R1.fastq.gz
+## Started analysis of YPS606_WT_MOCK_REP1_R1.fastq.gz
+## Approx 5% complete for YPS606_WT_MOCK_REP1_R1.fastq.gz
+## Approx 10% complete for YPS606_WT_MOCK_REP1_R1.fastq.gz
+## Approx 15% complete for YPS606_WT_MOCK_REP1_R1.fastq.gz
+## Approx 20% complete for YPS606_WT_MOCK_REP1_R1.fastq.gz
+## Approx 25% complete for YPS606_WT_MOCK_REP1_R1.fastq.gz
+## Approx 30% complete for YPS606_WT_MOCK_REP1_R1.fastq.gz
+## Approx 35% complete for YPS606_WT_MOCK_REP1_R1.fastq.gz
+## Approx 40% complete for YPS606_WT_MOCK_REP1_R1.fastq.gz
+## Approx 45% complete for YPS606_WT_MOCK_REP1_R1.fastq.gz
+## Approx 50% complete for YPS606_WT_MOCK_REP1_R1.fastq.gz
+## Approx 55% complete for YPS606_WT_MOCK_REP1_R1.fastq.gz
+## Approx 60% complete for YPS606_WT_MOCK_REP1_R1.fastq.gz
+## Approx 65% complete for YPS606_WT_MOCK_REP1_R1.fastq.gz
+## Approx 70% complete for YPS606_WT_MOCK_REP1_R1.fastq.gz
+## Approx 75% complete for YPS606_WT_MOCK_REP1_R1.fastq.gz
+## Approx 80% complete for YPS606_WT_MOCK_REP1_R1.fastq.gz
+## Approx 85% complete for YPS606_WT_MOCK_REP1_R1.fastq.gz
+## Approx 90% complete for YPS606_WT_MOCK_REP1_R1.fastq.gz
+## Approx 95% complete for YPS606_WT_MOCK_REP1_R1.fastq.gz
+## Analysis complete for YPS606_WT_MOCK_REP1_R1.fastq.gz
+## Started analysis of YPS606_WT_MOCK_REP2_R1.fastq.gz
+## Approx 5% complete for YPS606_WT_MOCK_REP2_R1.fastq.gz
+## Approx 10% complete for YPS606_WT_MOCK_REP2_R1.fastq.gz
+## Approx 15% complete for YPS606_WT_MOCK_REP2_R1.fastq.gz
+## Approx 20% complete for YPS606_WT_MOCK_REP2_R1.fastq.gz
+## Approx 25% complete for YPS606_WT_MOCK_REP2_R1.fastq.gz
+## Approx 30% complete for YPS606_WT_MOCK_REP2_R1.fastq.gz
+## Approx 35% complete for YPS606_WT_MOCK_REP2_R1.fastq.gz
+## Approx 40% complete for YPS606_WT_MOCK_REP2_R1.fastq.gz
+## Approx 45% complete for YPS606_WT_MOCK_REP2_R1.fastq.gz
+## Approx 50% complete for YPS606_WT_MOCK_REP2_R1.fastq.gz
+## Approx 55% complete for YPS606_WT_MOCK_REP2_R1.fastq.gz
+## Approx 60% complete for YPS606_WT_MOCK_REP2_R1.fastq.gz
+## Approx 65% complete for YPS606_WT_MOCK_REP2_R1.fastq.gz
+## Approx 70% complete for YPS606_WT_MOCK_REP2_R1.fastq.gz
+## Approx 75% complete for YPS606_WT_MOCK_REP2_R1.fastq.gz
+## Approx 80% complete for YPS606_WT_MOCK_REP2_R1.fastq.gz
+## Approx 85% complete for YPS606_WT_MOCK_REP2_R1.fastq.gz
+## Approx 90% complete for YPS606_WT_MOCK_REP2_R1.fastq.gz
+## Approx 95% complete for YPS606_WT_MOCK_REP2_R1.fastq.gz
+## Analysis complete for YPS606_WT_MOCK_REP2_R1.fastq.gz
+## Started analysis of YPS606_WT_MOCK_REP3_R1.fastq.gz
+## Approx 5% complete for YPS606_WT_MOCK_REP3_R1.fastq.gz
+## Approx 10% complete for YPS606_WT_MOCK_REP3_R1.fastq.gz
+## Approx 15% complete for YPS606_WT_MOCK_REP3_R1.fastq.gz
+## Approx 20% complete for YPS606_WT_MOCK_REP3_R1.fastq.gz
+## Approx 25% complete for YPS606_WT_MOCK_REP3_R1.fastq.gz
+## Approx 30% complete for YPS606_WT_MOCK_REP3_R1.fastq.gz
+## Approx 35% complete for YPS606_WT_MOCK_REP3_R1.fastq.gz
+## Approx 40% complete for YPS606_WT_MOCK_REP3_R1.fastq.gz
+## Approx 45% complete for YPS606_WT_MOCK_REP3_R1.fastq.gz
+## Approx 50% complete for YPS606_WT_MOCK_REP3_R1.fastq.gz
+## Approx 55% complete for YPS606_WT_MOCK_REP3_R1.fastq.gz
+## Approx 60% complete for YPS606_WT_MOCK_REP3_R1.fastq.gz
+## Approx 65% complete for YPS606_WT_MOCK_REP3_R1.fastq.gz
+## Approx 70% complete for YPS606_WT_MOCK_REP3_R1.fastq.gz
+## Approx 75% complete for YPS606_WT_MOCK_REP3_R1.fastq.gz
+## Approx 80% complete for YPS606_WT_MOCK_REP3_R1.fastq.gz
+## Approx 85% complete for YPS606_WT_MOCK_REP3_R1.fastq.gz
+## Approx 90% complete for YPS606_WT_MOCK_REP3_R1.fastq.gz
+## Approx 95% complete for YPS606_WT_MOCK_REP3_R1.fastq.gz
+## Analysis complete for YPS606_WT_MOCK_REP3_R1.fastq.gz
+## Started analysis of YPS606_WT_MOCK_REP4_R1.fastq.gz
+## Approx 5% complete for YPS606_WT_MOCK_REP4_R1.fastq.gz
+## Approx 10% complete for YPS606_WT_MOCK_REP4_R1.fastq.gz
+## Approx 15% complete for YPS606_WT_MOCK_REP4_R1.fastq.gz
+## Approx 20% complete for YPS606_WT_MOCK_REP4_R1.fastq.gz
+## Approx 25% complete for YPS606_WT_MOCK_REP4_R1.fastq.gz
+## Approx 30% complete for YPS606_WT_MOCK_REP4_R1.fastq.gz
+## Approx 35% complete for YPS606_WT_MOCK_REP4_R1.fastq.gz
+## Approx 40% complete for YPS606_WT_MOCK_REP4_R1.fastq.gz
+## Approx 45% complete for YPS606_WT_MOCK_REP4_R1.fastq.gz
+## Approx 50% complete for YPS606_WT_MOCK_REP4_R1.fastq.gz
+## Approx 55% complete for YPS606_WT_MOCK_REP4_R1.fastq.gz
+## Approx 60% complete for YPS606_WT_MOCK_REP4_R1.fastq.gz
+## Approx 65% complete for YPS606_WT_MOCK_REP4_R1.fastq.gz
+## Approx 70% complete for YPS606_WT_MOCK_REP4_R1.fastq.gz
+## Approx 75% complete for YPS606_WT_MOCK_REP4_R1.fastq.gz
+## Approx 80% complete for YPS606_WT_MOCK_REP4_R1.fastq.gz
+## Approx 85% complete for YPS606_WT_MOCK_REP4_R1.fastq.gz
+## Approx 90% complete for YPS606_WT_MOCK_REP4_R1.fastq.gz
+## Approx 95% complete for YPS606_WT_MOCK_REP4_R1.fastq.gz
+## Analysis complete for YPS606_WT_MOCK_REP4_R1.fastq.gz</code></pre>
+<p>This link shows the fastqc output for the trimmed WT_MOCK_REP1.fastq.gz</p>
+<div class="sourceCode" id="cb95"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb95-1"><a href="batch-file-processing.html#cb95-1" tabindex="-1"></a><span class="fu">browseURL</span>(<span class="st">&quot;~/Desktop/Genomic_Data_Analysis/QC/fastqc/Trimmed/YPS606_WT_MOCK_REP1_R1_fastqc.html&quot;</span>)</span></code></pre></div>
+<p>We could do this for each of the html fastq files to see how they all look but with a large sample size that takes a long time and can lead to missing important information.</p>
+</div>
+<div id="multiqc-for-qc-on-mutliple-samples" class="section level2 hasAnchor" number="6.3">
+<h2><span class="header-section-number">6.3</span> Multiqc for QC on mutliple samples<a href="batch-file-processing.html#multiqc-for-qc-on-mutliple-samples" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>One of our favorite ways to analyze multiple samples simultaneously is <a href="https://multiqc.info/">MultiQC</a> a software that combines fastQC (and other) reports</p>
+<p>Here is the code to run it:</p>
+<div class="sourceCode" id="cb96"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb96-1"><a href="batch-file-processing.html#cb96-1" tabindex="-1"></a><span class="co"># Be sure to change this file path to the path you want to run multiqc</span></span>
+<span id="cb96-2"><a href="batch-file-processing.html#cb96-2" tabindex="-1"></a><span class="va">QC_DIR</span><span class="op">=</span><span class="st">&quot;/Users/</span><span class="va">$USER</span><span class="st">/Desktop/Genomic_Data_Analysis/QC&quot;</span></span>
+<span id="cb96-3"><a href="batch-file-processing.html#cb96-3" tabindex="-1"></a></span>
+<span id="cb96-4"><a href="batch-file-processing.html#cb96-4" tabindex="-1"></a><span class="co"># activate QC environment</span></span>
+<span id="cb96-5"><a href="batch-file-processing.html#cb96-5" tabindex="-1"></a><span class="ex">conda</span> activate QC</span>
+<span id="cb96-6"><a href="batch-file-processing.html#cb96-6" tabindex="-1"></a></span>
+<span id="cb96-7"><a href="batch-file-processing.html#cb96-7" tabindex="-1"></a><span class="co"># run multiqc on all of the fastqc outputs</span></span>
+<span id="cb96-8"><a href="batch-file-processing.html#cb96-8" tabindex="-1"></a><span class="ex">multiqc</span> <span class="va">$QC_DIR</span>/fastqc <span class="at">-o</span> <span class="va">$QC_DIR</span> <span class="at">-m</span> fastqc <span class="at">-f</span></span></code></pre></div>
+<pre><code>## 
+##   /// MultiQC 🔍 | v1.15
+## 
+## |           multiqc | MultiQC Version v1.16 now available!
+## |           multiqc | Only using modules: fastqc
+## |           multiqc | Search path : /Users/clstacy/Desktop/Genomic_Data_Analysis/QC/fastqc
+## |         searching | ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 66/66  
+## |            fastqc | Found 32 reports
+## |           multiqc | Report      : ../../../Desktop/Genomic_Data_Analysis/QC/multiqc_report.html   (overwritten)
+## |           multiqc | Data        : ../../../Desktop/Genomic_Data_Analysis/QC/multiqc_data   (overwritten)
+## |           multiqc | MultiQC complete</code></pre>
+<div class="sourceCode" id="cb98"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb98-1"><a href="batch-file-processing.html#cb98-1" tabindex="-1"></a>path_multiqc <span class="ot">&lt;-</span> <span class="st">&quot;~/Desktop/Genomic_Data_Analysis/QC/multiqc_report.html&quot;</span></span>
+<span id="cb98-2"><a href="batch-file-processing.html#cb98-2" tabindex="-1"></a><span class="fu">browseURL</span>(path_multiqc)</span></code></pre></div>
+<p>Be sure to knit this file into a pdf or html file once you’re finished.</p>
+<p>System information for reproducibility:</p>
+<div class="sourceCode" id="cb99"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb99-1"><a href="batch-file-processing.html#cb99-1" tabindex="-1"></a>pander<span class="sc">::</span><span class="fu">pander</span>(<span class="fu">sessionInfo</span>())</span></code></pre></div>
+<p><strong>R version 4.3.1 (2023-06-16)</strong></p>
+<p><strong>Platform:</strong> aarch64-apple-darwin20 (64-bit)</p>
+<p><strong>locale:</strong>
+en_US.UTF-8||en_US.UTF-8||en_US.UTF-8||C||en_US.UTF-8||en_US.UTF-8</p>
+<p><strong>attached base packages:</strong>
+<em>stats4</em>, <em>stats</em>, <em>graphics</em>, <em>grDevices</em>, <em>utils</em>, <em>datasets</em>, <em>methods</em> and <em>base</em></p>
+<p><strong>other attached packages:</strong>
+<em>ShortRead(v.1.58.0)</em>, <em>GenomicAlignments(v.1.36.0)</em>, <em>SummarizedExperiment(v.1.30.2)</em>, <em>MatrixGenerics(v.1.12.3)</em>, <em>matrixStats(v.1.0.0)</em>, <em>Rsamtools(v.2.16.0)</em>, <em>GenomicRanges(v.1.52.1)</em>, <em>Biostrings(v.2.68.1)</em>, <em>GenomeInfoDb(v.1.36.4)</em>, <em>XVector(v.0.40.0)</em>, <em>BiocParallel(v.1.34.2)</em>, <em>Rfastp(v.1.10.0)</em>, <em>org.Sc.sgd.db(v.3.17.0)</em>, <em>AnnotationDbi(v.1.62.2)</em>, <em>IRanges(v.2.34.1)</em>, <em>S4Vectors(v.0.38.2)</em>, <em>Biobase(v.2.60.0)</em>, <em>BiocGenerics(v.0.46.0)</em>, <em>clusterProfiler(v.4.8.2)</em>, <em>ggVennDiagram(v.1.2.3)</em>, <em>tidytree(v.0.4.5)</em>, <em>igraph(v.1.5.1)</em>, <em>janitor(v.2.2.0)</em>, <em>BiocManager(v.1.30.22)</em>, <em>pander(v.0.6.5)</em>, <em>knitr(v.1.44)</em>, <em>here(v.1.0.1)</em>, <em>lubridate(v.1.9.3)</em>, <em>forcats(v.1.0.0)</em>, <em>stringr(v.1.5.0)</em>, <em>dplyr(v.1.1.3)</em>, <em>purrr(v.1.0.2)</em>, <em>readr(v.2.1.4)</em>, <em>tidyr(v.1.3.0)</em>, <em>tibble(v.3.2.1)</em>, <em>ggplot2(v.3.4.4)</em>, <em>tidyverse(v.2.0.0)</em> and <em>pacman(v.0.5.1)</em></p>
+<p><strong>loaded via a namespace (and not attached):</strong>
+<em>RColorBrewer(v.1.1-3)</em>, <em>rstudioapi(v.0.15.0)</em>, <em>jsonlite(v.1.8.7)</em>, <em>magrittr(v.2.0.3)</em>, <em>farver(v.2.1.1)</em>, <em>rmarkdown(v.2.25)</em>, <em>ragg(v.1.2.6)</em>, <em>fs(v.1.6.3)</em>, <em>zlibbioc(v.1.46.0)</em>, <em>vctrs(v.0.6.4)</em>, <em>memoise(v.2.0.1)</em>, <em>RCurl(v.1.98-1.12)</em>, <em>ggtree(v.3.8.2)</em>, <em>S4Arrays(v.1.0.6)</em>, <em>htmltools(v.0.5.6.1)</em>, <em>curl(v.5.1.0)</em>, <em>gridGraphics(v.0.5-1)</em>, <em>sass(v.0.4.7)</em>, <em>KernSmooth(v.2.23-22)</em>, <em>bslib(v.0.5.1)</em>, <em>plyr(v.1.8.9)</em>, <em>cachem(v.1.0.8)</em>, <em>lifecycle(v.1.0.3)</em>, <em>pkgconfig(v.2.0.3)</em>, <em>Matrix(v.1.6-1.1)</em>, <em>R6(v.2.5.1)</em>, <em>fastmap(v.1.1.1)</em>, <em>gson(v.0.1.0)</em>, <em>GenomeInfoDbData(v.1.2.10)</em>, <em>snakecase(v.0.11.1)</em>, <em>digest(v.0.6.33)</em>, <em>aplot(v.0.2.2)</em>, <em>enrichplot(v.1.20.0)</em>, <em>colorspace(v.2.1-0)</em>, <em>patchwork(v.1.1.3)</em>, <em>rprojroot(v.2.0.3)</em>, <em>textshaping(v.0.3.7)</em>, <em>RSQLite(v.2.3.1)</em>, <em>hwriter(v.1.3.2.1)</em>, <em>labeling(v.0.4.3)</em>, <em>fansi(v.1.0.5)</em>, <em>timechange(v.0.2.0)</em>, <em>abind(v.1.4-5)</em>, <em>httr(v.1.4.7)</em>, <em>polyclip(v.1.10-6)</em>, <em>compiler(v.4.3.1)</em>, <em>proxy(v.0.4-27)</em>, <em>bit64(v.4.0.5)</em>, <em>withr(v.2.5.1)</em>, <em>downloader(v.0.4)</em>, <em>viridis(v.0.6.4)</em>, <em>DBI(v.1.1.3)</em>, <em>ggforce(v.0.4.1)</em>, <em>MASS(v.7.3-60)</em>, <em>DelayedArray(v.0.26.7)</em>, <em>rjson(v.0.2.21)</em>, <em>classInt(v.0.4-10)</em>, <em>HDO.db(v.0.99.1)</em>, <em>units(v.0.8-4)</em>, <em>tools(v.4.3.1)</em>, <em>ape(v.5.7-1)</em>, <em>scatterpie(v.0.2.1)</em>, <em>glue(v.1.6.2)</em>, <em>nlme(v.3.1-163)</em>, <em>GOSemSim(v.2.26.1)</em>, <em>sf(v.1.0-14)</em>, <em>grid(v.4.3.1)</em>, <em>shadowtext(v.0.1.2)</em>, <em>reshape2(v.1.4.4)</em>, <em>fgsea(v.1.26.0)</em>, <em>generics(v.0.1.3)</em>, <em>gtable(v.0.3.4)</em>, <em>tzdb(v.0.4.0)</em>, <em>class(v.7.3-22)</em>, <em>data.table(v.1.14.8)</em>, <em>hms(v.1.1.3)</em>, <em>tidygraph(v.1.2.3)</em>, <em>utf8(v.1.2.3)</em>, <em>ggrepel(v.0.9.4)</em>, <em>pillar(v.1.9.0)</em>, <em>yulab.utils(v.0.1.0)</em>, <em>vroom(v.1.6.4)</em>, <em>splines(v.4.3.1)</em>, <em>tweenr(v.2.0.2)</em>, <em>treeio(v.1.24.3)</em>, <em>lattice(v.0.21-9)</em>, <em>deldir(v.1.0-9)</em>, <em>bit(v.4.0.5)</em>, <em>tidyselect(v.1.2.0)</em>, <em>GO.db(v.3.17.0)</em>, <em>gridExtra(v.2.3)</em>, <em>bookdown(v.0.36)</em>, <em>xfun(v.0.40)</em>, <em>graphlayouts(v.1.0.1)</em>, <em>stringi(v.1.7.12)</em>, <em>lazyeval(v.0.2.2)</em>, <em>ggfun(v.0.1.3)</em>, <em>yaml(v.2.3.7)</em>, <em>evaluate(v.0.22)</em>, <em>codetools(v.0.2-19)</em>, <em>interp(v.1.1-4)</em>, <em>ggraph(v.2.1.0)</em>, <em>qvalue(v.2.32.0)</em>, <em>RVenn(v.1.1.0)</em>, <em>ggplotify(v.0.1.2)</em>, <em>cli(v.3.6.1)</em>, <em>systemfonts(v.1.0.5)</em>, <em>munsell(v.0.5.0)</em>, <em>jquerylib(v.0.1.4)</em>, <em>Rcpp(v.1.0.11)</em>, <em>png(v.0.1-8)</em>, <em>parallel(v.4.3.1)</em>, <em>blob(v.1.2.4)</em>, <em>jpeg(v.0.1-10)</em>, <em>latticeExtra(v.0.6-30)</em>, <em>DOSE(v.3.26.1)</em>, <em>bitops(v.1.0-7)</em>, <em>viridisLite(v.0.4.2)</em>, <em>e1071(v.1.7-13)</em>, <em>scales(v.1.2.1)</em>, <em>crayon(v.1.5.2)</em>, <em>rlang(v.1.1.1)</em>, <em>cowplot(v.1.1.1)</em>, <em>fastmatch(v.1.1-4)</em> and <em>KEGGREST(v.1.40.1)</em></p>
+
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="trimming.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="read-mapping.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": false,
+"facebook": true,
+"twitter": true,
+"linkedin": false,
+"weibo": false,
+"instapaper": false,
+"vk": false,
+"whatsapp": false,
+"all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": "https://github.com/USERNAME/REPO/edit/BRANCH/03-Working_with_Sequences.Rmd",
+"text": "Edit"
+},
+"history": {
+"link": null,
+"text": null
+},
+"view": {
+"link": null,
+"text": null
+},
+"download": ["_main.pdf", "_main.epub"],
+"search": {
+"engine": "fuse",
+"options": null
+},
+"toc": {
+"collapse": "subsection"
+}
+});
+});
+</script>
+
+</body>
+
+</html>
