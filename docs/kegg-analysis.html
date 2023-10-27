@@ -1,0 +1,1429 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>Chapter 11 KEGG Analysis | Genomic Data Analysis Course Exercises</title>
+  <meta name="description" content="These are exercises created for the 2023 course: Genomic Data Analysis at the University of Arkansas." />
+  <meta name="generator" content="bookdown 0.36 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="Chapter 11 KEGG Analysis | Genomic Data Analysis Course Exercises" />
+  <meta property="og:type" content="book" />
+  
+  <meta property="og:description" content="These are exercises created for the 2023 course: Genomic Data Analysis at the University of Arkansas." />
+  <meta name="github-repo" content="clstacy/GenomicDataAnalysis" />
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Chapter 11 KEGG Analysis | Genomic Data Analysis Course Exercises" />
+  
+  <meta name="twitter:description" content="These are exercises created for the 2023 course: Genomic Data Analysis at the University of Arkansas." />
+  
+
+<meta name="author" content="Carson Stacy &amp; Jeffrey Lewis" />
+
+
+<meta name="date" content="2023-10-27" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="clustering.html"/>
+
+<script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+<link href="libs/anchor-sections-1.1.0/anchor-sections.css" rel="stylesheet" />
+<link href="libs/anchor-sections-1.1.0/anchor-sections-hash.css" rel="stylesheet" />
+<script src="libs/anchor-sections-1.1.0/anchor-sections.js"></script>
+<script src="libs/core-js-2.5.3/shim.min.js"></script>
+<script src="libs/react-18.2.0/react.min.js"></script>
+<script src="libs/react-18.2.0/react-dom.min.js"></script>
+<script src="libs/reactwidget-1.0.0/react-tools.js"></script>
+<script src="libs/htmlwidgets-1.6.2/htmlwidgets.js"></script>
+<link href="libs/reactable-0.4.4/reactable.css" rel="stylesheet" />
+<script src="libs/reactable-binding-0.4.4/reactable.js"></script>
+<link href="libs/datatables-1/datatables.css" rel="stylesheet" />
+<script src="libs/datatables-1/datatables.min.js"></script>
+<link href="libs/vega-1/vega_plots.css" rel="stylesheet" />
+<script src="libs/vega-1/vega.min.js"></script>
+<link href="libs/vega-tooltip-1/vega-tooltip.css" rel="stylesheet" />
+<script src="libs/vega-tooltip-1/vega-tooltip.js"></script>
+<script src="libs/FileSaver-1/FileSaver.js"></script>
+<script src="libs/GlimmaV2-1/XYSpecs.js"></script>
+<script src="libs/GlimmaV2-1/MDSSpecs.js"></script>
+<script src="libs/GlimmaV2-1/expressionSpec.js"></script>
+<script src="libs/GlimmaV2-1/makeTooltip.js"></script>
+<script src="libs/GlimmaV2-1/saveTools.js"></script>
+<script src="libs/glimmaXY-binding-2.10.0/glimmaXY.js"></script>
+
+
+<style type="text/css">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+<style type="text/css">
+  
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+</style>
+
+<link rel="stylesheet" href="style.css" type="text/css" />
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li><a href="./">Genomic Data Analysis Exercises</a></li>
+
+<li class="divider"></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Preface</a>
+<ul>
+<li class="chapter" data-level="0.1" data-path="index.html"><a href="index.html#usage"><i class="fa fa-check"></i><b>0.1</b> Usage</a></li>
+<li class="chapter" data-level="0.2" data-path="index.html"><a href="index.html#key-features"><i class="fa fa-check"></i><b>0.2</b> <strong>Key Features</strong></a></li>
+<li class="chapter" data-level="0.3" data-path="index.html"><a href="index.html#disclaimer"><i class="fa fa-check"></i><b>0.3</b> Disclaimer</a></li>
+</ul></li>
+<li class="chapter" data-level="1" data-path="getting-started-in-r.html"><a href="getting-started-in-r.html"><i class="fa fa-check"></i><b>1</b> Getting Started in R</a>
+<ul>
+<li class="chapter" data-level="1.1" data-path="getting-started-in-r.html"><a href="getting-started-in-r.html#exercise-description"><i class="fa fa-check"></i><b>1.1</b> Exercise Description</a></li>
+<li class="chapter" data-level="1.2" data-path="getting-started-in-r.html"><a href="getting-started-in-r.html#learning-outcomes"><i class="fa fa-check"></i><b>1.2</b> Learning outcomes</a></li>
+<li class="chapter" data-level="1.3" data-path="getting-started-in-r.html"><a href="getting-started-in-r.html#using-r-and-rstudio"><i class="fa fa-check"></i><b>1.3</b> Using R and RStudio</a></li>
+<li class="chapter" data-level="1.4" data-path="getting-started-in-r.html"><a href="getting-started-in-r.html#load-data-directly-from-the-url"><i class="fa fa-check"></i><b>1.4</b> Load data directly from the URL</a></li>
+<li class="chapter" data-level="1.5" data-path="getting-started-in-r.html"><a href="getting-started-in-r.html#working-with-data-in-r"><i class="fa fa-check"></i><b>1.5</b> Working with data in R</a></li>
+<li class="chapter" data-level="1.6" data-path="getting-started-in-r.html"><a href="getting-started-in-r.html#looking-at-data-in-rstudio"><i class="fa fa-check"></i><b>1.6</b> Looking at Data in RStudio</a></li>
+<li class="chapter" data-level="1.7" data-path="getting-started-in-r.html"><a href="getting-started-in-r.html#exploring-the-data"><i class="fa fa-check"></i><b>1.7</b> Exploring the data</a></li>
+</ul></li>
+<li class="chapter" data-level="2" data-path="gene-ontology.html"><a href="gene-ontology.html"><i class="fa fa-check"></i><b>2</b> Gene Ontology</a>
+<ul>
+<li class="chapter" data-level="2.1" data-path="gene-ontology.html"><a href="gene-ontology.html#description"><i class="fa fa-check"></i><b>2.1</b> Description</a></li>
+<li class="chapter" data-level="2.2" data-path="gene-ontology.html"><a href="gene-ontology.html#learning-outcomes-1"><i class="fa fa-check"></i><b>2.2</b> Learning outcomes</a></li>
+<li class="chapter" data-level="2.3" data-path="gene-ontology.html"><a href="gene-ontology.html#analysis-workflow"><i class="fa fa-check"></i><b>2.3</b> Analysis Workflow</a></li>
+<li class="chapter" data-level="2.4" data-path="gene-ontology.html"><a href="gene-ontology.html#get-de-gene-list"><i class="fa fa-check"></i><b>2.4</b> Get DE gene list</a>
+<ul>
+<li class="chapter" data-level="2.4.1" data-path="gene-ontology.html"><a href="gene-ontology.html#saving-ggplot-output-to-a-file"><i class="fa fa-check"></i><b>2.4.1</b> Saving ggplot output to a file</a></li>
+</ul></li>
+<li class="chapter" data-level="2.5" data-path="gene-ontology.html"><a href="gene-ontology.html#the-hypergeometric-distribution-in-practice"><i class="fa fa-check"></i><b>2.5</b> The Hypergeometric Distribution in practice</a></li>
+<li class="chapter" data-level="2.6" data-path="gene-ontology.html"><a href="gene-ontology.html#now-it-is-your-turn"><i class="fa fa-check"></i><b>2.6</b> Now it is your turn</a>
+<ul>
+<li class="chapter" data-level="2.6.1" data-path="gene-ontology.html"><a href="gene-ontology.html#run-enrichment"><i class="fa fa-check"></i><b>2.6.1</b> Run Enrichment</a></li>
+<li class="chapter" data-level="2.6.2" data-path="gene-ontology.html"><a href="gene-ontology.html#see-the-data"><i class="fa fa-check"></i><b>2.6.2</b> see the data</a></li>
+<li class="chapter" data-level="2.6.3" data-path="gene-ontology.html"><a href="gene-ontology.html#create-plots"><i class="fa fa-check"></i><b>2.6.3</b> create plots</a></li>
+</ul></li>
+<li class="chapter" data-level="2.7" data-path="gene-ontology.html"><a href="gene-ontology.html#questions"><i class="fa fa-check"></i><b>2.7</b> Questions</a></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="working-with-sequences-raw-data-quality-control.html"><a href="working-with-sequences-raw-data-quality-control.html"><i class="fa fa-check"></i><b>3</b> Working with Sequences: Raw Data &amp; Quality Control</a>
+<ul>
+<li class="chapter" data-level="3.1" data-path="working-with-sequences-raw-data-quality-control.html"><a href="working-with-sequences-raw-data-quality-control.html#description-1"><i class="fa fa-check"></i><b>3.1</b> Description</a></li>
+<li class="chapter" data-level="3.2" data-path="working-with-sequences-raw-data-quality-control.html"><a href="working-with-sequences-raw-data-quality-control.html#learning-outcomes-2"><i class="fa fa-check"></i><b>3.2</b> Learning outcomes</a></li>
+<li class="chapter" data-level="3.3" data-path="working-with-sequences-raw-data-quality-control.html"><a href="working-with-sequences-raw-data-quality-control.html#download-fastq"><i class="fa fa-check"></i><b>3.3</b> Download fastq</a></li>
+<li class="chapter" data-level="3.4" data-path="working-with-sequences-raw-data-quality-control.html"><a href="working-with-sequences-raw-data-quality-control.html#examining-fastq"><i class="fa fa-check"></i><b>3.4</b> Examining fastq</a></li>
+<li class="chapter" data-level="3.5" data-path="working-with-sequences-raw-data-quality-control.html"><a href="working-with-sequences-raw-data-quality-control.html#trimming"><i class="fa fa-check"></i><b>3.5</b> Trimming</a>
+<ul>
+<li class="chapter" data-level="3.5.1" data-path="working-with-sequences-raw-data-quality-control.html"><a href="working-with-sequences-raw-data-quality-control.html#automate-for-list-of-files"><i class="fa fa-check"></i><b>3.5.1</b> Automate for list of files</a></li>
+</ul></li>
+<li class="chapter" data-level="3.6" data-path="working-with-sequences-raw-data-quality-control.html"><a href="working-with-sequences-raw-data-quality-control.html#batch-file-processing"><i class="fa fa-check"></i><b>3.6</b> Batch file processing</a>
+<ul>
+<li class="chapter" data-level="3.6.1" data-path="working-with-sequences-raw-data-quality-control.html"><a href="working-with-sequences-raw-data-quality-control.html#running-rfastp-creates-several-files"><i class="fa fa-check"></i><b>3.6.1</b> Running RfastP creates several files:</a></li>
+</ul></li>
+<li class="chapter" data-level="3.7" data-path="working-with-sequences-raw-data-quality-control.html"><a href="working-with-sequences-raw-data-quality-control.html#qc-and-adapters"><i class="fa fa-check"></i><b>3.7</b> QC and adapters</a></li>
+<li class="chapter" data-level="3.8" data-path="working-with-sequences-raw-data-quality-control.html"><a href="working-with-sequences-raw-data-quality-control.html#running-fastqc"><i class="fa fa-check"></i><b>3.8</b> Running fastqc</a></li>
+<li class="chapter" data-level="3.9" data-path="working-with-sequences-raw-data-quality-control.html"><a href="working-with-sequences-raw-data-quality-control.html#multiqc-for-qc-on-mutliple-samples"><i class="fa fa-check"></i><b>3.9</b> Multiqc for QC on mutliple samples</a></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="read-mapping.html"><a href="read-mapping.html"><i class="fa fa-check"></i><b>4</b> Read Mapping</a>
+<ul>
+<li class="chapter" data-level="4.1" data-path="read-mapping.html"><a href="read-mapping.html#alignment"><i class="fa fa-check"></i><b>4.1</b> Alignment</a></li>
+<li class="chapter" data-level="4.2" data-path="read-mapping.html"><a href="read-mapping.html#retrieve-the-genome"><i class="fa fa-check"></i><b>4.2</b> Retrieve the genome</a></li>
+<li class="chapter" data-level="4.3" data-path="read-mapping.html"><a href="read-mapping.html#build-rsubread-index"><i class="fa fa-check"></i><b>4.3</b> Build Rsubread Index</a></li>
+<li class="chapter" data-level="4.4" data-path="read-mapping.html"><a href="read-mapping.html#pseudomapping-with-salmon"><i class="fa fa-check"></i><b>4.4</b> Pseudomapping with Salmon</a>
+<ul>
+<li class="chapter" data-level="4.4.1" data-path="read-mapping.html"><a href="read-mapping.html#create-conda-env"><i class="fa fa-check"></i><b>4.4.1</b> Create Conda Env</a></li>
+<li class="chapter" data-level="4.4.2" data-path="read-mapping.html"><a href="read-mapping.html#download-transcriptome"><i class="fa fa-check"></i><b>4.4.2</b> Download transcriptome</a></li>
+<li class="chapter" data-level="4.4.3" data-path="read-mapping.html"><a href="read-mapping.html#building-the-salmon-index"><i class="fa fa-check"></i><b>4.4.3</b> Building the Salmon index</a></li>
+</ul></li>
+<li class="chapter" data-level="4.5" data-path="read-mapping.html"><a href="read-mapping.html#questions-1"><i class="fa fa-check"></i><b>4.5</b> Questions</a>
+<ul>
+<li class="chapter" data-level="4.5.1" data-path="read-mapping.html"><a href="read-mapping.html#with-rsubread"><i class="fa fa-check"></i><b>4.5.1</b> With Rsubread:</a></li>
+<li class="chapter" data-level="4.5.2" data-path="read-mapping.html"><a href="read-mapping.html#with-salmon"><i class="fa fa-check"></i><b>4.5.2</b> With Salmon:</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="5" data-path="read-counting.html"><a href="read-counting.html"><i class="fa fa-check"></i><b>5</b> Read Counting</a>
+<ul>
+<li class="chapter" data-level="5.1" data-path="read-counting.html"><a href="read-counting.html#featurecounts"><i class="fa fa-check"></i><b>5.1</b> featureCounts</a>
+<ul>
+<li class="chapter" data-level="5.1.1" data-path="read-counting.html"><a href="read-counting.html#locate-bam-files"><i class="fa fa-check"></i><b>5.1.1</b> Locate BAM files</a></li>
+<li class="chapter" data-level="5.1.2" data-path="read-counting.html"><a href="read-counting.html#retrieve-the-genome-annotation"><i class="fa fa-check"></i><b>5.1.2</b> Retrieve the genome annotation</a></li>
+<li class="chapter" data-level="5.1.3" data-path="read-counting.html"><a href="read-counting.html#counting-with-featurecounts"><i class="fa fa-check"></i><b>5.1.3</b> Counting with FeatureCounts</a></li>
+<li class="chapter" data-level="5.1.4" data-path="read-counting.html"><a href="read-counting.html#counts-object"><i class="fa fa-check"></i><b>5.1.4</b> Counts object</a></li>
+<li class="chapter" data-level="5.1.5" data-path="read-counting.html"><a href="read-counting.html#saving-fc-object-for-future-use"><i class="fa fa-check"></i><b>5.1.5</b> Saving <code>fc</code> object for future use</a></li>
+<li class="chapter" data-level="5.1.6" data-path="read-counting.html"><a href="read-counting.html#rsubread-qc"><i class="fa fa-check"></i><b>5.1.6</b> RSubread QC</a></li>
+</ul></li>
+<li class="chapter" data-level="5.2" data-path="read-counting.html"><a href="read-counting.html#salmon"><i class="fa fa-check"></i><b>5.2</b> Salmon</a>
+<ul>
+<li class="chapter" data-level="5.2.1" data-path="read-counting.html"><a href="read-counting.html#pseudomapping-counting"><i class="fa fa-check"></i><b>5.2.1</b> Pseudomapping &amp; Counting</a></li>
+</ul></li>
+<li class="chapter" data-level="5.3" data-path="read-counting.html"><a href="read-counting.html#questions-2"><i class="fa fa-check"></i><b>5.3</b> Questions</a></li>
+</ul></li>
+<li class="chapter" data-level="6" data-path="differential-expression-edger.html"><a href="differential-expression-edger.html"><i class="fa fa-check"></i><b>6</b> Differential Expression: EdgeR</a>
+<ul>
+<li class="chapter" data-level="6.1" data-path="differential-expression-edger.html"><a href="differential-expression-edger.html#description-2"><i class="fa fa-check"></i><b>6.1</b> Description</a></li>
+<li class="chapter" data-level="6.2" data-path="differential-expression-edger.html"><a href="differential-expression-edger.html#learning-outcomes-3"><i class="fa fa-check"></i><b>6.2</b> Learning outcomes</a></li>
+<li class="chapter" data-level="6.3" data-path="differential-expression-edger.html"><a href="differential-expression-edger.html#loading-in-the-featurecounts-object"><i class="fa fa-check"></i><b>6.3</b> Loading in the featureCounts object</a></li>
+<li class="chapter" data-level="6.4" data-path="differential-expression-edger.html"><a href="differential-expression-edger.html#count-loading-and-annotation"><i class="fa fa-check"></i><b>6.4</b> Count loading and Annotation</a></li>
+<li class="chapter" data-level="6.5" data-path="differential-expression-edger.html"><a href="differential-expression-edger.html#filtering-to-remove-low-counts"><i class="fa fa-check"></i><b>6.5</b> Filtering to remove low counts</a></li>
+<li class="chapter" data-level="6.6" data-path="differential-expression-edger.html"><a href="differential-expression-edger.html#normalization-for-composition-bias"><i class="fa fa-check"></i><b>6.6</b> Normalization for composition bias</a></li>
+<li class="chapter" data-level="6.7" data-path="differential-expression-edger.html"><a href="differential-expression-edger.html#mds-plots"><i class="fa fa-check"></i><b>6.7</b> MDS plots</a></li>
+<li class="chapter" data-level="6.8" data-path="differential-expression-edger.html"><a href="differential-expression-edger.html#exploring-differences-between-libraries"><i class="fa fa-check"></i><b>6.8</b> Exploring differences between libraries</a></li>
+<li class="chapter" data-level="6.9" data-path="differential-expression-edger.html"><a href="differential-expression-edger.html#estimate-dispersion"><i class="fa fa-check"></i><b>6.9</b> Estimate Dispersion</a></li>
+<li class="chapter" data-level="6.10" data-path="differential-expression-edger.html"><a href="differential-expression-edger.html#testing-for-differential-expression"><i class="fa fa-check"></i><b>6.10</b> Testing for differential expression</a></li>
+<li class="chapter" data-level="6.11" data-path="differential-expression-edger.html"><a href="differential-expression-edger.html#looking-at-all-contrasts-at-once"><i class="fa fa-check"></i><b>6.11</b> Looking at all contrasts at once</a></li>
+<li class="chapter" data-level="6.12" data-path="differential-expression-edger.html"><a href="differential-expression-edger.html#questions-3"><i class="fa fa-check"></i><b>6.12</b> Questions</a></li>
+<li class="chapter" data-level="6.13" data-path="differential-expression-edger.html"><a href="differential-expression-edger.html#a-template-set-of-code-chunks-for-doing-this-is-below"><i class="fa fa-check"></i><b>6.13</b> A template set of code chunks for doing this is below:</a></li>
+</ul></li>
+<li class="chapter" data-level="7" data-path="differential-expression-deseq2.html"><a href="differential-expression-deseq2.html"><i class="fa fa-check"></i><b>7</b> Differential Expression: DESeq2</a>
+<ul>
+<li class="chapter" data-level="7.1" data-path="differential-expression-deseq2.html"><a href="differential-expression-deseq2.html#description-3"><i class="fa fa-check"></i><b>7.1</b> Description</a></li>
+<li class="chapter" data-level="7.2" data-path="differential-expression-deseq2.html"><a href="differential-expression-deseq2.html#learning-outcomes-4"><i class="fa fa-check"></i><b>7.2</b> Learning outcomes</a></li>
+<li class="chapter" data-level="7.3" data-path="differential-expression-deseq2.html"><a href="differential-expression-deseq2.html#loading-in-the-featurecounts-object-1"><i class="fa fa-check"></i><b>7.3</b> Loading in the featureCounts object</a></li>
+<li class="chapter" data-level="7.4" data-path="differential-expression-deseq2.html"><a href="differential-expression-deseq2.html#count-loading-and-annotation-1"><i class="fa fa-check"></i><b>7.4</b> Count loading and Annotation</a></li>
+<li class="chapter" data-level="7.5" data-path="differential-expression-deseq2.html"><a href="differential-expression-deseq2.html#filtering-to-remove-low-counts-1"><i class="fa fa-check"></i><b>7.5</b> Filtering to remove low counts</a></li>
+<li class="chapter" data-level="7.6" data-path="differential-expression-deseq2.html"><a href="differential-expression-deseq2.html#testing-for-differential-expression-1"><i class="fa fa-check"></i><b>7.6</b> Testing for differential expression</a></li>
+<li class="chapter" data-level="7.7" data-path="differential-expression-deseq2.html"><a href="differential-expression-deseq2.html#questions-4"><i class="fa fa-check"></i><b>7.7</b> Questions</a></li>
+</ul></li>
+<li class="chapter" data-level="8" data-path="differential-expression-limma.html"><a href="differential-expression-limma.html"><i class="fa fa-check"></i><b>8</b> Differential Expression: limma</a>
+<ul>
+<li class="chapter" data-level="8.1" data-path="differential-expression-limma.html"><a href="differential-expression-limma.html#description-4"><i class="fa fa-check"></i><b>8.1</b> Description</a></li>
+<li class="chapter" data-level="8.2" data-path="differential-expression-limma.html"><a href="differential-expression-limma.html#learning-objectives"><i class="fa fa-check"></i><b>8.2</b> Learning Objectives</a></li>
+<li class="chapter" data-level="8.3" data-path="differential-expression-limma.html"><a href="differential-expression-limma.html#loading-in-the-count-data-file"><i class="fa fa-check"></i><b>8.3</b> Loading in the count data file</a></li>
+<li class="chapter" data-level="8.4" data-path="differential-expression-limma.html"><a href="differential-expression-limma.html#count-loading-and-annotation-2"><i class="fa fa-check"></i><b>8.4</b> Count loading and Annotation</a></li>
+<li class="chapter" data-level="8.5" data-path="differential-expression-limma.html"><a href="differential-expression-limma.html#filtering-to-remove-low-counts-2"><i class="fa fa-check"></i><b>8.5</b> Filtering to remove low counts</a></li>
+<li class="chapter" data-level="8.6" data-path="differential-expression-limma.html"><a href="differential-expression-limma.html#normalization-for-composition-bias-1"><i class="fa fa-check"></i><b>8.6</b> Normalization for composition bias</a></li>
+<li class="chapter" data-level="8.7" data-path="differential-expression-limma.html"><a href="differential-expression-limma.html#exploring-differences-between-libraries-1"><i class="fa fa-check"></i><b>8.7</b> Exploring differences between libraries</a></li>
+<li class="chapter" data-level="8.8" data-path="differential-expression-limma.html"><a href="differential-expression-limma.html#estimate-dispersion-1"><i class="fa fa-check"></i><b>8.8</b> Estimate Dispersion</a></li>
+<li class="chapter" data-level="8.9" data-path="differential-expression-limma.html"><a href="differential-expression-limma.html#testing-for-differential-expression-2"><i class="fa fa-check"></i><b>8.9</b> Testing for differential expression</a></li>
+<li class="chapter" data-level="8.10" data-path="differential-expression-limma.html"><a href="differential-expression-limma.html#examining-a-specific-contrast"><i class="fa fa-check"></i><b>8.10</b> Examining a specific contrast</a></li>
+<li class="chapter" data-level="8.11" data-path="differential-expression-limma.html"><a href="differential-expression-limma.html#visualization"><i class="fa fa-check"></i><b>8.11</b> Visualization</a>
+<ul>
+<li class="chapter" data-level="8.11.1" data-path="differential-expression-limma.html"><a href="differential-expression-limma.html#ma-lot"><i class="fa fa-check"></i><b>8.11.1</b> MA lot</a></li>
+</ul></li>
+<li class="chapter" data-level="8.12" data-path="differential-expression-limma.html"><a href="differential-expression-limma.html#treat-testing"><i class="fa fa-check"></i><b>8.12</b> <code>treat()</code> testing</a>
+<ul>
+<li class="chapter" data-level="8.12.1" data-path="differential-expression-limma.html"><a href="differential-expression-limma.html#visualize-de-genes-from-treat-using-lfc1"><i class="fa fa-check"></i><b>8.12.1</b> Visualize DE genes from <code>Treat</code> using lfc=1</a></li>
+</ul></li>
+<li class="chapter" data-level="8.13" data-path="differential-expression-limma.html"><a href="differential-expression-limma.html#comparing-de-analysis-softwares"><i class="fa fa-check"></i><b>8.13</b> Comparing DE analysis softwares</a></li>
+<li class="chapter" data-level="8.14" data-path="differential-expression-limma.html"><a href="differential-expression-limma.html#correlation-between-logfc-estimates-across-softwares"><i class="fa fa-check"></i><b>8.14</b> Correlation between logFC estimates across softwares</a></li>
+<li class="chapter" data-level="8.15" data-path="differential-expression-limma.html"><a href="differential-expression-limma.html#questions-5"><i class="fa fa-check"></i><b>8.15</b> Questions</a></li>
+</ul></li>
+<li class="chapter" data-level="9" data-path="visualizing-differential-expression-results.html"><a href="visualizing-differential-expression-results.html"><i class="fa fa-check"></i><b>9</b> Visualizing Differential Expression Results</a>
+<ul>
+<li class="chapter" data-level="9.1" data-path="visualizing-differential-expression-results.html"><a href="visualizing-differential-expression-results.html#description-5"><i class="fa fa-check"></i><b>9.1</b> Description</a></li>
+<li class="chapter" data-level="9.2" data-path="visualizing-differential-expression-results.html"><a href="visualizing-differential-expression-results.html#learning-outcomes-5"><i class="fa fa-check"></i><b>9.2</b> Learning Outcomes</a></li>
+<li class="chapter" data-level="9.3" data-path="visualizing-differential-expression-results.html"><a href="visualizing-differential-expression-results.html#ma-plot"><i class="fa fa-check"></i><b>9.3</b> MA-plot</a></li>
+<li class="chapter" data-level="9.4" data-path="visualizing-differential-expression-results.html"><a href="visualizing-differential-expression-results.html#volcano-plot"><i class="fa fa-check"></i><b>9.4</b> Volcano Plot</a></li>
+<li class="chapter" data-level="9.5" data-path="visualizing-differential-expression-results.html"><a href="visualizing-differential-expression-results.html#using-glimma-for-an-interactive-visualization"><i class="fa fa-check"></i><b>9.5</b> Using Glimma for an interactive visualization</a>
+<ul>
+<li class="chapter" data-level="9.5.1" data-path="visualizing-differential-expression-results.html"><a href="visualizing-differential-expression-results.html#ma-plots"><i class="fa fa-check"></i><b>9.5.1</b> MA plots</a></li>
+<li class="chapter" data-level="9.5.2" data-path="visualizing-differential-expression-results.html"><a href="visualizing-differential-expression-results.html#volcano-plots"><i class="fa fa-check"></i><b>9.5.2</b> Volcano Plots</a></li>
+</ul></li>
+<li class="chapter" data-level="9.6" data-path="visualizing-differential-expression-results.html"><a href="visualizing-differential-expression-results.html#generating-bar-graph-summaries"><i class="fa fa-check"></i><b>9.6</b> Generating bar graph summaries</a></li>
+<li class="chapter" data-level="9.7" data-path="visualizing-differential-expression-results.html"><a href="visualizing-differential-expression-results.html#exercise"><i class="fa fa-check"></i><b>9.7</b> Exercise</a></li>
+</ul></li>
+<li class="chapter" data-level="10" data-path="clustering.html"><a href="clustering.html"><i class="fa fa-check"></i><b>10</b> Clustering</a>
+<ul>
+<li class="chapter" data-level="10.1" data-path="clustering.html"><a href="clustering.html#description-6"><i class="fa fa-check"></i><b>10.1</b> Description</a></li>
+<li class="chapter" data-level="10.2" data-path="clustering.html"><a href="clustering.html#learning-outcomes-6"><i class="fa fa-check"></i><b>10.2</b> Learning outcomes</a></li>
+<li class="chapter" data-level="10.3" data-path="clustering.html"><a href="clustering.html#cluster-3.0"><i class="fa fa-check"></i><b>10.3</b> Cluster 3.0</a>
+<ul>
+<li class="chapter" data-level="10.3.1" data-path="clustering.html"><a href="clustering.html#generating-a-pcl-file"><i class="fa fa-check"></i><b>10.3.1</b> Generating a PCL file</a></li>
+<li class="chapter" data-level="10.3.2" data-path="clustering.html"><a href="clustering.html#filtering-data"><i class="fa fa-check"></i><b>10.3.2</b> Filtering data</a></li>
+<li class="chapter" data-level="10.3.3" data-path="clustering.html"><a href="clustering.html#hierarchical-clustering"><i class="fa fa-check"></i><b>10.3.3</b> Hierarchical Clustering</a></li>
+<li class="chapter" data-level="10.3.4" data-path="clustering.html"><a href="clustering.html#k-means-clustering"><i class="fa fa-check"></i><b>10.3.4</b> <em>K</em>-Means Clustering</a></li>
+</ul></li>
+<li class="chapter" data-level="10.4" data-path="clustering.html"><a href="clustering.html#visualizing-clusters-with-java-treeview"><i class="fa fa-check"></i><b>10.4</b> Visualizing Clusters with Java TreeView</a>
+<ul>
+<li class="chapter" data-level="10.4.1" data-path="clustering.html"><a href="clustering.html#changing-pixel-settings."><i class="fa fa-check"></i><b>10.4.1</b> Changing pixel settings.</a></li>
+<li class="chapter" data-level="10.4.2" data-path="clustering.html"><a href="clustering.html#selecting-groups-of-genes."><i class="fa fa-check"></i><b>10.4.2</b> Selecting groups of genes.</a></li>
+</ul></li>
+<li class="chapter" data-level="10.5" data-path="clustering.html"><a href="clustering.html#performing-clustering-on-yeast-stress-data"><i class="fa fa-check"></i><b>10.5</b> Performing clustering on yeast stress data</a></li>
+<li class="chapter" data-level="10.6" data-path="clustering.html"><a href="clustering.html#questions-6"><i class="fa fa-check"></i><b>10.6</b> Questions</a></li>
+</ul></li>
+<li class="chapter" data-level="11" data-path="kegg-analysis.html"><a href="kegg-analysis.html"><i class="fa fa-check"></i><b>11</b> KEGG Analysis</a>
+<ul>
+<li class="chapter" data-level="11.1" data-path="kegg-analysis.html"><a href="kegg-analysis.html#description-7"><i class="fa fa-check"></i><b>11.1</b> Description</a></li>
+<li class="chapter" data-level="11.2" data-path="kegg-analysis.html"><a href="kegg-analysis.html#learning-outcomes-7"><i class="fa fa-check"></i><b>11.2</b> Learning Outcomes</a></li>
+<li class="chapter" data-level="11.3" data-path="kegg-analysis.html"><a href="kegg-analysis.html#loading-in-the-edger-de-gene-file-output."><i class="fa fa-check"></i><b>11.3</b> Loading in the edgeR DE gene file output.</a></li>
+<li class="chapter" data-level="11.4" data-path="kegg-analysis.html"><a href="kegg-analysis.html#kegg-analysis-1"><i class="fa fa-check"></i><b>11.4</b> KEGG Analysis</a>
+<ul>
+<li class="chapter" data-level="11.4.1" data-path="kegg-analysis.html"><a href="kegg-analysis.html#using-kegga-from-limma"><i class="fa fa-check"></i><b>11.4.1</b> Using <code>kegga()</code> from limma</a></li>
+<li class="chapter" data-level="11.4.2" data-path="kegg-analysis.html"><a href="kegg-analysis.html#pathway-visualization"><i class="fa fa-check"></i><b>11.4.2</b> Pathway Visualization</a></li>
+</ul></li>
+<li class="chapter" data-level="11.5" data-path="kegg-analysis.html"><a href="kegg-analysis.html#visualize-on-the-kegg-website"><i class="fa fa-check"></i><b>11.5</b> Visualize on the KEGG website</a></li>
+<li class="chapter" data-level="11.6" data-path="kegg-analysis.html"><a href="kegg-analysis.html#comparing-paralogs-in-common-pathways"><i class="fa fa-check"></i><b>11.6</b> Comparing Paralogs in common pathways</a></li>
+<li class="chapter" data-level="11.7" data-path="kegg-analysis.html"><a href="kegg-analysis.html#additional-kegg-related-analyses"><i class="fa fa-check"></i><b>11.7</b> Additional KEGG-related analyses</a></li>
+<li class="chapter" data-level="11.8" data-path="kegg-analysis.html"><a href="kegg-analysis.html#dotplot"><i class="fa fa-check"></i><b>11.8</b> Dotplot</a></li>
+<li class="chapter" data-level="11.9" data-path="kegg-analysis.html"><a href="kegg-analysis.html#cnetplot"><i class="fa fa-check"></i><b>11.9</b> cnetplot</a></li>
+<li class="chapter" data-level="11.10" data-path="kegg-analysis.html"><a href="kegg-analysis.html#heatplot"><i class="fa fa-check"></i><b>11.10</b> heatplot</a></li>
+<li class="chapter" data-level="11.11" data-path="kegg-analysis.html"><a href="kegg-analysis.html#upsetplot"><i class="fa fa-check"></i><b>11.11</b> upsetplot</a></li>
+<li class="chapter" data-level="11.12" data-path="kegg-analysis.html"><a href="kegg-analysis.html#emapplot"><i class="fa fa-check"></i><b>11.12</b> emapplot</a></li>
+<li class="chapter" data-level="11.13" data-path="kegg-analysis.html"><a href="kegg-analysis.html#gsea"><i class="fa fa-check"></i><b>11.13</b> GSEA</a>
+<ul>
+<li class="chapter" data-level="11.13.1" data-path="kegg-analysis.html"><a href="kegg-analysis.html#gsekegg-vs-enrichkegg"><i class="fa fa-check"></i><b>11.13.1</b> <code>gseKEGG</code> vs <code>enrichKEGG</code></a></li>
+<li class="chapter" data-level="11.13.2" data-path="kegg-analysis.html"><a href="kegg-analysis.html#gsea-visualization"><i class="fa fa-check"></i><b>11.13.2</b> GSEA visualization</a></li>
+</ul></li>
+<li class="chapter" data-level="11.14" data-path="kegg-analysis.html"><a href="kegg-analysis.html#questions-7"><i class="fa fa-check"></i><b>11.14</b> Questions</a></li>
+</ul></li>
+<li class="divider"></li>
+<li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
+
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Genomic Data Analysis Course Exercises</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="kegg-analysis" class="section level1 hasAnchor" number="11">
+<h1><span class="header-section-number">Chapter 11</span> KEGG Analysis<a href="kegg-analysis.html#kegg-analysis" class="anchor-section" aria-label="Anchor link to header"></a></h1>
+<p>last updated: 2023-10-27</p>
+<p><strong>Package Install</strong></p>
+<p>As usual, make sure we have the right packages for this exercise</p>
+<div class="sourceCode" id="cb351"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb351-1"><a href="kegg-analysis.html#cb351-1" tabindex="-1"></a><span class="cf">if</span> (<span class="sc">!</span><span class="fu">require</span>(<span class="st">&quot;pacman&quot;</span>)) <span class="fu">install.packages</span>(<span class="st">&quot;pacman&quot;</span>); <span class="fu">library</span>(pacman)</span>
+<span id="cb351-2"><a href="kegg-analysis.html#cb351-2" tabindex="-1"></a></span>
+<span id="cb351-3"><a href="kegg-analysis.html#cb351-3" tabindex="-1"></a><span class="co"># temporary install to fix bug in package</span></span>
+<span id="cb351-4"><a href="kegg-analysis.html#cb351-4" tabindex="-1"></a>pacman<span class="sc">::</span><span class="fu">p_install_version</span>(<span class="st">&quot;dbplyr&quot;</span>, <span class="at">version =</span> <span class="st">&quot;2.3.4&quot;</span>)</span></code></pre></div>
+<pre><code>## 
+## Version of dbplyr (v. 2.3.4) is suitable</code></pre>
+<div class="sourceCode" id="cb353"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb353-1"><a href="kegg-analysis.html#cb353-1" tabindex="-1"></a><span class="co"># let&#39;s load all of the files we were using and want to have again today</span></span>
+<span id="cb353-2"><a href="kegg-analysis.html#cb353-2" tabindex="-1"></a><span class="fu">p_load</span>(<span class="st">&quot;tidyverse&quot;</span>, <span class="st">&quot;knitr&quot;</span>, <span class="st">&quot;readr&quot;</span>,</span>
+<span id="cb353-3"><a href="kegg-analysis.html#cb353-3" tabindex="-1"></a>       <span class="st">&quot;pander&quot;</span>, <span class="st">&quot;BiocManager&quot;</span>, </span>
+<span id="cb353-4"><a href="kegg-analysis.html#cb353-4" tabindex="-1"></a>       <span class="st">&quot;dplyr&quot;</span>, <span class="st">&quot;stringr&quot;</span>, <span class="st">&quot;DOSE&quot;</span>,</span>
+<span id="cb353-5"><a href="kegg-analysis.html#cb353-5" tabindex="-1"></a>       <span class="st">&quot;purrr&quot;</span>, <span class="co"># for working with lists (beautify column names)</span></span>
+<span id="cb353-6"><a href="kegg-analysis.html#cb353-6" tabindex="-1"></a>       <span class="st">&quot;reactable&quot;</span>, <span class="co"># for pretty tables.</span></span>
+<span id="cb353-7"><a href="kegg-analysis.html#cb353-7" tabindex="-1"></a>       <span class="st">&quot;BiocFileCache&quot;</span> <span class="co"># for saving downloaded data files</span></span>
+<span id="cb353-8"><a href="kegg-analysis.html#cb353-8" tabindex="-1"></a>       ) </span>
+<span id="cb353-9"><a href="kegg-analysis.html#cb353-9" tabindex="-1"></a></span>
+<span id="cb353-10"><a href="kegg-analysis.html#cb353-10" tabindex="-1"></a><span class="co"># a package from github to install (using pacman library to install)</span></span>
+<span id="cb353-11"><a href="kegg-analysis.html#cb353-11" tabindex="-1"></a><span class="fu">p_install_gh</span>(<span class="st">&quot;noriakis/ggkegg&quot;</span>)</span></code></pre></div>
+<pre><code>## Skipping install of &#39;ggkegg&#39; from a github remote, the SHA1 (0cece6db) has not changed since last install.
+##   Use `force = TRUE` to force installation</code></pre>
+<pre><code>## 
+## The following packages were installed:
+## ggkegg</code></pre>
+<div class="sourceCode" id="cb356"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb356-1"><a href="kegg-analysis.html#cb356-1" tabindex="-1"></a><span class="co"># We also need these Bioconductor packages today.</span></span>
+<span id="cb356-2"><a href="kegg-analysis.html#cb356-2" tabindex="-1"></a><span class="fu">p_load</span>(<span class="st">&quot;edgeR&quot;</span>, </span>
+<span id="cb356-3"><a href="kegg-analysis.html#cb356-3" tabindex="-1"></a>       <span class="st">&quot;AnnotationDbi&quot;</span>, <span class="st">&quot;org.Sc.sgd.db&quot;</span>, </span>
+<span id="cb356-4"><a href="kegg-analysis.html#cb356-4" tabindex="-1"></a>       <span class="st">&quot;pathview&quot;</span>,<span class="st">&quot;clusterProfiler&quot;</span>, <span class="st">&quot;ggupset&quot;</span>,</span>
+<span id="cb356-5"><a href="kegg-analysis.html#cb356-5" tabindex="-1"></a>       <span class="st">&quot;KEGGgraph&quot;</span>, <span class="st">&quot;ggkegg&quot;</span>, <span class="st">&quot;patchwork&quot;</span>,</span>
+<span id="cb356-6"><a href="kegg-analysis.html#cb356-6" tabindex="-1"></a>       <span class="st">&quot;igraph&quot;</span>, <span class="st">&quot;tidygraph&quot;</span>, <span class="st">&quot;ggfx&quot;</span>)</span></code></pre></div>
+<div id="description-7" class="section level2 hasAnchor" number="11.1">
+<h2><span class="header-section-number">11.1</span> Description<a href="kegg-analysis.html#description-7" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>In this class exercise, we will explore the use of KEGG pathways in genomic data analysis. KEGG is a valuable resource for understanding biological pathways and functions associated with genomic data.</p>
+</div>
+<div id="learning-outcomes-7" class="section level2 hasAnchor" number="11.2">
+<h2><span class="header-section-number">11.2</span> Learning Outcomes<a href="kegg-analysis.html#learning-outcomes-7" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>At the end of this exercise, you should be able to:</p>
+<ul>
+<li>Understand the basics of KEGG pathways.</li>
+<li>Learn how to retrieve and analyze pathway information using R.</li>
+<li>Apply KEGG analysis to genomic data.</li>
+<li>Identify paralog differences within KEGG pathways</li>
+</ul>
+<div class="sourceCode" id="cb357"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb357-1"><a href="kegg-analysis.html#cb357-1" tabindex="-1"></a><span class="fu">library</span>(edgeR)</span>
+<span id="cb357-2"><a href="kegg-analysis.html#cb357-2" tabindex="-1"></a><span class="fu">library</span>(org.Sc.sgd.db)</span>
+<span id="cb357-3"><a href="kegg-analysis.html#cb357-3" tabindex="-1"></a><span class="co"># for ease of use, set max number of digits after decimal</span></span>
+<span id="cb357-4"><a href="kegg-analysis.html#cb357-4" tabindex="-1"></a><span class="fu">options</span>(<span class="at">digits=</span><span class="dv">3</span>)</span></code></pre></div>
+</div>
+<div id="loading-in-the-edger-de-gene-file-output." class="section level2 hasAnchor" number="11.3">
+<h2><span class="header-section-number">11.3</span> Loading in the edgeR DE gene file output.<a href="kegg-analysis.html#loading-in-the-edger-de-gene-file-output." class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div class="sourceCode" id="cb358"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb358-1"><a href="kegg-analysis.html#cb358-1" tabindex="-1"></a><span class="co"># Choose topTags destination</span></span>
+<span id="cb358-2"><a href="kegg-analysis.html#cb358-2" tabindex="-1"></a>dir_output_edgeR <span class="ot">&lt;-</span></span>
+<span id="cb358-3"><a href="kegg-analysis.html#cb358-3" tabindex="-1"></a>  <span class="fu">path.expand</span>(<span class="st">&quot;~/Desktop/Genomic_Data_Analysis/Analysis/edgeR/&quot;</span>)</span>
+<span id="cb358-4"><a href="kegg-analysis.html#cb358-4" tabindex="-1"></a></span>
+<span id="cb358-5"><a href="kegg-analysis.html#cb358-5" tabindex="-1"></a><span class="co"># for this, let&#39;s load the res objects as an R data object.</span></span>
+<span id="cb358-6"><a href="kegg-analysis.html#cb358-6" tabindex="-1"></a>res <span class="ot">&lt;-</span> <span class="fu">read_rds</span>(<span class="at">file =</span> <span class="fu">paste0</span>(dir_output_edgeR, <span class="st">&quot;yeast_res_edgeR.Rds&quot;</span>))</span>
+<span id="cb358-7"><a href="kegg-analysis.html#cb358-7" tabindex="-1"></a></span>
+<span id="cb358-8"><a href="kegg-analysis.html#cb358-8" tabindex="-1"></a><span class="co"># the below code downloads the file from the internet if you don&#39;t have in on your computer</span></span>
+<span id="cb358-9"><a href="kegg-analysis.html#cb358-9" tabindex="-1"></a><span class="co"># comment out the above line of code if it gives an error.</span></span>
+<span id="cb358-10"><a href="kegg-analysis.html#cb358-10" tabindex="-1"></a><span class="cf">if</span> (<span class="sc">!</span><span class="fu">exists</span>(<span class="st">&quot;res&quot;</span>, <span class="at">envir =</span> .GlobalEnv)) {</span>
+<span id="cb358-11"><a href="kegg-analysis.html#cb358-11" tabindex="-1"></a>  <span class="co"># If variable doesn&#39;t exist, load from</span></span>
+<span id="cb358-12"><a href="kegg-analysis.html#cb358-12" tabindex="-1"></a>  url <span class="ot">&lt;-</span> <span class="st">&quot;https://github.com/clstacy/GenomicDataAnalysis_Fa23/raw/main/data/yeast_res_all_edgeR.Rds&quot;</span></span>
+<span id="cb358-13"><a href="kegg-analysis.html#cb358-13" tabindex="-1"></a>  res <span class="ot">&lt;-</span> <span class="fu">read_rds</span>(url)</span>
+<span id="cb358-14"><a href="kegg-analysis.html#cb358-14" tabindex="-1"></a>  <span class="co"># assign(&quot;res&quot;, data, envir = .GlobalEnv)</span></span>
+<span id="cb358-15"><a href="kegg-analysis.html#cb358-15" tabindex="-1"></a>  <span class="fu">cat</span>(<span class="fu">paste</span>(<span class="st">&quot;Loaded res from&quot;</span>, url, <span class="st">&quot;</span><span class="sc">\n</span><span class="st">&quot;</span>))</span>
+<span id="cb358-16"><a href="kegg-analysis.html#cb358-16" tabindex="-1"></a>  <span class="fu">rm</span>(<span class="st">&quot;url&quot;</span>, <span class="at">envir =</span> .GlobalEnv)</span>
+<span id="cb358-17"><a href="kegg-analysis.html#cb358-17" tabindex="-1"></a>} <span class="cf">else</span> {</span>
+<span id="cb358-18"><a href="kegg-analysis.html#cb358-18" tabindex="-1"></a>  url <span class="ot">&lt;-</span> <span class="st">&quot;https://github.com/clstacy/GenomicDataAnalysis_Fa23/raw/main/data/yeast_res_all_edgeR.Rds&quot;</span></span>
+<span id="cb358-19"><a href="kegg-analysis.html#cb358-19" tabindex="-1"></a>  <span class="fu">cat</span>(<span class="fu">paste</span>(<span class="st">&quot;res object is already loaded. Skipping loading from&quot;</span>, url, <span class="st">&quot;</span><span class="sc">\n</span><span class="st">&quot;</span>))</span>
+<span id="cb358-20"><a href="kegg-analysis.html#cb358-20" tabindex="-1"></a>  <span class="fu">rm</span>(<span class="st">&quot;url&quot;</span>, <span class="at">envir =</span> .GlobalEnv)</span>
+<span id="cb358-21"><a href="kegg-analysis.html#cb358-21" tabindex="-1"></a>}</span></code></pre></div>
+<pre><code>## res object is already loaded. Skipping loading from https://github.com/clstacy/GenomicDataAnalysis_Fa23/raw/main/data/yeast_res_all_edgeR.Rds</code></pre>
+<div class="sourceCode" id="cb360"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb360-1"><a href="kegg-analysis.html#cb360-1" tabindex="-1"></a><span class="co"># let&#39;s also get the res object for all of the contrasts at once, (from GitHub)</span></span>
+<span id="cb360-2"><a href="kegg-analysis.html#cb360-2" tabindex="-1"></a>res_all <span class="ot">&lt;-</span> <span class="fu">read_rds</span>(<span class="st">&quot;https://github.com/clstacy/GenomicDataAnalysis_Fa23/raw/main/data/yeast_res_all_edgeR.Rds&quot;</span>)</span></code></pre></div>
+</div>
+<div id="kegg-analysis-1" class="section level2 hasAnchor" number="11.4">
+<h2><span class="header-section-number">11.4</span> KEGG Analysis<a href="kegg-analysis.html#kegg-analysis-1" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Recall that the <code>res</code> object from the <code>edgeR</code> Differential Expression analysis was defined as <code>glmQLFTest(fit, contrast = my.contrasts[,"EtOHvsWT.MSN24ddvsWT"])</code>. In other words, we are looking at the difference in the ethanol stress response of the Msn2/4∆∆ mutant and the WT cells. Recall that positive log2 fold changes correspond to relatively higher expression of that gene in the Msn2/4∆∆ mutant cells in response stress compared to how WT cells change during stress.</p>
+<div id="using-kegga-from-limma" class="section level3 hasAnchor" number="11.4.1">
+<h3><span class="header-section-number">11.4.1</span> Using <code>kegga()</code> from limma<a href="kegg-analysis.html#using-kegga-from-limma" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>One approach is to do a simple KEGG enrichment with the <code>limma</code> package, using the function <code>kegga()</code>. This approach is nice, because we can directly load in the <code>res</code> object we created in the <code>edgeR</code> workflow, set our FDR cutoff, and the process happens automatically. See <a href="https://www.kegg.jp/kegg/catalog/org_list.html" class="uri">https://www.kegg.jp/kegg/catalog/org_list.html</a> or <a href="https://rest.kegg.jp/list/organism" class="uri">https://rest.kegg.jp/list/organism</a> for list of organisms available.</p>
+<div class="sourceCode" id="cb361"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb361-1"><a href="kegg-analysis.html#cb361-1" tabindex="-1"></a><span class="co"># test for overrepresentation of KEGG pathways in given gene list</span></span>
+<span id="cb361-2"><a href="kegg-analysis.html#cb361-2" tabindex="-1"></a>k <span class="ot">&lt;-</span> <span class="fu">kegga</span>(res,</span>
+<span id="cb361-3"><a href="kegg-analysis.html#cb361-3" tabindex="-1"></a>           <span class="at">species.KEGG =</span> <span class="st">&quot;sce&quot;</span>,<span class="co"># three-letter KEGG species identifier.</span></span>
+<span id="cb361-4"><a href="kegg-analysis.html#cb361-4" tabindex="-1"></a>           <span class="at">FDR =</span> <span class="fl">0.01</span>) <span class="co">#FDR cutoff we want in deciding which genes to include.</span></span>
+<span id="cb361-5"><a href="kegg-analysis.html#cb361-5" tabindex="-1"></a></span>
+<span id="cb361-6"><a href="kegg-analysis.html#cb361-6" tabindex="-1"></a><span class="co"># we can see the p-value results for both up &amp; down enrichment</span></span>
+<span id="cb361-7"><a href="kegg-analysis.html#cb361-7" tabindex="-1"></a>k</span></code></pre></div>
+<pre><code>##                                                         Pathway   N Up Down
+## sce00010                           Glycolysis / Gluconeogenesis  51  5   11
+## sce00020                              Citrate cycle (TCA cycle)  30  1   10
+## sce00030                              Pentose phosphate pathway  27  3    6
+## sce00040               Pentose and glucuronate interconversions  10  0    3
+## sce00051                        Fructose and mannose metabolism  20  0    7
+## sce00052                                   Galactose metabolism  22  0    7
+## sce00053                      Ascorbate and aldarate metabolism  11  2    4
+## sce00061                                Fatty acid biosynthesis  13  2    1
+## sce00062                                  Fatty acid elongation   8  1    0
+## sce00071                                 Fatty acid degradation  20  7    5
+## sce00100                                   Steroid biosynthesis  18  6    3
+## sce00130    Ubiquinone and other terpenoid-quinone biosynthesis  10  0    5
+## sce00190                              Oxidative phosphorylation  71  0   27
+## sce00220                                  Arginine biosynthesis  16  3    1
+## sce00230                                      Purine metabolism  57  9    8
+## sce00240                                  Pyrimidine metabolism  31  5    2
+## sce00250            Alanine, aspartate and glutamate metabolism  27  5    5
+## sce00260               Glycine, serine and threonine metabolism  30  4    5
+## sce00261                                Monobactam biosynthesis   3  1    0
+## sce00270                     Cysteine and methionine metabolism  43 12    3
+## sce00280             Valine, leucine and isoleucine degradation  14  6    4
+## sce00290            Valine, leucine and isoleucine biosynthesis  12  8    0
+## sce00300                                    Lysine biosynthesis  12  6    0
+## sce00310                                     Lysine degradation  16  4    5
+## sce00330                        Arginine and proline metabolism  23  3    4
+## sce00332                                Carbapenem biosynthesis   3  1    0
+## sce00340                                   Histidine metabolism  14  2    3
+## sce00350                                    Tyrosine metabolism  13  3    2
+## sce00360                               Phenylalanine metabolism   7  2    0
+## sce00380                                  Tryptophan metabolism  20  3    6
+## sce00400    Phenylalanine, tyrosine and tryptophan biosynthesis  17  3    0
+## sce00410                                beta-Alanine metabolism  13  3    6
+## sce00430                     Taurine and hypotaurine metabolism   3  0    3
+## sce00440                 Phosphonate and phosphinate metabolism   4  1    0
+## sce00450                              Selenocompound metabolism  12  2    0
+## sce00460                             Cyanoamino acid metabolism   5  0    1
+## sce00470                                D-Amino acid metabolism   3  0    1
+## sce00480                                 Glutathione metabolism  23  1    5
+## sce00500                          Starch and sucrose metabolism  39  1   20
+## sce00510                                  N-Glycan biosynthesis  30  2    1
+## sce00511                               Other glycan degradation   1  0    1
+## sce00513                 Various types of N-glycan biosynthesis  31  4    1
+## sce00514                   Other types of O-glycan biosynthesis  14  2    0
+## sce00515                     Mannose type O-glycan biosynthesis   7  0    0
+## sce00520            Amino sugar and nucleotide sugar metabolism  31  0    7
+## sce00561                                Glycerolipid metabolism  31  2   13
+## sce00562                          Inositol phosphate metabolism  21  0    1
+## sce00563 Glycosylphosphatidylinositol (GPI)-anchor biosynthesis  25  0    2
+## sce00564                         Glycerophospholipid metabolism  40  2   10
+## sce00565                                 Ether lipid metabolism   8  0    3
+## sce00590                            Arachidonic acid metabolism   3  0    2
+## sce00592                        alpha-Linolenic acid metabolism   4  0    1
+## sce00600                                Sphingolipid metabolism  14  0    3
+## sce00620                                    Pyruvate metabolism  48 12   12
+## sce00630                Glyoxylate and dicarboxylate metabolism  27  4    6
+## sce00640                                  Propanoate metabolism  13  2    1
+## sce00650                                   Butanoate metabolism   9  3    4
+## sce00660                    C5-Branched dibasic acid metabolism   3  1    0
+## sce00670                              One carbon pool by folate  15  2    0
+## sce00680                                     Methane metabolism  20  3    3
+## sce00730                                    Thiamine metabolism  16  0    1
+## sce00740                                  Riboflavin metabolism  16  0    1
+## sce00750                                  Vitamin B6 metabolism  11  2    1
+## sce00760                 Nicotinate and nicotinamide metabolism  20  2    3
+## sce00770                      Pantothenate and CoA biosynthesis  23 10    4
+## sce00780                                      Biotin metabolism   6  0    0
+## sce00785                                 Lipoic acid metabolism  12  1    2
+## sce00790                                    Folate biosynthesis  11  0    1
+## sce00791                                   Atrazine degradation   2  0    0
+## sce00860                                   Porphyrin metabolism  17  0    2
+## sce00900                        Terpenoid backbone biosynthesis  19  5    1
+## sce00909          Sesquiterpenoid and triterpenoid biosynthesis   2  0    0
+## sce00910                                    Nitrogen metabolism   7  2    1
+## sce00920                                      Sulfur metabolism  15  3    1
+## sce00970                            Aminoacyl-tRNA biosynthesis  40  4    1
+## sce00999    Biosynthesis of various plant secondary metabolites   3  2    0
+## sce01040                Biosynthesis of unsaturated fatty acids  10  1    0
+## sce01100                                     Metabolic pathways 766 86  132
+## sce01110                  Biosynthesis of secondary metabolites 339 56   65
+## sce01200                                      Carbon metabolism 104 10   24
+## sce01210                        2-Oxocarboxylic acid metabolism  42 13    6
+## sce01212                                  Fatty acid metabolism  23  4    1
+## sce01230                            Biosynthesis of amino acids 122 32    7
+## sce01232                                  Nucleotide metabolism  42  6    3
+## sce01240                              Biosynthesis of cofactors 126 18   18
+## sce01250                      Biosynthesis of nucleotide sugars  22  0    6
+## sce02010                                       ABC transporters  18  1    3
+## sce03008                      Ribosome biogenesis in eukaryotes  74 32    1
+## sce03010                                               Ribosome 174 61    1
+## sce03013                            Nucleocytoplasmic transport  65  8    2
+## sce03015                              mRNA surveillance pathway  48  6    1
+## sce03018                                        RNA degradation  61  6    3
+## sce03020                                         RNA polymerase  31 14    0
+## sce03022                            Basal transcription factors  32  2    0
+## sce03030                                        DNA replication  31  4    0
+## sce03040                                            Spliceosome  75  4    4
+## sce03050                                             Proteasome  36  0    0
+## sce03060                                         Protein export  22  1    1
+## sce03082                     ATP-dependent chromatin remodeling  35  3    1
+## sce03083                            Polycomb repressive complex  13  2    2
+## sce03250                               Viral life cycle - HIV-1  15  0    1
+## sce03410                                   Base excision repair  25  2    0
+## sce03420                             Nucleotide excision repair  49  5    0
+## sce03430                                        Mismatch repair  20  1    0
+## sce03440                               Homologous recombination  21  0    0
+## sce03450                             Non-homologous end-joining  10  0    0
+## sce04011                         MAPK signaling pathway - yeast 108  7   12
+## sce04070                  Phosphatidylinositol signaling system  23  0    1
+## sce04111                                     Cell cycle - yeast 129 12    2
+## sce04113                                        Meiosis - yeast 117  9   15
+## sce04120                         Ubiquitin mediated proteolysis  50  1    1
+## sce04122                                    Sulfur relay system   7  0    1
+## sce04130              SNARE interactions in vesicular transport  20  0    0
+## sce04136                                      Autophagy - other  23  0    1
+## sce04138                                      Autophagy - yeast  90  2    8
+## sce04139                                      Mitophagy - yeast  40  1    3
+## sce04141            Protein processing in endoplasmic reticulum  92  1   17
+## sce04144                                            Endocytosis  79  1   11
+## sce04145                                              Phagosome  35  0    0
+## sce04146                                             Peroxisome  39  2    8
+## sce04148                                          Efferocytosis  24  0    4
+## sce04213        Longevity regulating pathway - multiple species  38  1   17
+## sce04392             Hippo signaling pathway - multiple species   8  2    0
+## sce04814                                         Motor proteins  24  2    1
+##              P.Up   P.Down
+## sce00010 4.59e-01 1.13e-02
+## sce00020 9.35e-01 4.71e-04
+## sce00030 4.21e-01 4.86e-02
+## sce00040 1.00e+00 7.17e-02
+## sce00051 1.00e+00 2.47e-03
+## sce00052 1.00e+00 4.55e-03
+## sce00053 2.47e-01 1.90e-02
+## sce00061 3.14e-01 7.50e-01
+## sce00062 5.17e-01 1.00e+00
+## sce00071 1.02e-03 4.45e-02
+## sce00100 3.13e-03 2.71e-01
+## sce00130 1.00e+00 1.69e-03
+## sce00190 1.00e+00 2.93e-10
+## sce00220 1.57e-01 8.18e-01
+## sce00230 5.55e-02 2.13e-01
+## sce00240 1.27e-01 8.35e-01
+## sce00250 7.96e-02 1.30e-01
+## sce00260 2.61e-01 1.80e-01
+## sce00261 2.39e-01 1.00e+00
+## sce00270 2.03e-04 8.24e-01
+## sce00280 6.85e-04 4.53e-02
+## sce00290 1.11e-06 1.00e+00
+## sce00300 2.45e-04 1.00e+00
+## sce00310 4.42e-02 1.75e-02
+## sce00330 3.23e-01 1.97e-01
+## sce00332 2.39e-01 1.00e+00
+## sce00340 3.47e-01 1.62e-01
+## sce00350 9.69e-02 3.84e-01
+## sce00360 1.18e-01 1.00e+00
+## sce00380 2.49e-01 1.16e-02
+## sce00400 1.79e-01 1.00e+00
+## sce00410 9.69e-02 9.52e-04
+## sce00430 1.00e+00 1.02e-03
+## sce00440 3.05e-01 1.00e+00
+## sce00450 2.80e-01 1.00e+00
+## sce00460 1.00e+00 4.13e-01
+## sce00470 1.00e+00 2.73e-01
+## sce00480 8.77e-01 7.52e-02
+## sce00500 9.72e-01 9.65e-11
+## sce00510 7.49e-01 9.59e-01
+## sce00511 1.00e+00 1.01e-01
+## sce00513 2.81e-01 9.63e-01
+## sce00514 3.47e-01 1.00e+00
+## sce00515 1.00e+00 1.00e+00
+## sce00520 1.00e+00 3.16e-02
+## sce00561 7.65e-01 3.67e-06
+## sce00562 1.00e+00 8.94e-01
+## sce00563 1.00e+00 7.35e-01
+## sce00564 8.74e-01 5.25e-03
+## sce00565 1.00e+00 3.90e-02
+## sce00590 1.00e+00 2.85e-02
+## sce00592 1.00e+00 3.47e-01
+## sce00600 1.00e+00 1.62e-01
+## sce00620 6.17e-04 2.31e-03
+## sce00630 2.03e-01 4.86e-02
+## sce00640 3.14e-01 7.50e-01
+## sce00650 3.69e-02 8.57e-03
+## sce00660 2.39e-01 1.00e+00
+## sce00670 3.79e-01 1.00e+00
+## sce00680 2.49e-01 3.29e-01
+## sce00730 1.00e+00 8.18e-01
+## sce00740 1.00e+00 8.18e-01
+## sce00750 2.47e-01 6.90e-01
+## sce00760 5.29e-01 3.29e-01
+## sce00770 9.09e-06 1.97e-01
+## sce00780 1.00e+00 1.00e+00
+## sce00785 6.65e-01 3.46e-01
+## sce00790 1.00e+00 6.90e-01
+## sce00791 1.00e+00 1.00e+00
+## sce00860 1.00e+00 5.24e-01
+## sce00900 2.03e-02 8.68e-01
+## sce00909 1.00e+00 1.00e+00
+## sce00910 1.18e-01 5.26e-01
+## sce00920 1.36e-01 7.98e-01
+## sce00970 4.63e-01 9.86e-01
+## sce00999 2.13e-02 1.00e+00
+## sce01040 5.97e-01 1.00e+00
+## sce01100 5.52e-03 3.24e-11
+## sce01110 1.16e-06 1.37e-07
+## sce01200 4.18e-01 7.56e-05
+## sce01210 3.33e-05 2.46e-01
+## sce01212 1.34e-01 9.14e-01
+## sce01230 6.35e-09 9.70e-01
+## sce01232 1.53e-01 8.11e-01
+## sce01240 2.36e-02 8.12e-02
+## sce01250 1.00e+00 1.88e-02
+## sce02010 8.06e-01 2.71e-01
+## sce03008 1.21e-15 1.00e+00
+## sce03010 3.84e-23 1.00e+00
+## sce03013 2.00e-01 9.92e-01
+## sce03015 2.35e-01 9.94e-01
+## sce03018 4.39e-01 9.54e-01
+## sce03020 7.75e-08 1.00e+00
+## sce03022 7.80e-01 1.00e+00
+## sce03030 2.81e-01 1.00e+00
+## sce03040 9.02e-01 9.53e-01
+## sce03050 1.00e+00 1.00e+00
+## sce03060 8.65e-01 9.04e-01
+## sce03082 5.97e-01 9.76e-01
+## sce03083 3.14e-01 3.84e-01
+## sce03250 1.00e+00 7.98e-01
+## sce03410 6.53e-01 1.00e+00
+## sce03420 4.24e-01 1.00e+00
+## sce03430 8.38e-01 1.00e+00
+## sce03440 1.00e+00 1.00e+00
+## sce03450 1.00e+00 1.00e+00
+## sce04011 8.41e-01 4.09e-01
+## sce04070 1.00e+00 9.14e-01
+## sce04111 4.47e-01 1.00e+00
+## sce04113 6.99e-01 1.99e-01
+## sce04120 9.90e-01 9.95e-01
+## sce04122 1.00e+00 5.26e-01
+## sce04130 1.00e+00 1.00e+00
+## sce04136 1.00e+00 9.14e-01
+## sce04138 9.97e-01 7.01e-01
+## sce04139 9.74e-01 7.84e-01
+## sce04141 1.00e+00 9.67e-03
+## sce04144 9.99e-01 1.69e-01
+## sce04145 1.00e+00 1.00e+00
+## sce04146 8.65e-01 3.79e-02
+## sce04148 1.00e+00 2.19e-01
+## sce04213 9.69e-01 3.55e-08
+## sce04392 1.49e-01 1.00e+00
+## sce04814 6.30e-01 9.23e-01</code></pre>
+<p>Interesting, but note those are in order of the pathway ID, which are the left-most rowname values above.
+If we want to sort the rows based on their significance, we can use the <code>topKEGG</code> function to do so, like this:</p>
+<div class="sourceCode" id="cb363"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb363-1"><a href="kegg-analysis.html#cb363-1" tabindex="-1"></a><span class="co"># extract the top KEGG pathways from kegg output</span></span>
+<span id="cb363-2"><a href="kegg-analysis.html#cb363-2" tabindex="-1"></a><span class="fu">topKEGG</span>(k, <span class="at">sort=</span><span class="st">&quot;down&quot;</span>)</span></code></pre></div>
+<pre><code>##                                                      Pathway   N Up Down
+## sce01100                                  Metabolic pathways 766 86  132
+## sce00500                       Starch and sucrose metabolism  39  1   20
+## sce00190                           Oxidative phosphorylation  71  0   27
+## sce04213     Longevity regulating pathway - multiple species  38  1   17
+## sce01110               Biosynthesis of secondary metabolites 339 56   65
+## sce00561                             Glycerolipid metabolism  31  2   13
+## sce01200                                   Carbon metabolism 104 10   24
+## sce00020                           Citrate cycle (TCA cycle)  30  1   10
+## sce00410                             beta-Alanine metabolism  13  3    6
+## sce00430                  Taurine and hypotaurine metabolism   3  0    3
+## sce00130 Ubiquinone and other terpenoid-quinone biosynthesis  10  0    5
+## sce00620                                 Pyruvate metabolism  48 12   12
+## sce00051                     Fructose and mannose metabolism  20  0    7
+## sce00052                                Galactose metabolism  22  0    7
+## sce00564                      Glycerophospholipid metabolism  40  2   10
+## sce00650                                Butanoate metabolism   9  3    4
+## sce04141         Protein processing in endoplasmic reticulum  92  1   17
+## sce00010                        Glycolysis / Gluconeogenesis  51  5   11
+## sce00380                               Tryptophan metabolism  20  3    6
+## sce00310                                  Lysine degradation  16  4    5
+##              P.Up   P.Down
+## sce01100 5.52e-03 3.24e-11
+## sce00500 9.72e-01 9.65e-11
+## sce00190 1.00e+00 2.93e-10
+## sce04213 9.69e-01 3.55e-08
+## sce01110 1.16e-06 1.37e-07
+## sce00561 7.65e-01 3.67e-06
+## sce01200 4.18e-01 7.56e-05
+## sce00020 9.35e-01 4.71e-04
+## sce00410 9.69e-02 9.52e-04
+## sce00430 1.00e+00 1.02e-03
+## sce00130 1.00e+00 1.69e-03
+## sce00620 6.17e-04 2.31e-03
+## sce00051 1.00e+00 2.47e-03
+## sce00052 1.00e+00 4.55e-03
+## sce00564 8.74e-01 5.25e-03
+## sce00650 3.69e-02 8.57e-03
+## sce04141 1.00e+00 9.67e-03
+## sce00010 4.59e-01 1.13e-02
+## sce00380 2.49e-01 1.16e-02
+## sce00310 4.42e-02 1.75e-02</code></pre>
+<p>Notice I chose to sort on p-value for the “downregulated” genes (aka lower in the mutant). We could change “down” to “up” in the code above to sort on the other column.</p>
+</div>
+<div id="pathway-visualization" class="section level3 hasAnchor" number="11.4.2">
+<h3><span class="header-section-number">11.4.2</span> Pathway Visualization<a href="kegg-analysis.html#pathway-visualization" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>So, we’ve found out which KEGG pathways are enriched in our gene list for this comparison. A common thing we will want to do is visualize those enriched pathways. The Bioconductor package <code>pathview</code> allows us to visualize these pathways. If you prefer web based tools, it has a free web version at: <a href="https://pathview.uncc.edu" class="uri">https://pathview.uncc.edu</a></p>
+<p>In addition to just the genes that are DE, we can also include information about their changes by coloring the corresponding parts of the graph accordingly.</p>
+<div class="sourceCode" id="cb365"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb365-1"><a href="kegg-analysis.html#cb365-1" tabindex="-1"></a><span class="co"># this makes sure you have pathview and tries to install it if you don&#39;t</span></span>
+<span id="cb365-2"><a href="kegg-analysis.html#cb365-2" tabindex="-1"></a><span class="cf">if</span> (<span class="sc">!</span><span class="fu">requireNamespace</span>(<span class="st">&quot;pathview&quot;</span>, <span class="at">quietly =</span> <span class="cn">TRUE</span>))</span>
+<span id="cb365-3"><a href="kegg-analysis.html#cb365-3" tabindex="-1"></a>    BiocManager<span class="sc">::</span><span class="fu">install</span>(<span class="st">&quot;pathview&quot;</span>)</span>
+<span id="cb365-4"><a href="kegg-analysis.html#cb365-4" tabindex="-1"></a><span class="fu">library</span>(<span class="st">&quot;pathview&quot;</span>)</span>
+<span id="cb365-5"><a href="kegg-analysis.html#cb365-5" tabindex="-1"></a></span>
+<span id="cb365-6"><a href="kegg-analysis.html#cb365-6" tabindex="-1"></a><span class="co"># save the logFC values from the res object to a new variable</span></span>
+<span id="cb365-7"><a href="kegg-analysis.html#cb365-7" tabindex="-1"></a>gene_data_logFC <span class="ot">&lt;-</span> res<span class="sc">$</span>table <span class="sc">%&gt;%</span> dplyr<span class="sc">::</span><span class="fu">select</span>(logFC)</span>
+<span id="cb365-8"><a href="kegg-analysis.html#cb365-8" tabindex="-1"></a></span>
+<span id="cb365-9"><a href="kegg-analysis.html#cb365-9" tabindex="-1"></a><span class="co"># put the ORF names as names for each entry</span></span>
+<span id="cb365-10"><a href="kegg-analysis.html#cb365-10" tabindex="-1"></a>fold_change_geneList <span class="ot">&lt;-</span> <span class="fu">setNames</span>(<span class="at">object =</span> <span class="fu">data.frame</span>(res)<span class="sc">$</span>logFC,</span>
+<span id="cb365-11"><a href="kegg-analysis.html#cb365-11" tabindex="-1"></a>                                 <span class="at">nm =</span> <span class="fu">data.frame</span>(res)<span class="sc">$</span>ORF)</span>
+<span id="cb365-12"><a href="kegg-analysis.html#cb365-12" tabindex="-1"></a></span>
+<span id="cb365-13"><a href="kegg-analysis.html#cb365-13" tabindex="-1"></a><span class="co"># we can see what this look like with head()</span></span>
+<span id="cb365-14"><a href="kegg-analysis.html#cb365-14" tabindex="-1"></a><span class="fu">head</span>(fold_change_geneList)</span></code></pre></div>
+<pre><code>##  YIL170W  YFL056C  YAR061W  YGR014W  YPR031W  YIL003W 
+##  1.00593  0.82290 -0.63346 -0.00538 -0.10371  0.25097</code></pre>
+<div class="sourceCode" id="cb367"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb367-1"><a href="kegg-analysis.html#cb367-1" tabindex="-1"></a><span class="co"># the pathview command saves the file to your current directory.</span></span>
+<span id="cb367-2"><a href="kegg-analysis.html#cb367-2" tabindex="-1"></a><span class="co"># let&#39;s create a place for that information to go.</span></span>
+<span id="cb367-3"><a href="kegg-analysis.html#cb367-3" tabindex="-1"></a>path_to_kegg_images <span class="ot">&lt;-</span> <span class="st">&quot;~/Desktop/Genomic_Data_Analysis/Analysis/KEGG/&quot;</span></span>
+<span id="cb367-4"><a href="kegg-analysis.html#cb367-4" tabindex="-1"></a><span class="cf">if</span> (<span class="sc">!</span><span class="fu">dir.exists</span>(path_to_kegg_images)) {</span>
+<span id="cb367-5"><a href="kegg-analysis.html#cb367-5" tabindex="-1"></a>  <span class="fu">dir.create</span>(path_to_kegg_images, <span class="at">recursive =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb367-6"><a href="kegg-analysis.html#cb367-6" tabindex="-1"></a>}</span>
+<span id="cb367-7"><a href="kegg-analysis.html#cb367-7" tabindex="-1"></a></span>
+<span id="cb367-8"><a href="kegg-analysis.html#cb367-8" tabindex="-1"></a><span class="co"># move to this place so images save there.</span></span>
+<span id="cb367-9"><a href="kegg-analysis.html#cb367-9" tabindex="-1"></a><span class="fu">setwd</span>(path_to_kegg_images)</span>
+<span id="cb367-10"><a href="kegg-analysis.html#cb367-10" tabindex="-1"></a></span>
+<span id="cb367-11"><a href="kegg-analysis.html#cb367-11" tabindex="-1"></a><span class="co"># now, we can run the pathview command.</span></span>
+<span id="cb367-12"><a href="kegg-analysis.html#cb367-12" tabindex="-1"></a><span class="co"># you can try changing the pathway.id below to one of the shown examples</span></span>
+<span id="cb367-13"><a href="kegg-analysis.html#cb367-13" tabindex="-1"></a><span class="co"># this will let you see the different pathways.</span></span>
+<span id="cb367-14"><a href="kegg-analysis.html#cb367-14" tabindex="-1"></a>test <span class="ot">&lt;-</span> <span class="fu">pathview</span>(<span class="at">gene.data  =</span> fold_change_geneList,</span>
+<span id="cb367-15"><a href="kegg-analysis.html#cb367-15" tabindex="-1"></a>                     <span class="co"># pathway.id = &quot;sce01100&quot;, #metabolic pathways</span></span>
+<span id="cb367-16"><a href="kegg-analysis.html#cb367-16" tabindex="-1"></a>                     <span class="at">pathway.id =</span> <span class="st">&quot;sce00010&quot;</span>, <span class="co">#glycolysis/gluconeogenesis</span></span>
+<span id="cb367-17"><a href="kegg-analysis.html#cb367-17" tabindex="-1"></a>                     <span class="co"># pathway.id = &quot;sce03050&quot;, # proteasome cycle</span></span>
+<span id="cb367-18"><a href="kegg-analysis.html#cb367-18" tabindex="-1"></a>                     <span class="co"># pathway.id = &quot;sce00020&quot;, # TCA cycle</span></span>
+<span id="cb367-19"><a href="kegg-analysis.html#cb367-19" tabindex="-1"></a>                     <span class="co"># pathway.id = &quot;sce00500&quot;, # starch &amp; sucrose metabolism (trehalose)</span></span>
+<span id="cb367-20"><a href="kegg-analysis.html#cb367-20" tabindex="-1"></a>                     <span class="co"># pathway.id = &quot;sce00030&quot;, #PPP</span></span>
+<span id="cb367-21"><a href="kegg-analysis.html#cb367-21" tabindex="-1"></a>                     <span class="at">species    =</span> <span class="st">&quot;sce&quot;</span>,</span>
+<span id="cb367-22"><a href="kegg-analysis.html#cb367-22" tabindex="-1"></a>                     <span class="at">gene.idtype=</span><span class="st">&quot;orf&quot;</span>,</span>
+<span id="cb367-23"><a href="kegg-analysis.html#cb367-23" tabindex="-1"></a>                     <span class="co"># expand.node = TRUE,</span></span>
+<span id="cb367-24"><a href="kegg-analysis.html#cb367-24" tabindex="-1"></a>                     <span class="at">split.group=</span>T,</span>
+<span id="cb367-25"><a href="kegg-analysis.html#cb367-25" tabindex="-1"></a>                     <span class="at">map.symbol =</span> T,</span>
+<span id="cb367-26"><a href="kegg-analysis.html#cb367-26" tabindex="-1"></a>                     <span class="at">is.signal=</span>F,</span>
+<span id="cb367-27"><a href="kegg-analysis.html#cb367-27" tabindex="-1"></a>                     <span class="at">kegg.native =</span> F, </span>
+<span id="cb367-28"><a href="kegg-analysis.html#cb367-28" tabindex="-1"></a>                     <span class="at">match.data =</span> T, </span>
+<span id="cb367-29"><a href="kegg-analysis.html#cb367-29" tabindex="-1"></a>                     <span class="at">node.sum=</span><span class="st">&#39;max.abs&#39;</span>, <span class="co"># this determines how to choose which gene to show.</span></span>
+<span id="cb367-30"><a href="kegg-analysis.html#cb367-30" tabindex="-1"></a>                     <span class="at">multi.state =</span> T, </span>
+<span id="cb367-31"><a href="kegg-analysis.html#cb367-31" tabindex="-1"></a>                     <span class="at">bins=</span><span class="dv">20</span>,</span>
+<span id="cb367-32"><a href="kegg-analysis.html#cb367-32" tabindex="-1"></a>                     <span class="at">same.layer =</span> F,</span>
+<span id="cb367-33"><a href="kegg-analysis.html#cb367-33" tabindex="-1"></a>                     <span class="at">pdf.size=</span><span class="fu">c</span>(<span class="dv">7</span>,<span class="dv">7</span>),</span>
+<span id="cb367-34"><a href="kegg-analysis.html#cb367-34" tabindex="-1"></a>                     <span class="at">limit =</span> <span class="fu">list</span>(<span class="at">gene=</span><span class="dv">5</span>, <span class="at">cpd=</span><span class="dv">1</span>))</span></code></pre></div>
+<pre><code>## &#39;select()&#39; returned 1:1 mapping between keys and columns</code></pre>
+<pre><code>## [1] &quot;Note: 148 of 5615 unique input IDs unmapped.&quot;</code></pre>
+<pre><code>## Info: Getting gene ID data from KEGG...</code></pre>
+<pre><code>## Info: Done with data retrieval!</code></pre>
+<pre><code>## Warning in .local(from, to, graph): edges replaced: &#39;139|61&#39;, &#39;139|62&#39;,
+## &#39;118|121&#39;</code></pre>
+<pre><code>## Info: Working in directory /Users/clstacy/Desktop/Genomic_Data_Analysis/Analysis/KEGG</code></pre>
+<pre><code>## Info: Writing image file sce00010.pathview.pdf</code></pre>
+<p>Of course, you might want more control over the process. In that case, we can use another package. For example, we could use <code>clusterProfiler</code> that we’ve used before. If you want to learn more, this is a useful guide: <a href="https://yulab-smu.top/biomedical-knowledge-mining-book/clusterprofiler-kegg.html" class="uri">https://yulab-smu.top/biomedical-knowledge-mining-book/clusterprofiler-kegg.html</a>. In this analysis, we need to manually select the genes that we want to run KEGG enrichment on, and save that character vector of gene names.</p>
+<div class="sourceCode" id="cb375"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb375-1"><a href="kegg-analysis.html#cb375-1" tabindex="-1"></a><span class="co"># turn res object into a list of genes</span></span>
+<span id="cb375-2"><a href="kegg-analysis.html#cb375-2" tabindex="-1"></a><span class="co"># Recall that these genes are those that are DE between mutant stress response and</span></span>
+<span id="cb375-3"><a href="kegg-analysis.html#cb375-3" tabindex="-1"></a><span class="co"># the WT stress response.</span></span>
+<span id="cb375-4"><a href="kegg-analysis.html#cb375-4" tabindex="-1"></a>DE_genes <span class="ot">&lt;-</span> res <span class="sc">%&gt;%</span> </span>
+<span id="cb375-5"><a href="kegg-analysis.html#cb375-5" tabindex="-1"></a>  <span class="fu">data.frame</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb375-6"><a href="kegg-analysis.html#cb375-6" tabindex="-1"></a>  <span class="fu">filter</span>(PValue <span class="sc">&lt;</span> <span class="fl">0.01</span> <span class="sc">&amp;</span> <span class="fu">abs</span>(logFC)<span class="sc">&gt;</span><span class="fl">0.5</span></span>
+<span id="cb375-7"><a href="kegg-analysis.html#cb375-7" tabindex="-1"></a>         ) <span class="sc">%&gt;%</span></span>
+<span id="cb375-8"><a href="kegg-analysis.html#cb375-8" tabindex="-1"></a>  <span class="fu">pull</span>(ORF)</span></code></pre></div>
+<p>To run the enrichment, we can use the <code>enrichKEGG()</code> function from the <code>clusterProfiler</code> package. The argument “gene” for this function requires a vector of Entrez gene id’s. Right now we have a vector of gene IDs, but they are the ORF names instead of entrez IDs, so for most organisms we need to convert them.</p>
+<div class="sourceCode" id="cb376"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb376-1"><a href="kegg-analysis.html#cb376-1" tabindex="-1"></a><span class="co"># how can we find our organism &amp; its code? try this clusterProfiler command:</span></span>
+<span id="cb376-2"><a href="kegg-analysis.html#cb376-2" tabindex="-1"></a><span class="fu">search_kegg_organism</span>(<span class="st">&#39;yeast&#39;</span>, <span class="at">by=</span><span class="st">&#39;common_name&#39;</span>)</span></code></pre></div>
+<pre><code>##     kegg_code           scientific_name   common_name
+## 708       sce  Saccharomyces cerevisiae budding yeast
+## 820       spo Schizosaccharomyces pombe fission yeast</code></pre>
+<p>Thankfully, the <code>clusterProfiler</code> package comes with the function <code>bitr</code> (Biological Id TRanslator) to translate geneIDs.</p>
+<p>Note: the <code>sce</code> genome database is coded differently than many genome databases, so it requests the <code>ORF</code> instead of the <code>entrezID</code>, so we can directly use the DE_genes vector instead of the entrez ID. If you don’t work with yeast, you’ll probably need to use the entrez ID list for analyses that you do on your own.</p>
+<div class="sourceCode" id="cb378"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb378-1"><a href="kegg-analysis.html#cb378-1" tabindex="-1"></a><span class="co"># convert gene IDs to entrez IDs</span></span>
+<span id="cb378-2"><a href="kegg-analysis.html#cb378-2" tabindex="-1"></a>entrez_ids <span class="ot">&lt;-</span> <span class="fu">bitr</span>(DE_genes, <span class="at">fromType =</span> <span class="st">&quot;ORF&quot;</span>, <span class="at">toType =</span> <span class="st">&quot;ENTREZID&quot;</span>, <span class="at">OrgDb =</span> org.Sc.sgd.db)</span></code></pre></div>
+<pre><code>## &#39;select()&#39; returned 1:1 mapping between keys and columns</code></pre>
+<div class="sourceCode" id="cb380"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb380-1"><a href="kegg-analysis.html#cb380-1" tabindex="-1"></a><span class="co"># Run our KEGG enrichment</span></span>
+<span id="cb380-2"><a href="kegg-analysis.html#cb380-2" tabindex="-1"></a>kegg_results <span class="ot">&lt;-</span> <span class="fu">enrichKEGG</span>(<span class="at">gene =</span> DE_genes, <span class="co">#entrez_ids$ENTREZID, </span></span>
+<span id="cb380-3"><a href="kegg-analysis.html#cb380-3" tabindex="-1"></a>                           <span class="at">organism =</span> <span class="st">&#39;sce&#39;</span> <span class="co">#options: https://www.genome.jp/kegg/catalog/org_list.html</span></span>
+<span id="cb380-4"><a href="kegg-analysis.html#cb380-4" tabindex="-1"></a>                           )</span></code></pre></div>
+<pre><code>## Reading KEGG annotation online: &quot;https://rest.kegg.jp/link/sce/pathway&quot;...</code></pre>
+<pre><code>## Reading KEGG annotation online: &quot;https://rest.kegg.jp/list/pathway/sce&quot;...</code></pre>
+<div class="sourceCode" id="cb383"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb383-1"><a href="kegg-analysis.html#cb383-1" tabindex="-1"></a><span class="co"># take a peak at the results</span></span>
+<span id="cb383-2"><a href="kegg-analysis.html#cb383-2" tabindex="-1"></a><span class="fu">head</span>(kegg_results)</span></code></pre></div>
+<pre><code>##                    category                          subcategory       ID
+## sce01110         Metabolism             Global and overview maps sce01110
+## sce00500         Metabolism              Carbohydrate metabolism sce00500
+## sce04213 Organismal Systems                                Aging sce04213
+## sce00620         Metabolism              Carbohydrate metabolism sce00620
+## sce01200         Metabolism             Global and overview maps sce01200
+## sce00770         Metabolism Metabolism of cofactors and vitamins sce00770
+##                                                                                         Description
+## sce01110           Biosynthesis of secondary metabolites - Saccharomyces cerevisiae (budding yeast)
+## sce00500                   Starch and sucrose metabolism - Saccharomyces cerevisiae (budding yeast)
+## sce04213 Longevity regulating pathway - multiple species - Saccharomyces cerevisiae (budding yeast)
+## sce00620                             Pyruvate metabolism - Saccharomyces cerevisiae (budding yeast)
+## sce01200                               Carbon metabolism - Saccharomyces cerevisiae (budding yeast)
+## sce00770               Pantothenate and CoA biosynthesis - Saccharomyces cerevisiae (budding yeast)
+##          GeneRatio  BgRatio       pvalue     p.adjust       qvalue
+## sce01110   108/385 351/2467 4.483267e-15 4.259103e-13 3.114691e-13
+## sce00500    20/385  41/2467 5.180046e-07 1.960553e-05 1.433756e-05
+## sce04213    19/385  38/2467 6.191220e-07 1.960553e-05 1.433756e-05
+## sce00620    22/385  52/2467 2.906810e-06 6.903673e-05 5.048669e-05
+## sce01200    36/385 112/2467 5.890900e-06 1.092427e-04 7.988940e-05
+## sce00770    13/385  23/2467 6.899539e-06 1.092427e-04 7.988940e-05
+##                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     geneID
+## sce01110 YPL028W/YER091C/YKR067W/YMR169C/YDR178W/YER026C/YKL085W/YGR088W/YNL274C/YIL145C/YJR148W/YBL011W/YJR016C/YHR137W/YLR355C/YBR052C/YPL061W/YFR015C/YML110C/YER073W/YGR155W/YGR060W/YOR347C/YOR374W/YMR108W/YOR108W/YDR256C/YLR258W/YLL041C/YLR432W/YKL035W/YDR074W/YOR176W/YDR300C/YBR001C/YJL200C/YNR001C/YHR063C/YLR372W/YLL062C/YOR184W/YMR105C/YER141W/YAL054C/YKL067W/YPR145W/YIL094C/YCR073W-A/YLR303W/YLR174W/YGR248W/YAL061W/YDR502C/YPR184W/YDL131W/YJR010W/YMR189W/YIL155C/YDR032C/YNR043W/YCR004C/YIL125W/YDR019C/YPR160W/YBR117C/YML126C/YDR001C/YEL011W/YJL052W/YGR255C/YNL280C/YGL009C/YDL166C/YML035C/YDL022W/YDR516C/YMR261C/YKL148C/YHR208W/YAL060W/YNR034W/YGR157W/YBR126C/YEL046C/YBR145W/YER081W/YLR180W/YMR278W/YML100W/YLR153C/YDL182W/YMR250W/YBL068W/YJR073C/YOL058W/YPR026W/YFL030W/YGL256W/YDR148C/YGR205W/YKL141W/YKR058W/YGR256W/YFR053C/YDR234W/YDL021W/YOR136W/YCL040W
+## sce00500                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   YFR015C/YLR258W/YKL035W/YDR074W/YBR001C/YMR105C/YGR287C/YPR184W/YPR160W/YDR001C/YEL011W/YDR516C/YMR261C/YBR126C/YMR278W/YML100W/YPR026W/YKR058W/YFR053C/YCL040W
+## sce04213                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           YGR088W/YPL203W/YJL164C/YHR008C/YDR256C/YLL024C/YER103W/YDR258C/YFL033C/YPL015C/YLL026W/YDR096W/YBL075C/YOR025W/YAL005C/YGL037C/YNL098C/YJL005W/YJR104C
+## sce00620                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   YPL028W/YMR169C/YKL085W/YPL061W/YER073W/YOR347C/YOR374W/YOR108W/YGL062W/YML004C/YAL054C/YDL174C/YDL131W/YDR272W/YBR145W/YEL071W/YLR153C/YDL182W/YBL015W/YML054C/YGL256W/YDR533C
+## sce01200                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 YPL028W/YDR178W/YKL085W/YGR088W/YML070W/YOR347C/YDR256C/YLL041C/YGL062W/YNR001C/YOR184W/YAL054C/YCR073W-A/YLR303W/YLR174W/YGR248W/YMR189W/YIL125W/YDR019C/YBR117C/YJL052W/YDR516C/YKL148C/YNR034W/YER081W/YLR153C/YBL068W/YFL030W/YDR148C/YGR205W/YKL141W/YGR256W/YFR053C/YDL021W/YOR136W/YCL040W
+## sce00770                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           YMR169C/YIL145C/YJR148W/YJR016C/YLR355C/YPL061W/YER073W/YOR374W/YMR108W/YHR063C/YGL154C/YHR208W/YMR020W
+##          Count
+## sce01110   108
+## sce00500    20
+## sce04213    19
+## sce00620    22
+## sce01200    36
+## sce00770    13</code></pre>
+<div class="sourceCode" id="cb385"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb385-1"><a href="kegg-analysis.html#cb385-1" tabindex="-1"></a><span class="co"># create a table for the html file</span></span>
+<span id="cb385-2"><a href="kegg-analysis.html#cb385-2" tabindex="-1"></a><span class="fu">data.frame</span>(kegg_results) <span class="sc">%&gt;%</span> <span class="fu">reactable</span>()</span></code></pre></div>
+<div class="reactable html-widget html-fill-item-overflow-hidden html-fill-item" id="htmlwidget-fa2ca10493f35d219894" style="width:auto;height:auto;"></div>
+<script type="application/json" data-for="htmlwidget-fa2ca10493f35d219894">{"x":{"tag":{"name":"Reactable","attribs":{"data":{".rownames":["sce01110","sce00500","sce04213","sce00620","sce01200","sce00770","sce01210","sce03008","sce00280","sce00630","sce00410","sce00290","sce01230","sce03020","sce03010","sce00380","sce00561","sce01240","sce00260","sce00020","sce00310","sce00071","sce00190","sce00010","sce00270","sce00130"],"category":["Metabolism","Metabolism","Organismal Systems","Metabolism","Metabolism","Metabolism",null,"Genetic Information Processing","Metabolism","Metabolism","Metabolism","Metabolism","Metabolism","Genetic Information Processing","Genetic Information Processing","Metabolism","Metabolism","Metabolism","Metabolism","Metabolism","Metabolism","Metabolism","Metabolism","Metabolism","Metabolism","Metabolism"],"subcategory":["Global and overview maps","Carbohydrate metabolism","Aging","Carbohydrate metabolism","Global and overview maps","Metabolism of cofactors and vitamins",null,"Translation","Amino acid metabolism","Carbohydrate metabolism","Metabolism of other amino acids","Amino acid metabolism","Global and overview maps","Transcription","Translation","Amino acid metabolism","Lipid metabolism","Global and overview maps","Amino acid metabolism","Carbohydrate metabolism","Amino acid metabolism","Lipid metabolism","Energy metabolism","Carbohydrate metabolism","Amino acid metabolism","Metabolism of cofactors and vitamins"],"ID":["sce01110","sce00500","sce04213","sce00620","sce01200","sce00770","sce01210","sce03008","sce00280","sce00630","sce00410","sce00290","sce01230","sce03020","sce03010","sce00380","sce00561","sce01240","sce00260","sce00020","sce00310","sce00071","sce00190","sce00010","sce00270","sce00130"],"Description":["Biosynthesis of secondary metabolites - Saccharomyces cerevisiae (budding yeast)","Starch and sucrose metabolism - Saccharomyces cerevisiae (budding yeast)","Longevity regulating pathway - multiple species - Saccharomyces cerevisiae (budding yeast)","Pyruvate metabolism - Saccharomyces cerevisiae (budding yeast)","Carbon metabolism - Saccharomyces cerevisiae (budding yeast)","Pantothenate and CoA biosynthesis - Saccharomyces cerevisiae (budding yeast)","2-Oxocarboxylic acid metabolism - Saccharomyces cerevisiae (budding yeast)","Ribosome biogenesis in eukaryotes - Saccharomyces cerevisiae (budding yeast)","Valine, leucine and isoleucine degradation - Saccharomyces cerevisiae (budding yeast)","Glyoxylate and dicarboxylate metabolism - Saccharomyces cerevisiae (budding yeast)","beta-Alanine metabolism - Saccharomyces cerevisiae (budding yeast)","Valine, leucine and isoleucine biosynthesis - Saccharomyces cerevisiae (budding yeast)","Biosynthesis of amino acids - Saccharomyces cerevisiae (budding yeast)","RNA polymerase - Saccharomyces cerevisiae (budding yeast)","Ribosome - Saccharomyces cerevisiae (budding yeast)","Tryptophan metabolism - Saccharomyces cerevisiae (budding yeast)","Glycerolipid metabolism - Saccharomyces cerevisiae (budding yeast)","Biosynthesis of cofactors - Saccharomyces cerevisiae (budding yeast)","Glycine, serine and threonine metabolism - Saccharomyces cerevisiae (budding yeast)","Citrate cycle (TCA cycle) - Saccharomyces cerevisiae (budding yeast)","Lysine degradation - Saccharomyces cerevisiae (budding yeast)","Fatty acid degradation - Saccharomyces cerevisiae (budding yeast)","Oxidative phosphorylation - Saccharomyces cerevisiae (budding yeast)","Glycolysis / Gluconeogenesis - Saccharomyces cerevisiae (budding yeast)","Cysteine and methionine metabolism - Saccharomyces cerevisiae (budding yeast)","Ubiquinone and other terpenoid-quinone biosynthesis - Saccharomyces cerevisiae (budding yeast)"],"GeneRatio":["108/385","20/385","19/385","22/385","36/385","13/385","18/385","29/385","9/385","13/385","8/385","7/385","33/385","12/385","44/385","9/385","12/385","33/385","11/385","11/385","7/385","8/385","21/385","16/385","13/385","5/385"],"BgRatio":["351/2467","41/2467","38/2467","52/2467","112/2467","23/2467","42/2467","88/2467","14/2467","29/2467","13/2467","12/2467","125/2467","31/2467","185/2467","20/2467","32/2467","131/2467","30/2467","31/2467","16/2467","20/2467","79/2467","55/2467","43/2467","10/2467"],"pvalue":[4.48326677311144e-15,5.18004636439497e-07,6.19121979705541e-07,2.90680964874645e-06,5.89090002494767e-06,6.89953905176219e-06,1.93378448336452e-05,2.93952291006541e-05,4.85038433693591e-05,0.000165868281856592,0.000205144998820934,0.000830944584458969,0.000997188168543337,0.00147047826790234,0.00163749882315092,0.00169007884246343,0.00202792347171843,0.00235733561235463,0.0038129597522839,0.00510132456869376,0.00679982606996635,0.00731725105681854,0.00754541123398831,0.0075987140117063,0.0110801442722015,0.0115317723825105],"p.adjust":[4.25910343445587e-13,1.96055293573421e-05,1.96055293573421e-05,6.90367291577281e-05,0.000109242701652901,0.000109242701652901,0.000262442179885184,0.000349068345570268,0.000511985013343234,0.00157574867763763,0.00177170680799897,0.0065783112936335,0.00728714430858592,0.00997824538933734,0.0100348431271266,0.0100348431271266,0.0113325135184265,0.0124414935096495,0.0190647987614195,0.0242312917012953,0.0300782429630041,0.0300782429630041,0.0300782429630041,0.0300782429630041,0.0421045482343656,0.0421353221668654],"qvalue":[3.1146906002669e-13,1.43375616352862e-05,1.43375616352862e-05,5.04866938992804e-05,7.98893995467201e-05,7.98893995467201e-05,0.000191924475040689,0.000255274357979365,0.000374415633026631,0.00115234806342475,0.00129565262413221,0.00481073180476245,0.00532910276306561,0.00729711020162066,0.00733850023701225,0.00733850023701225,0.00828748911042825,0.0090984883283863,0.0139421243019799,0.0177203906070415,0.0219962774023077,0.0219962774023077,0.0219962774023077,0.0219962774023077,0.0307911377669599,0.0308136428034694],"geneID":["YPL028W/YER091C/YKR067W/YMR169C/YDR178W/YER026C/YKL085W/YGR088W/YNL274C/YIL145C/YJR148W/YBL011W/YJR016C/YHR137W/YLR355C/YBR052C/YPL061W/YFR015C/YML110C/YER073W/YGR155W/YGR060W/YOR347C/YOR374W/YMR108W/YOR108W/YDR256C/YLR258W/YLL041C/YLR432W/YKL035W/YDR074W/YOR176W/YDR300C/YBR001C/YJL200C/YNR001C/YHR063C/YLR372W/YLL062C/YOR184W/YMR105C/YER141W/YAL054C/YKL067W/YPR145W/YIL094C/YCR073W-A/YLR303W/YLR174W/YGR248W/YAL061W/YDR502C/YPR184W/YDL131W/YJR010W/YMR189W/YIL155C/YDR032C/YNR043W/YCR004C/YIL125W/YDR019C/YPR160W/YBR117C/YML126C/YDR001C/YEL011W/YJL052W/YGR255C/YNL280C/YGL009C/YDL166C/YML035C/YDL022W/YDR516C/YMR261C/YKL148C/YHR208W/YAL060W/YNR034W/YGR157W/YBR126C/YEL046C/YBR145W/YER081W/YLR180W/YMR278W/YML100W/YLR153C/YDL182W/YMR250W/YBL068W/YJR073C/YOL058W/YPR026W/YFL030W/YGL256W/YDR148C/YGR205W/YKL141W/YKR058W/YGR256W/YFR053C/YDR234W/YDL021W/YOR136W/YCL040W","YFR015C/YLR258W/YKL035W/YDR074W/YBR001C/YMR105C/YGR287C/YPR184W/YPR160W/YDR001C/YEL011W/YDR516C/YMR261C/YBR126C/YMR278W/YML100W/YPR026W/YKR058W/YFR053C/YCL040W","YGR088W/YPL203W/YJL164C/YHR008C/YDR256C/YLL024C/YER103W/YDR258C/YFL033C/YPL015C/YLL026W/YDR096W/YBL075C/YOR025W/YAL005C/YGL037C/YNL098C/YJL005W/YJR104C","YPL028W/YMR169C/YKL085W/YPL061W/YER073W/YOR347C/YOR374W/YOR108W/YGL062W/YML004C/YAL054C/YDL174C/YDL131W/YDR272W/YBR145W/YEL071W/YLR153C/YDL182W/YBL015W/YML054C/YGL256W/YDR533C","YPL028W/YDR178W/YKL085W/YGR088W/YML070W/YOR347C/YDR256C/YLL041C/YGL062W/YNR001C/YOR184W/YAL054C/YCR073W-A/YLR303W/YLR174W/YGR248W/YMR189W/YIL125W/YDR019C/YBR117C/YJL052W/YDR516C/YKL148C/YNR034W/YER081W/YLR153C/YBL068W/YFL030W/YDR148C/YGR205W/YKL141W/YGR256W/YFR053C/YDL021W/YOR136W/YCL040W","YMR169C/YIL145C/YJR148W/YJR016C/YLR355C/YPL061W/YER073W/YOR374W/YMR108W/YHR063C/YGL154C/YHR208W/YMR020W","YJR148W/YJR016C/YLR355C/YMR108W/YOR108W/YJL200C/YNR001C/YIL094C/YLR174W/YDL131W/YIL125W/YGL009C/YHR208W/YDL182W/YFL030W/YDR148C/YDR234W/YOR136W","YJL109C/YHR089C/YNL132W/YLR022C/YPL093W/YDR449C/YOR310C/YCR057C/YLR106C/YLR175W/YOL010W/YOR056C/YOR185C/YDL166C/YLL034C/YLR197W/YHR170W/YOR119C/YKL186C/YLR186W/YDL208W/YLR129W/YLR222C/YJL069C/YNL075W/YGR128C/YDL014W/YHR196W/YLR409C","YPL028W/YMR169C/YJR148W/YPL061W/YER073W/YOR374W/YML126C/YHR208W/YGR019W","YPL028W/YKL085W/YGR088W/YNL274C/YDR256C/YNR001C/YAL054C/YMR189W/YDR019C/YPR035W/YLR153C/YFL030W/YGR205W","YMR169C/YIL145C/YPL061W/YER073W/YOR374W/YMR250W/YMR020W/YGR019W","YJR148W/YJR016C/YLR355C/YMR108W/YOR108W/YGL009C/YHR208W","YER091C/YJR148W/YJR016C/YLR355C/YGR155W/YOR347C/YMR108W/YOR108W/YGL062W/YDR300C/YJL200C/YNR001C/YOR184W/YPR145W/YIL094C/YLR303W/YLR174W/YDR502C/YDL131W/YBR117C/YJL052W/YGL009C/YPR035W/YHR208W/YEL046C/YER081W/YLR180W/YDL182W/YBL068W/YOL058W/YDR234W/YDL021W/YOR136W","YJL148W/YBR154C/YOR340C/YNL151C/YIL021W/YOR341W/YNL248C/YKL144C/YNL113W/YJR063W/YPR010C/YPR110C","YHL001W/YJL177W/YER131W/YOR234C/YGR148C/YDR500C/YKL156W/YHL033C/YLR406C/YMR194W/YOL121C/YFL034C-A/YLR048W/YIL069C/YOR293W/YOR312C/YEL054C/YMR286W/YGR214W/YDL136W/YNL301C/YDR447C/YDR025W/YNL096C/YLR061W/YGL076C/YPL079W/YLR448W/YML063W/YNL067W/YGR085C/YBL027W/YML026C/YNL002C/YDR418W/YJL190C/YBR189W/YDL082W/YIL133C/YLR344W/YDR471W/YDL083C/YPL198W/YOR096W","YPL028W/YMR169C/YGR088W/YPL061W/YER073W/YOR374W/YDR256C/YJR025C/YDR148C","YKR067W/YMR169C/YBL011W/YML070W/YPL061W/YER073W/YOR374W/YER062C/YOR245C/YKL094W/YOR120W/YGR205W","YMR169C/YIL145C/YJR148W/YJL101C/YBR052C/YPL061W/YML110C/YER073W/YLR328W/YOR374W/YKL035W/YOR176W/YHR063C/YMR271C/YOR184W/YKL216W/YER141W/YKL067W/YBL039C/YGR144W/YDR502C/YBR035C/YDR032C/YCR004C/YGR255C/YJR025C/YDL166C/YHR208W/YNR033W/YLR180W/YMR096W/YMR020W/YGL037C","YER026C/YGR155W/YOR184W/YMR189W/YDR019C/YEL046C/YER081W/YFL030W/YGR205W/YGL196W/YDL021W","YDR178W/YKL085W/YLL041C/YGL062W/YNR001C/YLR174W/YIL125W/YKL148C/YDR148C/YKL141W/YOR136W","YPL028W/YMR169C/YPL061W/YER073W/YOR374W/YBR006W/YDR148C","YPL028W/YMR169C/YPL061W/YER073W/YOR374W/YOR317W/YBR145W/YGL256W","YIL111W/YDR178W/YKL192C/YMR145C/YBL099W/YMR256C/YLL041C/YEL039C/YJL166W/YDR529C/YER141W/YOR020W-A/YPR191W/YKL148C/YGL191W/YHR001W-A/YEL024W/YML120C/YDL004W/YKL141W/YJR121W","YMR169C/YPL061W/YER073W/YOR347C/YOR374W/YMR105C/YAL054C/YJL052W/YDR516C/YBR145W/YMR278W/YLR153C/YGL256W/YFR053C/YDL021W/YCL040W","YER091C/YKL085W/YJR148W/YJL101C/YGR155W/YLL062C/YOR184W/YEL038W/YLR303W/YDR502C/YHR208W/YER081W/YLR180W","YBR052C/YML110C/YDR032C/YCR004C/YGR255C"],"Count":[108,20,19,22,36,13,18,29,9,13,8,7,33,12,44,9,12,33,11,11,7,8,21,16,13,5]},"columns":[{"id":".rownames","name":"","type":"character","sortable":false,"filterable":false,"rowHeader":true},{"id":"category","name":"category","type":"character"},{"id":"subcategory","name":"subcategory","type":"character"},{"id":"ID","name":"ID","type":"character"},{"id":"Description","name":"Description","type":"character"},{"id":"GeneRatio","name":"GeneRatio","type":"character"},{"id":"BgRatio","name":"BgRatio","type":"character"},{"id":"pvalue","name":"pvalue","type":"numeric"},{"id":"p.adjust","name":"p.adjust","type":"numeric"},{"id":"qvalue","name":"qvalue","type":"numeric"},{"id":"geneID","name":"geneID","type":"character"},{"id":"Count","name":"Count","type":"numeric"}],"dataKey":"5c975a538a2529ca48731cdfcd72e392"},"children":[]},"class":"reactR_markup"},"evals":[],"jsHooks":[]}</script>
+<div class="sourceCode" id="cb386"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb386-1"><a href="kegg-analysis.html#cb386-1" tabindex="-1"></a><span class="co"># Remove &quot; - Saccharomyces cerevesiae&quot; from each description entry</span></span>
+<span id="cb386-2"><a href="kegg-analysis.html#cb386-2" tabindex="-1"></a>kegg_results<span class="sc">@</span>result<span class="sc">$</span>Description <span class="ot">&lt;-</span> kegg_results<span class="sc">@</span>result<span class="sc">$</span>Description <span class="sc">%&gt;%</span> <span class="fu">print</span>() <span class="sc">%&gt;%</span> <span class="fu">str_replace_all</span>(., <span class="fu">fixed</span>(<span class="st">&quot; - Saccharomyces cerevisiae&quot;</span>), <span class="st">&quot;&quot;</span>)</span></code></pre></div>
+<pre><code>##  [1] &quot;Biosynthesis of secondary metabolites - Saccharomyces cerevisiae (budding yeast)&quot;                 
+##  [2] &quot;Starch and sucrose metabolism - Saccharomyces cerevisiae (budding yeast)&quot;                         
+##  [3] &quot;Longevity regulating pathway - multiple species - Saccharomyces cerevisiae (budding yeast)&quot;       
+##  [4] &quot;Pyruvate metabolism - Saccharomyces cerevisiae (budding yeast)&quot;                                   
+##  [5] &quot;Carbon metabolism - Saccharomyces cerevisiae (budding yeast)&quot;                                     
+##  [6] &quot;Pantothenate and CoA biosynthesis - Saccharomyces cerevisiae (budding yeast)&quot;                     
+##  [7] &quot;2-Oxocarboxylic acid metabolism - Saccharomyces cerevisiae (budding yeast)&quot;                       
+##  [8] &quot;Ribosome biogenesis in eukaryotes - Saccharomyces cerevisiae (budding yeast)&quot;                     
+##  [9] &quot;Valine, leucine and isoleucine degradation - Saccharomyces cerevisiae (budding yeast)&quot;            
+## [10] &quot;Glyoxylate and dicarboxylate metabolism - Saccharomyces cerevisiae (budding yeast)&quot;               
+## [11] &quot;beta-Alanine metabolism - Saccharomyces cerevisiae (budding yeast)&quot;                               
+## [12] &quot;Valine, leucine and isoleucine biosynthesis - Saccharomyces cerevisiae (budding yeast)&quot;           
+## [13] &quot;Biosynthesis of amino acids - Saccharomyces cerevisiae (budding yeast)&quot;                           
+## [14] &quot;RNA polymerase - Saccharomyces cerevisiae (budding yeast)&quot;                                        
+## [15] &quot;Ribosome - Saccharomyces cerevisiae (budding yeast)&quot;                                              
+## [16] &quot;Tryptophan metabolism - Saccharomyces cerevisiae (budding yeast)&quot;                                 
+## [17] &quot;Glycerolipid metabolism - Saccharomyces cerevisiae (budding yeast)&quot;                               
+## [18] &quot;Biosynthesis of cofactors - Saccharomyces cerevisiae (budding yeast)&quot;                             
+## [19] &quot;Glycine, serine and threonine metabolism - Saccharomyces cerevisiae (budding yeast)&quot;              
+## [20] &quot;Citrate cycle (TCA cycle) - Saccharomyces cerevisiae (budding yeast)&quot;                             
+## [21] &quot;Lysine degradation - Saccharomyces cerevisiae (budding yeast)&quot;                                    
+## [22] &quot;Fatty acid degradation - Saccharomyces cerevisiae (budding yeast)&quot;                                
+## [23] &quot;Oxidative phosphorylation - Saccharomyces cerevisiae (budding yeast)&quot;                             
+## [24] &quot;Glycolysis / Gluconeogenesis - Saccharomyces cerevisiae (budding yeast)&quot;                          
+## [25] &quot;Cysteine and methionine metabolism - Saccharomyces cerevisiae (budding yeast)&quot;                    
+## [26] &quot;Ubiquinone and other terpenoid-quinone biosynthesis - Saccharomyces cerevisiae (budding yeast)&quot;   
+## [27] &quot;Ascorbate and aldarate metabolism - Saccharomyces cerevisiae (budding yeast)&quot;                     
+## [28] &quot;Purine metabolism - Saccharomyces cerevisiae (budding yeast)&quot;                                     
+## [29] &quot;Lysine biosynthesis - Saccharomyces cerevisiae (budding yeast)&quot;                                   
+## [30] &quot;Alanine, aspartate and glutamate metabolism - Saccharomyces cerevisiae (budding yeast)&quot;           
+## [31] &quot;Fructose and mannose metabolism - Saccharomyces cerevisiae (budding yeast)&quot;                       
+## [32] &quot;Pentose phosphate pathway - Saccharomyces cerevisiae (budding yeast)&quot;                             
+## [33] &quot;Galactose metabolism - Saccharomyces cerevisiae (budding yeast)&quot;                                  
+## [34] &quot;Methane metabolism - Saccharomyces cerevisiae (budding yeast)&quot;                                    
+## [35] &quot;Lipoic acid metabolism - Saccharomyces cerevisiae (budding yeast)&quot;                                
+## [36] &quot;Tyrosine metabolism - Saccharomyces cerevisiae (budding yeast)&quot;                                   
+## [37] &quot;Propanoate metabolism - Saccharomyces cerevisiae (budding yeast)&quot;                                 
+## [38] &quot;Arginine and proline metabolism - Saccharomyces cerevisiae (budding yeast)&quot;                       
+## [39] &quot;Biosynthesis of nucleotide sugars - Saccharomyces cerevisiae (budding yeast)&quot;                     
+## [40] &quot;Glycerophospholipid metabolism - Saccharomyces cerevisiae (budding yeast)&quot;                        
+## [41] &quot;Peroxisome - Saccharomyces cerevisiae (budding yeast)&quot;                                            
+## [42] &quot;Histidine metabolism - Saccharomyces cerevisiae (budding yeast)&quot;                                  
+## [43] &quot;Nicotinate and nicotinamide metabolism - Saccharomyces cerevisiae (budding yeast)&quot;                
+## [44] &quot;Sulfur metabolism - Saccharomyces cerevisiae (budding yeast)&quot;                                     
+## [45] &quot;Nucleotide metabolism - Saccharomyces cerevisiae (budding yeast)&quot;                                 
+## [46] &quot;Arginine biosynthesis - Saccharomyces cerevisiae (budding yeast)&quot;                                 
+## [47] &quot;Amino sugar and nucleotide sugar metabolism - Saccharomyces cerevisiae (budding yeast)&quot;           
+## [48] &quot;Glutathione metabolism - Saccharomyces cerevisiae (budding yeast)&quot;                                
+## [49] &quot;Fatty acid metabolism - Saccharomyces cerevisiae (budding yeast)&quot;                                 
+## [50] &quot;Pentose and glucuronate interconversions - Saccharomyces cerevisiae (budding yeast)&quot;              
+## [51] &quot;Fatty acid biosynthesis - Saccharomyces cerevisiae (budding yeast)&quot;                               
+## [52] &quot;Vitamin B6 metabolism - Saccharomyces cerevisiae (budding yeast)&quot;                                 
+## [53] &quot;Polycomb repressive complex - Saccharomyces cerevisiae (budding yeast)&quot;                           
+## [54] &quot;Pyrimidine metabolism - Saccharomyces cerevisiae (budding yeast)&quot;                                 
+## [55] &quot;Meiosis - yeast - Saccharomyces cerevisiae (budding yeast)&quot;                                       
+## [56] &quot;MAPK signaling pathway - yeast - Saccharomyces cerevisiae (budding yeast)&quot;                        
+## [57] &quot;Steroid biosynthesis - Saccharomyces cerevisiae (budding yeast)&quot;                                  
+## [58] &quot;ABC transporters - Saccharomyces cerevisiae (budding yeast)&quot;                                      
+## [59] &quot;Efferocytosis - Saccharomyces cerevisiae (budding yeast)&quot;                                         
+## [60] &quot;Selenocompound metabolism - Saccharomyces cerevisiae (budding yeast)&quot;                             
+## [61] &quot;Terpenoid backbone biosynthesis - Saccharomyces cerevisiae (budding yeast)&quot;                       
+## [62] &quot;Other types of O-glycan biosynthesis - Saccharomyces cerevisiae (budding yeast)&quot;                  
+## [63] &quot;Sphingolipid metabolism - Saccharomyces cerevisiae (budding yeast)&quot;                               
+## [64] &quot;Protein processing in endoplasmic reticulum - Saccharomyces cerevisiae (budding yeast)&quot;           
+## [65] &quot;One carbon pool by folate - Saccharomyces cerevisiae (budding yeast)&quot;                             
+## [66] &quot;Porphyrin metabolism - Saccharomyces cerevisiae (budding yeast)&quot;                                  
+## [67] &quot;RNA degradation - Saccharomyces cerevisiae (budding yeast)&quot;                                       
+## [68] &quot;Endocytosis - Saccharomyces cerevisiae (budding yeast)&quot;                                           
+## [69] &quot;Biosynthesis of unsaturated fatty acids - Saccharomyces cerevisiae (budding yeast)&quot;               
+## [70] &quot;Folate biosynthesis - Saccharomyces cerevisiae (budding yeast)&quot;                                   
+## [71] &quot;Various types of N-glycan biosynthesis - Saccharomyces cerevisiae (budding yeast)&quot;                
+## [72] &quot;DNA replication - Saccharomyces cerevisiae (budding yeast)&quot;                                       
+## [73] &quot;Mitophagy - yeast - Saccharomyces cerevisiae (budding yeast)&quot;                                     
+## [74] &quot;Autophagy - other - Saccharomyces cerevisiae (budding yeast)&quot;                                     
+## [75] &quot;Motor proteins - Saccharomyces cerevisiae (budding yeast)&quot;                                        
+## [76] &quot;Glycosylphosphatidylinositol (GPI)-anchor biosynthesis - Saccharomyces cerevisiae (budding yeast)&quot;
+## [77] &quot;Viral life cycle - HIV-1 - Saccharomyces cerevisiae (budding yeast)&quot;                              
+## [78] &quot;Cell cycle - yeast - Saccharomyces cerevisiae (budding yeast)&quot;                                    
+## [79] &quot;Riboflavin metabolism - Saccharomyces cerevisiae (budding yeast)&quot;                                 
+## [80] &quot;Phenylalanine, tyrosine and tryptophan biosynthesis - Saccharomyces cerevisiae (budding yeast)&quot;   
+## [81] &quot;Thiamine metabolism - Saccharomyces cerevisiae (budding yeast)&quot;                                   
+## [82] &quot;Nucleocytoplasmic transport - Saccharomyces cerevisiae (budding yeast)&quot;                           
+## [83] &quot;Autophagy - yeast - Saccharomyces cerevisiae (budding yeast)&quot;                                     
+## [84] &quot;N-Glycan biosynthesis - Saccharomyces cerevisiae (budding yeast)&quot;                                 
+## [85] &quot;Spliceosome - Saccharomyces cerevisiae (budding yeast)&quot;                                           
+## [86] &quot;Inositol phosphate metabolism - Saccharomyces cerevisiae (budding yeast)&quot;                         
+## [87] &quot;Homologous recombination - Saccharomyces cerevisiae (budding yeast)&quot;                              
+## [88] &quot;Phosphatidylinositol signaling system - Saccharomyces cerevisiae (budding yeast)&quot;                 
+## [89] &quot;Base excision repair - Saccharomyces cerevisiae (budding yeast)&quot;                                  
+## [90] &quot;Basal transcription factors - Saccharomyces cerevisiae (budding yeast)&quot;                           
+## [91] &quot;mRNA surveillance pathway - Saccharomyces cerevisiae (budding yeast)&quot;                             
+## [92] &quot;ATP-dependent chromatin remodeling - Saccharomyces cerevisiae (budding yeast)&quot;                    
+## [93] &quot;Nucleotide excision repair - Saccharomyces cerevisiae (budding yeast)&quot;                            
+## [94] &quot;Ubiquitin mediated proteolysis - Saccharomyces cerevisiae (budding yeast)&quot;                        
+## [95] &quot;Aminoacyl-tRNA biosynthesis - Saccharomyces cerevisiae (budding yeast)&quot;</code></pre>
+</div>
+</div>
+<div id="visualize-on-the-kegg-website" class="section level2 hasAnchor" number="11.5">
+<h2><span class="header-section-number">11.5</span> Visualize on the KEGG website<a href="kegg-analysis.html#visualize-on-the-kegg-website" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>The first way we might want to visualize this plot is part of a KEGG pathway. We can open an html window with genes that are enriched highlighted, like this. Run one of these lines below and it will open a new window in your browser.</p>
+<div class="sourceCode" id="cb388"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb388-1"><a href="kegg-analysis.html#cb388-1" tabindex="-1"></a><span class="fu">browseKEGG</span>(kegg_results, <span class="st">&#39;sce00500&#39;</span>)  <span class="co"># starch &amp; sucrose metabolism</span></span>
+<span id="cb388-2"><a href="kegg-analysis.html#cb388-2" tabindex="-1"></a><span class="fu">browseKEGG</span>(kegg_results, <span class="st">&#39;sce04213&#39;</span>)  <span class="co"># longevity</span></span></code></pre></div>
+</div>
+<div id="comparing-paralogs-in-common-pathways" class="section level2 hasAnchor" number="11.6">
+<h2><span class="header-section-number">11.6</span> Comparing Paralogs in common pathways<a href="kegg-analysis.html#comparing-paralogs-in-common-pathways" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Using the <code>res_all</code> object instead, we can compare logFC across contrasts.
+We can create a side by side of the WT EtOH response and the Msn2/4∆∆ EtOH response.</p>
+<div class="sourceCode" id="cb389"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb389-1"><a href="kegg-analysis.html#cb389-1" tabindex="-1"></a><span class="co"># choose the pathway we want to visualize:</span></span>
+<span id="cb389-2"><a href="kegg-analysis.html#cb389-2" tabindex="-1"></a></span>
+<span id="cb389-3"><a href="kegg-analysis.html#cb389-3" tabindex="-1"></a>pathway_to_graph <span class="ot">&lt;-</span> <span class="st">&quot;sce00010&quot;</span> <span class="co"># glycolysis/gluconeogenesis</span></span>
+<span id="cb389-4"><a href="kegg-analysis.html#cb389-4" tabindex="-1"></a><span class="co"># pathway_to_graph &lt;- &quot;sce00020&quot; # TCA cycle</span></span>
+<span id="cb389-5"><a href="kegg-analysis.html#cb389-5" tabindex="-1"></a><span class="co"># pathway_to_graph &lt;- &quot;sce04213&quot; # longevity</span></span>
+<span id="cb389-6"><a href="kegg-analysis.html#cb389-6" tabindex="-1"></a><span class="co"># pathway_to_graph &lt;- &quot;sce00500&quot; # starch &amp; sucrose metabolism</span></span>
+<span id="cb389-7"><a href="kegg-analysis.html#cb389-7" tabindex="-1"></a><span class="co"># pathway_to_graph &lt;- &quot;sce00620&quot; # pyruvate metabolism</span></span>
+<span id="cb389-8"><a href="kegg-analysis.html#cb389-8" tabindex="-1"></a></span>
+<span id="cb389-9"><a href="kegg-analysis.html#cb389-9" tabindex="-1"></a><span class="co"># get the ID for the pathway we want to see</span></span>
+<span id="cb389-10"><a href="kegg-analysis.html#cb389-10" tabindex="-1"></a>pathway_number <span class="ot">&lt;-</span> kegg_results <span class="sc">%&gt;%</span></span>
+<span id="cb389-11"><a href="kegg-analysis.html#cb389-11" tabindex="-1"></a>  <span class="fu">data.frame</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb389-12"><a href="kegg-analysis.html#cb389-12" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">row_number =</span> <span class="fu">row_number</span>()) <span class="sc">%&gt;%</span></span>
+<span id="cb389-13"><a href="kegg-analysis.html#cb389-13" tabindex="-1"></a>  <span class="fu">filter</span>(ID <span class="sc">==</span> pathway_to_graph) <span class="sc">%&gt;%</span></span>
+<span id="cb389-14"><a href="kegg-analysis.html#cb389-14" tabindex="-1"></a>  <span class="fu">pull</span>(row_number)</span>
+<span id="cb389-15"><a href="kegg-analysis.html#cb389-15" tabindex="-1"></a></span>
+<span id="cb389-16"><a href="kegg-analysis.html#cb389-16" tabindex="-1"></a></span>
+<span id="cb389-17"><a href="kegg-analysis.html#cb389-17" tabindex="-1"></a><span class="co"># this saves the kegg list reaction mappings to KEGG_reactions for plotting</span></span>
+<span id="cb389-18"><a href="kegg-analysis.html#cb389-18" tabindex="-1"></a><span class="co"># where these came from: &quot;https://rest.kegg.jp/list/reaction/&quot;</span></span>
+<span id="cb389-19"><a href="kegg-analysis.html#cb389-19" tabindex="-1"></a><span class="cf">if</span> (<span class="sc">!</span><span class="fu">exists</span>(<span class="st">&quot;KEGG_reactions&quot;</span>)) {</span>
+<span id="cb389-20"><a href="kegg-analysis.html#cb389-20" tabindex="-1"></a>  <span class="co"># save the kegglist reaction infromation</span></span>
+<span id="cb389-21"><a href="kegg-analysis.html#cb389-21" tabindex="-1"></a>  KEGG_reactions <span class="ot">&lt;-</span> KEGGREST<span class="sc">::</span><span class="fu">keggList</span>(<span class="st">&quot;reaction&quot;</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb389-22"><a href="kegg-analysis.html#cb389-22" tabindex="-1"></a>    <span class="fu">as.data.frame</span>() </span>
+<span id="cb389-23"><a href="kegg-analysis.html#cb389-23" tabindex="-1"></a>  <span class="fu">colnames</span>(KEGG_reactions) <span class="ot">&lt;-</span> <span class="st">&quot;long_reaction_description&quot;</span></span>
+<span id="cb389-24"><a href="kegg-analysis.html#cb389-24" tabindex="-1"></a>  KEGG_reactions <span class="ot">&lt;-</span> KEGG_reactions <span class="sc">%&gt;%</span></span>
+<span id="cb389-25"><a href="kegg-analysis.html#cb389-25" tabindex="-1"></a>    tibble<span class="sc">::</span><span class="fu">rownames_to_column</span>(<span class="st">&quot;reaction&quot;</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb389-26"><a href="kegg-analysis.html#cb389-26" tabindex="-1"></a>    dplyr<span class="sc">::</span><span class="fu">mutate</span>(<span class="at">reaction_description =</span> <span class="fu">str_split_i</span>(</span>
+<span id="cb389-27"><a href="kegg-analysis.html#cb389-27" tabindex="-1"></a>      long_reaction_description, <span class="st">&quot;;&quot;</span>, <span class="dv">1</span>)</span>
+<span id="cb389-28"><a href="kegg-analysis.html#cb389-28" tabindex="-1"></a>      ) <span class="sc">%&gt;%</span></span>
+<span id="cb389-29"><a href="kegg-analysis.html#cb389-29" tabindex="-1"></a>    dplyr<span class="sc">::</span><span class="fu">select</span>(reaction, reaction_description) <span class="sc">%&gt;%</span></span>
+<span id="cb389-30"><a href="kegg-analysis.html#cb389-30" tabindex="-1"></a>    dplyr<span class="sc">::</span><span class="fu">mutate</span>(<span class="at">reaction =</span> <span class="fu">paste0</span>(<span class="st">&#39;rn:&#39;</span>, reaction))</span>
+<span id="cb389-31"><a href="kegg-analysis.html#cb389-31" tabindex="-1"></a>}</span>
+<span id="cb389-32"><a href="kegg-analysis.html#cb389-32" tabindex="-1"></a></span>
+<span id="cb389-33"><a href="kegg-analysis.html#cb389-33" tabindex="-1"></a><span class="co"># save the kegg_data as a ggkegg object</span></span>
+<span id="cb389-34"><a href="kegg-analysis.html#cb389-34" tabindex="-1"></a>KEGG_data <span class="ot">&lt;-</span> kegg_results <span class="sc">%&gt;%</span></span>
+<span id="cb389-35"><a href="kegg-analysis.html#cb389-35" tabindex="-1"></a>  <span class="fu">ggkegg</span>(</span>
+<span id="cb389-36"><a href="kegg-analysis.html#cb389-36" tabindex="-1"></a>    <span class="at">convert_first =</span> <span class="cn">FALSE</span>,</span>
+<span id="cb389-37"><a href="kegg-analysis.html#cb389-37" tabindex="-1"></a>    <span class="at">convert_collapse =</span> <span class="st">&quot;</span><span class="sc">\n</span><span class="st">&quot;</span>,</span>
+<span id="cb389-38"><a href="kegg-analysis.html#cb389-38" tabindex="-1"></a>    <span class="at">pathway_number =</span> pathway_number, <span class="co"># changing this to change the pathway.</span></span>
+<span id="cb389-39"><a href="kegg-analysis.html#cb389-39" tabindex="-1"></a>    <span class="at">convert_org =</span> <span class="fu">c</span>(<span class="st">&quot;sce&quot;</span>),</span>
+<span id="cb389-40"><a href="kegg-analysis.html#cb389-40" tabindex="-1"></a>    <span class="at">delete_zero_degree =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb389-41"><a href="kegg-analysis.html#cb389-41" tabindex="-1"></a>    <span class="at">return_igraph =</span> <span class="cn">FALSE</span></span>
+<span id="cb389-42"><a href="kegg-analysis.html#cb389-42" tabindex="-1"></a>  )</span>
+<span id="cb389-43"><a href="kegg-analysis.html#cb389-43" tabindex="-1"></a></span>
+<span id="cb389-44"><a href="kegg-analysis.html#cb389-44" tabindex="-1"></a><span class="co"># process thsi data to visualize</span></span>
+<span id="cb389-45"><a href="kegg-analysis.html#cb389-45" tabindex="-1"></a>graph.data <span class="ot">&lt;-</span> KEGG_data<span class="sc">$</span>data <span class="sc">%&gt;%</span></span>
+<span id="cb389-46"><a href="kegg-analysis.html#cb389-46" tabindex="-1"></a>  <span class="fu">filter</span>(type <span class="sc">==</span> <span class="st">&quot;gene&quot;</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb389-47"><a href="kegg-analysis.html#cb389-47" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">showname =</span> <span class="fu">strsplit</span>(name, <span class="st">&quot; &quot;</span>) <span class="sc">%&gt;%</span> <span class="fu">str_remove_all</span>(<span class="st">&quot;sce:&quot;</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb389-48"><a href="kegg-analysis.html#cb389-48" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">showname =</span> <span class="fu">gsub</span>(<span class="st">&#39;c</span><span class="sc">\\</span><span class="st">(|</span><span class="sc">\\</span><span class="st">)|&quot;|&quot;|,&#39;</span>, <span class="st">&#39;&#39;</span>, showname)) <span class="sc">%&gt;%</span></span>
+<span id="cb389-49"><a href="kegg-analysis.html#cb389-49" tabindex="-1"></a>  <span class="fu">separate_rows</span>(showname, <span class="at">sep =</span> <span class="st">&quot; &quot;</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb389-50"><a href="kegg-analysis.html#cb389-50" tabindex="-1"></a>  <span class="fu">left_join</span>(<span class="fu">rownames_to_column</span>(res_all<span class="sc">$</span>table),</span>
+<span id="cb389-51"><a href="kegg-analysis.html#cb389-51" tabindex="-1"></a>            <span class="at">by =</span> <span class="fu">c</span>(<span class="st">&quot;showname&quot;</span> <span class="ot">=</span> <span class="st">&quot;rowname&quot;</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb389-52"><a href="kegg-analysis.html#cb389-52" tabindex="-1"></a>  <span class="fu">left_join</span>(KEGG_reactions, <span class="at">by =</span> <span class="st">&quot;reaction&quot;</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb389-53"><a href="kegg-analysis.html#cb389-53" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">gene_name =</span> AnnotationDbi<span class="sc">::</span><span class="fu">select</span>(org.Sc.sgd.db, </span>
+<span id="cb389-54"><a href="kegg-analysis.html#cb389-54" tabindex="-1"></a>                                           <span class="at">keys =</span> showname, </span>
+<span id="cb389-55"><a href="kegg-analysis.html#cb389-55" tabindex="-1"></a>                                           <span class="at">columns =</span> <span class="st">&quot;GENENAME&quot;</span>)<span class="sc">$</span>GENENAME) <span class="sc">%&gt;%</span></span>
+<span id="cb389-56"><a href="kegg-analysis.html#cb389-56" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">gene_name =</span> <span class="fu">coalesce</span>(gene_name, showname))</span></code></pre></div>
+<pre><code>## &#39;select()&#39; returned many:1 mapping between keys and columns</code></pre>
+<div class="sourceCode" id="cb391"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb391-1"><a href="kegg-analysis.html#cb391-1" tabindex="-1"></a><span class="co"># find our fc values needed for color scale</span></span>
+<span id="cb391-2"><a href="kegg-analysis.html#cb391-2" tabindex="-1"></a>max_fc <span class="ot">&lt;-</span></span>
+<span id="cb391-3"><a href="kegg-analysis.html#cb391-3" tabindex="-1"></a>  <span class="fu">ceiling</span>(<span class="fu">max</span>(<span class="fu">c</span>(</span>
+<span id="cb391-4"><a href="kegg-analysis.html#cb391-4" tabindex="-1"></a>    <span class="fu">abs</span>(graph.data<span class="sc">$</span>logFC.EtOHvsMOCK.MSN24dd),</span>
+<span id="cb391-5"><a href="kegg-analysis.html#cb391-5" tabindex="-1"></a>    <span class="fu">abs</span>(graph.data<span class="sc">$</span>logFC.EtOHvsMOCK.WT)</span>
+<span id="cb391-6"><a href="kegg-analysis.html#cb391-6" tabindex="-1"></a>  ), <span class="at">na.rm =</span> <span class="cn">TRUE</span>))</span>
+<span id="cb391-7"><a href="kegg-analysis.html#cb391-7" tabindex="-1"></a></span>
+<span id="cb391-8"><a href="kegg-analysis.html#cb391-8" tabindex="-1"></a><span class="co"># create graph for WT stress response</span></span>
+<span id="cb391-9"><a href="kegg-analysis.html#cb391-9" tabindex="-1"></a>WT.graph <span class="ot">&lt;-</span> graph.data <span class="sc">%&gt;%</span></span>
+<span id="cb391-10"><a href="kegg-analysis.html#cb391-10" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> x, <span class="at">y =</span> y)) <span class="sc">+</span></span>
+<span id="cb391-11"><a href="kegg-analysis.html#cb391-11" tabindex="-1"></a>  <span class="fu">overlay_raw_map</span>(pathway_to_graph) <span class="sc">+</span></span>
+<span id="cb391-12"><a href="kegg-analysis.html#cb391-12" tabindex="-1"></a>  ggrepel<span class="sc">::</span><span class="fu">geom_label_repel</span>(</span>
+<span id="cb391-13"><a href="kegg-analysis.html#cb391-13" tabindex="-1"></a>    <span class="fu">aes</span>(<span class="at">label =</span> gene_name, <span class="at">fill =</span> logFC.EtOHvsMOCK.WT),</span>
+<span id="cb391-14"><a href="kegg-analysis.html#cb391-14" tabindex="-1"></a>    <span class="at">box.padding =</span> <span class="fl">0.05</span>,</span>
+<span id="cb391-15"><a href="kegg-analysis.html#cb391-15" tabindex="-1"></a>    <span class="at">label.padding =</span> <span class="fl">0.05</span>,</span>
+<span id="cb391-16"><a href="kegg-analysis.html#cb391-16" tabindex="-1"></a>    <span class="at">direction =</span> <span class="st">&quot;y&quot;</span>,</span>
+<span id="cb391-17"><a href="kegg-analysis.html#cb391-17" tabindex="-1"></a>    <span class="at">size =</span> <span class="dv">2</span>,</span>
+<span id="cb391-18"><a href="kegg-analysis.html#cb391-18" tabindex="-1"></a>    <span class="at">max.overlaps =</span> <span class="dv">100</span>,</span>
+<span id="cb391-19"><a href="kegg-analysis.html#cb391-19" tabindex="-1"></a>    <span class="at">label.r =</span> <span class="fl">0.002</span>,</span>
+<span id="cb391-20"><a href="kegg-analysis.html#cb391-20" tabindex="-1"></a>    <span class="at">seed =</span> <span class="dv">123</span></span>
+<span id="cb391-21"><a href="kegg-analysis.html#cb391-21" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb391-22"><a href="kegg-analysis.html#cb391-22" tabindex="-1"></a>  <span class="fu">theme_void</span>() <span class="sc">+</span></span>
+<span id="cb391-23"><a href="kegg-analysis.html#cb391-23" tabindex="-1"></a>  <span class="fu">scale_fill_gradientn</span>(</span>
+<span id="cb391-24"><a href="kegg-analysis.html#cb391-24" tabindex="-1"></a>    <span class="at">colours =</span> <span class="fu">rev</span>(RColorBrewer<span class="sc">::</span><span class="fu">brewer.pal</span>(<span class="at">n =</span> <span class="dv">10</span>, <span class="at">name =</span> <span class="st">&quot;RdYlBu&quot;</span>)),</span>
+<span id="cb391-25"><a href="kegg-analysis.html#cb391-25" tabindex="-1"></a>    <span class="at">limits =</span> <span class="fu">c</span>(<span class="sc">-</span>max_fc, max_fc)</span>
+<span id="cb391-26"><a href="kegg-analysis.html#cb391-26" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb391-27"><a href="kegg-analysis.html#cb391-27" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">plot.margin =</span> <span class="fu">unit</span>(<span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>), <span class="st">&quot;cm&quot;</span>)) <span class="sc">+</span></span>
+<span id="cb391-28"><a href="kegg-analysis.html#cb391-28" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">fill =</span> <span class="st">&quot;logFC&quot;</span>, <span class="at">title =</span> <span class="st">&quot;      WT Response to Ethanol&quot;</span>)</span>
+<span id="cb391-29"><a href="kegg-analysis.html#cb391-29" tabindex="-1"></a></span>
+<span id="cb391-30"><a href="kegg-analysis.html#cb391-30" tabindex="-1"></a><span class="co"># create graph for mutant stress response</span></span>
+<span id="cb391-31"><a href="kegg-analysis.html#cb391-31" tabindex="-1"></a>msn24.graph <span class="ot">&lt;-</span> graph.data <span class="sc">%&gt;%</span></span>
+<span id="cb391-32"><a href="kegg-analysis.html#cb391-32" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> x, <span class="at">y =</span> y)) <span class="sc">+</span></span>
+<span id="cb391-33"><a href="kegg-analysis.html#cb391-33" tabindex="-1"></a>  <span class="fu">overlay_raw_map</span>(pathway_to_graph) <span class="sc">+</span></span>
+<span id="cb391-34"><a href="kegg-analysis.html#cb391-34" tabindex="-1"></a>  ggrepel<span class="sc">::</span><span class="fu">geom_label_repel</span>(</span>
+<span id="cb391-35"><a href="kegg-analysis.html#cb391-35" tabindex="-1"></a>    <span class="fu">aes</span>(<span class="at">label =</span> gene_name, <span class="at">fill =</span> logFC.EtOHvsMOCK.MSN24dd),</span>
+<span id="cb391-36"><a href="kegg-analysis.html#cb391-36" tabindex="-1"></a>    <span class="at">box.padding =</span> <span class="fl">0.05</span>,</span>
+<span id="cb391-37"><a href="kegg-analysis.html#cb391-37" tabindex="-1"></a>    <span class="at">label.padding =</span> <span class="fl">0.05</span>,</span>
+<span id="cb391-38"><a href="kegg-analysis.html#cb391-38" tabindex="-1"></a>    <span class="at">direction =</span> <span class="st">&quot;y&quot;</span>,</span>
+<span id="cb391-39"><a href="kegg-analysis.html#cb391-39" tabindex="-1"></a>    <span class="at">size =</span> <span class="dv">2</span>,</span>
+<span id="cb391-40"><a href="kegg-analysis.html#cb391-40" tabindex="-1"></a>    <span class="at">max.overlaps =</span> <span class="dv">100</span>,</span>
+<span id="cb391-41"><a href="kegg-analysis.html#cb391-41" tabindex="-1"></a>    <span class="at">label.r =</span> <span class="fl">0.002</span>,</span>
+<span id="cb391-42"><a href="kegg-analysis.html#cb391-42" tabindex="-1"></a>    <span class="at">seed =</span> <span class="dv">123</span></span>
+<span id="cb391-43"><a href="kegg-analysis.html#cb391-43" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb391-44"><a href="kegg-analysis.html#cb391-44" tabindex="-1"></a>  <span class="fu">theme_void</span>() <span class="sc">+</span></span>
+<span id="cb391-45"><a href="kegg-analysis.html#cb391-45" tabindex="-1"></a>  <span class="fu">guides</span>(<span class="at">fill =</span> <span class="cn">FALSE</span>) <span class="sc">+</span></span>
+<span id="cb391-46"><a href="kegg-analysis.html#cb391-46" tabindex="-1"></a>  <span class="fu">scale_fill_gradientn</span>(</span>
+<span id="cb391-47"><a href="kegg-analysis.html#cb391-47" tabindex="-1"></a>    <span class="at">colours =</span> <span class="fu">rev</span>(RColorBrewer<span class="sc">::</span><span class="fu">brewer.pal</span>(<span class="at">n =</span> <span class="dv">10</span>, <span class="at">name =</span> <span class="st">&quot;RdYlBu&quot;</span>)),</span>
+<span id="cb391-48"><a href="kegg-analysis.html#cb391-48" tabindex="-1"></a>    <span class="at">limits =</span> <span class="fu">c</span>(<span class="sc">-</span>max_fc, max_fc)</span>
+<span id="cb391-49"><a href="kegg-analysis.html#cb391-49" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb391-50"><a href="kegg-analysis.html#cb391-50" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">plot.margin =</span> <span class="fu">unit</span>(<span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>), <span class="st">&quot;cm&quot;</span>)) <span class="sc">+</span></span>
+<span id="cb391-51"><a href="kegg-analysis.html#cb391-51" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">fill =</span> <span class="st">&quot;logFC&quot;</span>, <span class="at">title =</span> <span class="st">&quot;      Msn2/4∆∆ Response to Ethanol&quot;</span>)</span>
+<span id="cb391-52"><a href="kegg-analysis.html#cb391-52" tabindex="-1"></a></span>
+<span id="cb391-53"><a href="kegg-analysis.html#cb391-53" tabindex="-1"></a></span>
+<span id="cb391-54"><a href="kegg-analysis.html#cb391-54" tabindex="-1"></a></span>
+<span id="cb391-55"><a href="kegg-analysis.html#cb391-55" tabindex="-1"></a><span class="co"># generate the graph</span></span>
+<span id="cb391-56"><a href="kegg-analysis.html#cb391-56" tabindex="-1"></a>side_by_side_graph <span class="ot">&lt;-</span> WT.graph <span class="sc">+</span> msn24.graph <span class="sc">+</span></span>
+<span id="cb391-57"><a href="kegg-analysis.html#cb391-57" tabindex="-1"></a>  patchwork<span class="sc">::</span><span class="fu">plot_annotation</span>(<span class="at">tag_levels =</span> <span class="st">&#39;A&#39;</span>)</span>
+<span id="cb391-58"><a href="kegg-analysis.html#cb391-58" tabindex="-1"></a></span>
+<span id="cb391-59"><a href="kegg-analysis.html#cb391-59" tabindex="-1"></a><span class="co"># display the graph</span></span>
+<span id="cb391-60"><a href="kegg-analysis.html#cb391-60" tabindex="-1"></a>side_by_side_graph</span></code></pre></div>
+<p><img src="_main_files/figure-html/graphing-paralogs-KEGG-1.png" width="672" /></p>
+<p>Once we are happy with our graph. We might want to save it. We can save it like this</p>
+<div class="sourceCode" id="cb392"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb392-1"><a href="kegg-analysis.html#cb392-1" tabindex="-1"></a><span class="co"># command to save</span></span>
+<span id="cb392-2"><a href="kegg-analysis.html#cb392-2" tabindex="-1"></a><span class="fu">ggsave</span>(<span class="fu">paste0</span>(path_to_kegg_images,pathway_to_graph,<span class="st">&quot;.sidebyside.pdf&quot;</span>), </span>
+<span id="cb392-3"><a href="kegg-analysis.html#cb392-3" tabindex="-1"></a>       <span class="at">plot =</span> side_by_side_graph,</span>
+<span id="cb392-4"><a href="kegg-analysis.html#cb392-4" tabindex="-1"></a>       <span class="at">device =</span> <span class="st">&quot;pdf&quot;</span>,</span>
+<span id="cb392-5"><a href="kegg-analysis.html#cb392-5" tabindex="-1"></a>       <span class="at">width=</span><span class="dv">10</span>,</span>
+<span id="cb392-6"><a href="kegg-analysis.html#cb392-6" tabindex="-1"></a>       <span class="at">height=</span><span class="dv">6</span>,</span>
+<span id="cb392-7"><a href="kegg-analysis.html#cb392-7" tabindex="-1"></a>       <span class="at">dpi=</span><span class="dv">300</span></span>
+<span id="cb392-8"><a href="kegg-analysis.html#cb392-8" tabindex="-1"></a>       )</span></code></pre></div>
+</div>
+<div id="additional-kegg-related-analyses" class="section level2 hasAnchor" number="11.7">
+<h2><span class="header-section-number">11.7</span> Additional KEGG-related analyses<a href="kegg-analysis.html#additional-kegg-related-analyses" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>clusterProfiler let’s us visualize the output of <code>enrichKEGG()</code>, that we named as <code>kegg_results</code> in this exercise, using the <code>res</code> object.</p>
+</div>
+<div id="dotplot" class="section level2 hasAnchor" number="11.8">
+<h2><span class="header-section-number">11.8</span> Dotplot<a href="kegg-analysis.html#dotplot" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>We can create a dotplot from this object as shown below. The dotplot shows KEGG categories that are enriched, the adjusted p.values, the number of genes in the KEGG category, and the proportion of genes in the KEGG pathway that are included in the DE gene list.</p>
+<div class="sourceCode" id="cb393"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb393-1"><a href="kegg-analysis.html#cb393-1" tabindex="-1"></a><span class="co"># Plot the KEGG pathway enrichment results</span></span>
+<span id="cb393-2"><a href="kegg-analysis.html#cb393-2" tabindex="-1"></a><span class="fu">dotplot</span>(kegg_results, <span class="at">showCategory =</span> <span class="dv">10</span>)</span></code></pre></div>
+<p><img src="_main_files/figure-html/kegg-dotplot-KEGG-1.png" width="768" /></p>
+</div>
+<div id="cnetplot" class="section level2 hasAnchor" number="11.9">
+<h2><span class="header-section-number">11.9</span> cnetplot<a href="kegg-analysis.html#cnetplot" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>The <code>dotplot()</code> only shows the most significant or selected enriched terms, while we may want to know which genes are involved in these significant terms. In order to consider the potentially biological complexities in which a gene may belong to multiple annotation categories and provide log2FC information, we can use the <code>cnetplot()</code> function to extract the complex association. The <code>cnetplot()</code> depicts the linkages of genes and KEGG pathways as a network. We can project the network into 2D space, or we can create a circular version of the graph. See each below.</p>
+<div class="sourceCode" id="cb394"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb394-1"><a href="kegg-analysis.html#cb394-1" tabindex="-1"></a><span class="co"># cnetplot</span></span>
+<span id="cb394-2"><a href="kegg-analysis.html#cb394-2" tabindex="-1"></a><span class="fu">cnetplot</span>(kegg_results,  </span>
+<span id="cb394-3"><a href="kegg-analysis.html#cb394-3" tabindex="-1"></a>         <span class="at">showCategory=</span><span class="dv">10</span>,</span>
+<span id="cb394-4"><a href="kegg-analysis.html#cb394-4" tabindex="-1"></a>         <span class="at">node_label=</span><span class="st">&quot;category&quot;</span>,</span>
+<span id="cb394-5"><a href="kegg-analysis.html#cb394-5" tabindex="-1"></a>         <span class="at">color.params=</span><span class="fu">list</span>(<span class="at">foldChange =</span> fold_change_geneList),</span>
+<span id="cb394-6"><a href="kegg-analysis.html#cb394-6" tabindex="-1"></a>         <span class="at">cex.params=</span><span class="fu">list</span>(<span class="at">gene_label =</span> <span class="fl">0.1</span>,</span>
+<span id="cb394-7"><a href="kegg-analysis.html#cb394-7" tabindex="-1"></a>                         <span class="at">category_label=</span><span class="fl">0.5</span>), </span>
+<span id="cb394-8"><a href="kegg-analysis.html#cb394-8" tabindex="-1"></a>         <span class="at">max.overlaps=</span><span class="dv">100</span>) <span class="sc">+</span></span>
+<span id="cb394-9"><a href="kegg-analysis.html#cb394-9" tabindex="-1"></a>  <span class="co"># change the color scale</span></span>
+<span id="cb394-10"><a href="kegg-analysis.html#cb394-10" tabindex="-1"></a>  <span class="fu">scale_colour_gradientn</span>(<span class="at">colours =</span> <span class="fu">rev</span>(RColorBrewer<span class="sc">::</span><span class="fu">brewer.pal</span>(<span class="at">n =</span> <span class="dv">10</span>, <span class="at">name =</span> <span class="st">&quot;RdYlBu&quot;</span>)), <span class="at">limits=</span><span class="fu">c</span>(<span class="sc">-</span><span class="dv">6</span>, <span class="dv">6</span>)) <span class="sc">+</span></span>
+<span id="cb394-11"><a href="kegg-analysis.html#cb394-11" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">colour=</span><span class="st">&quot;logFC&quot;</span>)</span></code></pre></div>
+<pre><code>## Scale for size is already present.
+## Adding another scale for size, which will replace the existing scale.
+## Scale for colour is already present.
+## Adding another scale for colour, which will replace the existing scale.</code></pre>
+<pre><code>## Warning: Removed 167 rows containing missing values (`geom_text_repel()`).</code></pre>
+<p><img src="_main_files/figure-html/kegg-cnetplot-KEGG-1.png" width="768" /></p>
+<div class="sourceCode" id="cb397"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb397-1"><a href="kegg-analysis.html#cb397-1" tabindex="-1"></a><span class="co"># circular cnetplot</span></span>
+<span id="cb397-2"><a href="kegg-analysis.html#cb397-2" tabindex="-1"></a><span class="fu">cnetplot</span>(kegg_results,  </span>
+<span id="cb397-3"><a href="kegg-analysis.html#cb397-3" tabindex="-1"></a>         <span class="at">showCategory=</span><span class="dv">6</span>,</span>
+<span id="cb397-4"><a href="kegg-analysis.html#cb397-4" tabindex="-1"></a>         <span class="at">circular=</span><span class="cn">TRUE</span>, <span class="co"># this changes the output graphing</span></span>
+<span id="cb397-5"><a href="kegg-analysis.html#cb397-5" tabindex="-1"></a>         <span class="at">node_label=</span><span class="st">&quot;category&quot;</span>,</span>
+<span id="cb397-6"><a href="kegg-analysis.html#cb397-6" tabindex="-1"></a>         <span class="at">color.params=</span><span class="fu">list</span>(<span class="at">foldChange =</span> fold_change_geneList),</span>
+<span id="cb397-7"><a href="kegg-analysis.html#cb397-7" tabindex="-1"></a>         <span class="at">cex.params=</span><span class="fu">list</span>(<span class="at">gene_label =</span> <span class="fl">0.5</span>,</span>
+<span id="cb397-8"><a href="kegg-analysis.html#cb397-8" tabindex="-1"></a>                         <span class="at">category_label=</span><span class="fl">0.5</span>), </span>
+<span id="cb397-9"><a href="kegg-analysis.html#cb397-9" tabindex="-1"></a>         <span class="at">max.overlaps=</span><span class="dv">100</span>) <span class="sc">+</span></span>
+<span id="cb397-10"><a href="kegg-analysis.html#cb397-10" tabindex="-1"></a>  <span class="co"># change the color scale</span></span>
+<span id="cb397-11"><a href="kegg-analysis.html#cb397-11" tabindex="-1"></a>  <span class="fu">scale_colour_gradientn</span>(<span class="at">colours =</span> <span class="fu">rev</span>(RColorBrewer<span class="sc">::</span><span class="fu">brewer.pal</span>(<span class="at">n =</span> <span class="dv">10</span>, <span class="at">name =</span> <span class="st">&quot;RdYlBu&quot;</span>)), <span class="at">limits=</span><span class="fu">c</span>(<span class="sc">-</span><span class="dv">6</span>, <span class="dv">6</span>)) <span class="sc">+</span></span>
+<span id="cb397-12"><a href="kegg-analysis.html#cb397-12" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">colour=</span><span class="st">&quot;logFC&quot;</span>)</span></code></pre></div>
+<pre><code>## Scale for size is already present.
+## Adding another scale for size, which will replace the existing scale.
+## Scale for colour is already present.
+## Adding another scale for colour, which will replace the existing scale.</code></pre>
+<pre><code>## Warning: Removed 137 rows containing missing values (`geom_text_repel()`).</code></pre>
+<pre><code>## Warning: ggrepel: 4 unlabeled data points (too many overlaps). Consider
+## increasing max.overlaps</code></pre>
+<p><img src="_main_files/figure-html/kegg-cnetplot-KEGG-2.png" width="768" /></p>
+</div>
+<div id="heatplot" class="section level2 hasAnchor" number="11.10">
+<h2><span class="header-section-number">11.10</span> heatplot<a href="kegg-analysis.html#heatplot" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>The <code>heatplot</code> is similar to <code>cnetplot</code>, while displaying the relationships as a heatmap. The gene-concept network may become too complicated if you want to show a large number significant terms. The heatplot can simplify the result and more easy to identify expression patterns.</p>
+<div class="sourceCode" id="cb401"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb401-1"><a href="kegg-analysis.html#cb401-1" tabindex="-1"></a><span class="co"># heatplot</span></span>
+<span id="cb401-2"><a href="kegg-analysis.html#cb401-2" tabindex="-1"></a><span class="fu">heatplot</span>(kegg_results, <span class="at">showCategory=</span><span class="dv">10</span>, <span class="at">foldChange =</span> fold_change_geneList) <span class="sc">+</span></span>
+<span id="cb401-3"><a href="kegg-analysis.html#cb401-3" tabindex="-1"></a>  <span class="co"># the below code hides the messy overlapping gene names.</span></span>
+<span id="cb401-4"><a href="kegg-analysis.html#cb401-4" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">axis.title.x=</span><span class="fu">element_blank</span>(),</span>
+<span id="cb401-5"><a href="kegg-analysis.html#cb401-5" tabindex="-1"></a>        <span class="at">axis.text.x=</span><span class="fu">element_blank</span>(),</span>
+<span id="cb401-6"><a href="kegg-analysis.html#cb401-6" tabindex="-1"></a>        <span class="at">axis.ticks.x=</span><span class="fu">element_blank</span>())</span></code></pre></div>
+<p><img src="_main_files/figure-html/kegg-heatplot-KEGG-1.png" width="768" /></p>
+</div>
+<div id="upsetplot" class="section level2 hasAnchor" number="11.11">
+<h2><span class="header-section-number">11.11</span> upsetplot<a href="kegg-analysis.html#upsetplot" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>The <code>upsetplot</code> shows the the overlaps and unique contributions of KEGG pathways across multiple gene sets. It helps to identify which KEGG pathways are shared or distinct between different conditions or experimental groups, providing insights into the common and specific KEGG pathways enriched in each set of genes. Here, the bars show number of genes in the category.</p>
+<div class="sourceCode" id="cb402"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb402-1"><a href="kegg-analysis.html#cb402-1" tabindex="-1"></a>enrichplot<span class="sc">::</span><span class="fu">upsetplot</span>(kegg_results)</span></code></pre></div>
+<p><img src="_main_files/figure-html/kegg-enrichplot-KEGG-1.png" width="672" /></p>
+</div>
+<div id="emapplot" class="section level2 hasAnchor" number="11.12">
+<h2><span class="header-section-number">11.12</span> emapplot<a href="kegg-analysis.html#emapplot" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>The <code>emmapplot</code> enrichment map organizes enriched terms into a network with edges connecting overlapping gene sets. In this way, mutually overlapping gene sets are tend to cluster together, making it easy to identify functional modules.</p>
+<p>The <code>emapplot</code> function supports results obtained from hypergeometric test and gene set enrichment analysis. We have to first use the <code>pairwise_termsim</code> function from the <code>enrichplot</code> package on the <code>kegg_results</code> object in order to get a similarity matrix.</p>
+<div class="sourceCode" id="cb403"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb403-1"><a href="kegg-analysis.html#cb403-1" tabindex="-1"></a>x2 <span class="ot">=</span> enrichplot<span class="sc">::</span><span class="fu">pairwise_termsim</span>(kegg_results)</span>
+<span id="cb403-2"><a href="kegg-analysis.html#cb403-2" tabindex="-1"></a><span class="fu">emapplot</span>(x2, </span>
+<span id="cb403-3"><a href="kegg-analysis.html#cb403-3" tabindex="-1"></a>         <span class="at">showCategory =</span> <span class="dv">30</span>,</span>
+<span id="cb403-4"><a href="kegg-analysis.html#cb403-4" tabindex="-1"></a>         <span class="at">cex.params =</span> <span class="fu">list</span>(<span class="at">category_label =</span> <span class="fl">0.4</span>))</span></code></pre></div>
+<p><img src="_main_files/figure-html/kegg-emmapplot-KEGG-1.png" width="672" /></p>
+</div>
+<div id="gsea" class="section level2 hasAnchor" number="11.13">
+<h2><span class="header-section-number">11.13</span> GSEA<a href="kegg-analysis.html#gsea" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>KEGG pathway gene set enrichment analysis allows us to identify whether a particular set of genes associated with a KEGG pathway is enriched in a given gene list compared to what would be expected by chance.</p>
+<div class="sourceCode" id="cb404"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb404-1"><a href="kegg-analysis.html#cb404-1" tabindex="-1"></a><span class="co"># For gseKEGG, we need a gene list with na removed and sorted. let&#39;s do that now.</span></span>
+<span id="cb404-2"><a href="kegg-analysis.html#cb404-2" tabindex="-1"></a><span class="co"># omit any NA values </span></span>
+<span id="cb404-3"><a href="kegg-analysis.html#cb404-3" tabindex="-1"></a>kegg_gene_list <span class="ot">=</span> <span class="fu">na.omit</span>(fold_change_geneList)</span>
+<span id="cb404-4"><a href="kegg-analysis.html#cb404-4" tabindex="-1"></a></span>
+<span id="cb404-5"><a href="kegg-analysis.html#cb404-5" tabindex="-1"></a><span class="co"># sort the list in decreasing order by FOLD CHANGE (required for this analysis)</span></span>
+<span id="cb404-6"><a href="kegg-analysis.html#cb404-6" tabindex="-1"></a>kegg_gene_list <span class="ot">=</span> <span class="fu">sort</span>(kegg_gene_list, <span class="at">decreasing =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb404-7"><a href="kegg-analysis.html#cb404-7" tabindex="-1"></a></span>
+<span id="cb404-8"><a href="kegg-analysis.html#cb404-8" tabindex="-1"></a>gse_kegg <span class="ot">&lt;-</span> <span class="fu">gseKEGG</span>(<span class="at">geneList     =</span> kegg_gene_list,</span>
+<span id="cb404-9"><a href="kegg-analysis.html#cb404-9" tabindex="-1"></a>               <span class="at">organism     =</span> <span class="st">&#39;sce&#39;</span>,</span>
+<span id="cb404-10"><a href="kegg-analysis.html#cb404-10" tabindex="-1"></a>               <span class="co"># minGSSize    = 120,</span></span>
+<span id="cb404-11"><a href="kegg-analysis.html#cb404-11" tabindex="-1"></a>               <span class="at">pvalueCutoff =</span> <span class="fl">0.05</span>,</span>
+<span id="cb404-12"><a href="kegg-analysis.html#cb404-12" tabindex="-1"></a>               <span class="at">verbose      =</span> <span class="cn">FALSE</span>)</span></code></pre></div>
+<pre><code>## Warning in fgseaMultilevel(pathways = pathways, stats = stats, minSize =
+## minSize, : For some pathways, in reality P-values are less than 1e-10. You can
+## set the `eps` argument to zero for better estimation.</code></pre>
+<div class="sourceCode" id="cb406"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb406-1"><a href="kegg-analysis.html#cb406-1" tabindex="-1"></a><span class="fu">head</span>(gse_kegg)</span></code></pre></div>
+<pre><code>##                ID
+## sce03010 sce03010
+## sce03008 sce03008
+## sce00500 sce00500
+## sce03020 sce03020
+## sce04213 sce04213
+## sce00520 sce00520
+##                                                                                         Description
+## sce03010                                        Ribosome - Saccharomyces cerevisiae (budding yeast)
+## sce03008               Ribosome biogenesis in eukaryotes - Saccharomyces cerevisiae (budding yeast)
+## sce00500                   Starch and sucrose metabolism - Saccharomyces cerevisiae (budding yeast)
+## sce03020                                  RNA polymerase - Saccharomyces cerevisiae (budding yeast)
+## sce04213 Longevity regulating pathway - multiple species - Saccharomyces cerevisiae (budding yeast)
+## sce00520     Amino sugar and nucleotide sugar metabolism - Saccharomyces cerevisiae (budding yeast)
+##          setSize enrichmentScore       NES       pvalue     p.adjust
+## sce03010     174       0.6197685  2.654732 1.000000e-10 1.010000e-08
+## sce03008      74       0.6595249  2.519163 3.984710e-10 2.012279e-08
+## sce00500      39      -0.8569869 -2.240346 9.406530e-10 3.166865e-08
+## sce03020      31       0.7228139  2.305050 3.938205e-06 9.943967e-05
+## sce04213      38      -0.7695484 -2.008026 1.063327e-05 2.147920e-04
+## sce00520      31      -0.7964672 -2.004683 1.740995e-05 2.930675e-04
+##                qvalue rank                   leading_edge
+## sce03010 7.894737e-09 1481 tags=68%, list=26%, signal=52%
+## sce03008 1.572912e-08 1094 tags=68%, list=19%, signal=55%
+## sce00500 2.475403e-08  319  tags=49%, list=6%, signal=46%
+## sce03020 7.772772e-05 1091 tags=68%, list=19%, signal=55%
+## sce04213 1.678937e-04  615 tags=50%, list=11%, signal=45%
+## sce00520 2.290783e-04  166  tags=29%, list=3%, signal=28%
+##                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  core_enrichment
+## sce03010 YLR406C/YIL069C/YKL156W/YNL002C/YDR471W/YMR194W/YOR234C/YGR085C/YBR189W/YPL198W/YGR214W/YDL082W/YFL034C-A/YNL096C/YHL033C/YJL177W/YIL133C/YNL067W/YHL001W/YOL121C/YOR312C/YLR448W/YDR025W/YOR293W/YPL079W/YLR061W/YJL190C/YML063W/YDR447C/YGL076C/YDR500C/YLR344W/YLR048W/YER131W/YOR096W/YDR418W/YML026C/YDL083C/YNL301C/YEL054C/YBL027W/YGR148C/YDL136W/YBR181C/YER117W/YMR142C/YNL162W/YML073C/YER102W/YLR325C/YKR057W/YBR191W/YLR441C/YGR034W/YFR031C-A/YDL075W/YKR094C/YER074W/YCR003W/YHR010W/YLR009W/YPL090C/YHR141C/YGL123W/YLL045C/YER056C-A/YHR203C/YMR230W/YDR405W/YOR063W/YMR242C/YJL136C/YLR167W/YGR118W/YLR264W/YNL302C/YPR102C/YKL180W/YPR132W/YBR084C-A/YLR029C/YPL249C-A/YDR450W/YJL191W/YJR123W/YLR388W/YDL191W/YBL072C/YIL052C/YMR143W/YDR064W/YNL178W/YPL081W/YBL087C/YNL069C/YOL127W/YGL031C/YBL092W/YOL120C/YML024W/YPR043W/YJR145C/YOR182C/YDL133C-A/YLR333C/YBR048W/YFR032C-A/YLR340W/YHL004W/YPL143W/YIL018W/YLR367W/YGL030W/YDL202W/YML025C/YJR094W-A/YGL189C/YJL189W/YLR185W
+## sce03008                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         YOR119C/YDR449C/YNL132W/YLR106C/YLL034C/YLR186W/YJL069C/YOR310C/YKL186C/YLR175W/YLR197W/YDL014W/YHR170W/YNL282W/YDL208W/YHR089C/YPL093W/YDL166C/YOR056C/YGR030C/YNL075W/YCR057C/YJL109C/YLR222C/YML093W/YHR148W/YGR128C/YOL010W/YLR129W/YLR409C/YLR022C/YHR196W/YDR339C/YPL217C/YMR239C/YBL018C/YOR048C/YDR324C/YLR397C/YGR090W/YBR167C/YEL026W/YPL043W/YNL207W/YBR257W/YDR398W/YJR002W/YGL099W/YIL035C/YNR053C
+## sce00500                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 YBR001C/YOL157C/YKR058W/YPR026W/YCL040W/YMR261C/YPR184W/YDR074W/YDR001C/YBR126C/YKL035W/YDR516C/YEL011W/YLR258W/YFR015C/YMR105C/YPR160W/YML100W/YFR053C
+## sce03020                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               YOR340C/YPR010C/YNL113W/YKL144C/YPR110C/YOR341W/YNL151C/YNL248C/YJL148W/YJR063W/YBR154C/YHR143W-A/YIL021W/YOR207C/YOR224C/YOR210W/YPR187W/YDL150W/YDR045C/YKR025W/YGL070C
+## sce04213                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 YER103W/YFL033C/YDR256C/YPL203W/YDR096W/YLL024C/YJL005W/YHR008C/YMR037C/YKL062W/YNL098C/YPL015C/YJL164C/YBL075C/YAL005C/YLL026W/YGL037C/YDR258C/YGR088W
+## sce00520                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 YML087C/YMR084W/YMR278W/YCL040W/YKL150W/YKL035W/YDR516C/YMR105C/YFR053C</code></pre>
+<div class="sourceCode" id="cb408"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb408-1"><a href="kegg-analysis.html#cb408-1" tabindex="-1"></a><span class="co"># let&#39;s turn this into a searchable table for the knit file.</span></span>
+<span id="cb408-2"><a href="kegg-analysis.html#cb408-2" tabindex="-1"></a><span class="fu">data.frame</span>(gse_kegg) <span class="sc">%&gt;%</span> <span class="fu">reactable</span>()</span></code></pre></div>
+<div class="reactable html-widget html-fill-item-overflow-hidden html-fill-item" id="htmlwidget-fa5ad2798a81c9f8cb47" style="width:auto;height:auto;"></div>
+<script type="application/json" data-for="htmlwidget-fa5ad2798a81c9f8cb47">{"x":{"tag":{"name":"Reactable","attribs":{"data":{".rownames":["sce03010","sce03008","sce00500","sce03020","sce04213","sce00520","sce01250","sce01110","sce00190","sce00300","sce00290","sce00052","sce00030","sce01200","sce04111","sce01230","sce00051","sce04141","sce00010","sce00270","sce01210"],"ID":["sce03010","sce03008","sce00500","sce03020","sce04213","sce00520","sce01250","sce01110","sce00190","sce00300","sce00290","sce00052","sce00030","sce01200","sce04111","sce01230","sce00051","sce04141","sce00010","sce00270","sce01210"],"Description":["Ribosome - Saccharomyces cerevisiae (budding yeast)","Ribosome biogenesis in eukaryotes - Saccharomyces cerevisiae (budding yeast)","Starch and sucrose metabolism - Saccharomyces cerevisiae (budding yeast)","RNA polymerase - Saccharomyces cerevisiae (budding yeast)","Longevity regulating pathway - multiple species - Saccharomyces cerevisiae (budding yeast)","Amino sugar and nucleotide sugar metabolism - Saccharomyces cerevisiae (budding yeast)","Biosynthesis of nucleotide sugars - Saccharomyces cerevisiae (budding yeast)","Biosynthesis of secondary metabolites - Saccharomyces cerevisiae (budding yeast)","Oxidative phosphorylation - Saccharomyces cerevisiae (budding yeast)","Lysine biosynthesis - Saccharomyces cerevisiae (budding yeast)","Valine, leucine and isoleucine biosynthesis - Saccharomyces cerevisiae (budding yeast)","Galactose metabolism - Saccharomyces cerevisiae (budding yeast)","Pentose phosphate pathway - Saccharomyces cerevisiae (budding yeast)","Carbon metabolism - Saccharomyces cerevisiae (budding yeast)","Cell cycle - yeast - Saccharomyces cerevisiae (budding yeast)","Biosynthesis of amino acids - Saccharomyces cerevisiae (budding yeast)","Fructose and mannose metabolism - Saccharomyces cerevisiae (budding yeast)","Protein processing in endoplasmic reticulum - Saccharomyces cerevisiae (budding yeast)","Glycolysis / Gluconeogenesis - Saccharomyces cerevisiae (budding yeast)","Cysteine and methionine metabolism - Saccharomyces cerevisiae (budding yeast)","2-Oxocarboxylic acid metabolism - Saccharomyces cerevisiae (budding yeast)"],"setSize":[174,74,39,31,38,31,22,339,71,12,12,22,27,104,129,122,20,92,51,43,42],"enrichmentScore":[0.619768515488332,0.659524928703229,-0.856986943709615,0.72281394138393,-0.769548369525475,-0.796467230188074,-0.816458069857407,-0.483918235536639,-0.650788786541215,0.80301947483178,0.801907279641608,-0.780356827378214,-0.755011305128382,-0.594839696987685,0.355853478168743,0.363802494188458,-0.765704469275658,-0.559375082161408,-0.60964362611768,0.479153273963754,0.474311830645505],"NES":[2.65473155248965,2.51916304795712,-2.24034586488786,2.30505048866001,-2.00802566040405,-2.00468338097846,-1.96287917550555,-1.5567331247538,-1.86261010397553,2.01808287766017,2.0152877996574,-1.87608674893959,-1.87198537122567,-1.78173112112959,1.50823950824965,1.52941374766236,-1.79971517233667,-1.64639446274948,-1.67297003625636,1.62211470291263,1.6037591798611],"pvalue":[1e-10,3.9847100284251e-10,9.40652998514885e-10,3.93820471457221e-06,1.06332677440087e-05,1.74099510586409e-05,5.21936456924751e-05,8.8845110694629e-05,0.000199444412588937,0.00033290600113963,0.000350274583009905,0.000513340161011219,0.000484909590279289,0.000443550594531515,0.00372656698168296,0.00422839099213785,0.0045240243458549,0.00517166115865031,0.0065538399530674,0.00722535420336867,0.00858683883951232],"p.adjust":[1.01e-08,2.01227856435468e-08,3.16686509500011e-08,9.94396690429484e-05,0.000214792008428975,0.000293067509487123,0.000753079744991426,0.00112166952251969,0.00223820951905363,0.00321615753490913,0.00321615753490913,0.00370338259015237,0.00370338259015237,0.00370338259015237,0.0250922176766653,0.0266917181378702,0.0268780269959614,0.0290187653902045,0.0348388334347267,0.0364880387270118,0.0412986058471783],"qvalue":[7.89473684210526e-09,1.5729118533257e-08,2.47540262767075e-08,7.77277246297147e-05,0.000167893701221189,0.00022907830340317,0.000588650139388816,0.00087676096080226,0.00174951239113103,0.00251393241394669,0.00251393241394669,0.00289477534404823,0.00289477534404823,0.00289477534404823,0.0196135104299103,0.0208637713427854,0.0210094009869422,0.0226827243800452,0.027232021965654,0.0285211350132974,0.032281349020723],"rank":[1481,1094,319,1091,615,166,166,634,1017,655,648,534,469,634,1597,733,663,1419,464,876,648],"leading_edge":["tags=68%, list=26%, signal=52%","tags=68%, list=19%, signal=55%","tags=49%, list=6%, signal=46%","tags=68%, list=19%, signal=55%","tags=50%, list=11%, signal=45%","tags=29%, list=3%, signal=28%","tags=32%, list=3%, signal=31%","tags=19%, list=11%, signal=18%","tags=54%, list=18%, signal=44%","tags=58%, list=12%, signal=52%","tags=67%, list=12%, signal=59%","tags=36%, list=10%, signal=33%","tags=30%, list=8%, signal=27%","tags=30%, list=11%, signal=27%","tags=41%, list=28%, signal=30%","tags=26%, list=13%, signal=23%","tags=45%, list=12%, signal=40%","tags=34%, list=25%, signal=26%","tags=24%, list=8%, signal=22%","tags=33%, list=16%, signal=28%","tags=33%, list=12%, signal=30%"],"core_enrichment":["YLR406C/YIL069C/YKL156W/YNL002C/YDR471W/YMR194W/YOR234C/YGR085C/YBR189W/YPL198W/YGR214W/YDL082W/YFL034C-A/YNL096C/YHL033C/YJL177W/YIL133C/YNL067W/YHL001W/YOL121C/YOR312C/YLR448W/YDR025W/YOR293W/YPL079W/YLR061W/YJL190C/YML063W/YDR447C/YGL076C/YDR500C/YLR344W/YLR048W/YER131W/YOR096W/YDR418W/YML026C/YDL083C/YNL301C/YEL054C/YBL027W/YGR148C/YDL136W/YBR181C/YER117W/YMR142C/YNL162W/YML073C/YER102W/YLR325C/YKR057W/YBR191W/YLR441C/YGR034W/YFR031C-A/YDL075W/YKR094C/YER074W/YCR003W/YHR010W/YLR009W/YPL090C/YHR141C/YGL123W/YLL045C/YER056C-A/YHR203C/YMR230W/YDR405W/YOR063W/YMR242C/YJL136C/YLR167W/YGR118W/YLR264W/YNL302C/YPR102C/YKL180W/YPR132W/YBR084C-A/YLR029C/YPL249C-A/YDR450W/YJL191W/YJR123W/YLR388W/YDL191W/YBL072C/YIL052C/YMR143W/YDR064W/YNL178W/YPL081W/YBL087C/YNL069C/YOL127W/YGL031C/YBL092W/YOL120C/YML024W/YPR043W/YJR145C/YOR182C/YDL133C-A/YLR333C/YBR048W/YFR032C-A/YLR340W/YHL004W/YPL143W/YIL018W/YLR367W/YGL030W/YDL202W/YML025C/YJR094W-A/YGL189C/YJL189W/YLR185W","YOR119C/YDR449C/YNL132W/YLR106C/YLL034C/YLR186W/YJL069C/YOR310C/YKL186C/YLR175W/YLR197W/YDL014W/YHR170W/YNL282W/YDL208W/YHR089C/YPL093W/YDL166C/YOR056C/YGR030C/YNL075W/YCR057C/YJL109C/YLR222C/YML093W/YHR148W/YGR128C/YOL010W/YLR129W/YLR409C/YLR022C/YHR196W/YDR339C/YPL217C/YMR239C/YBL018C/YOR048C/YDR324C/YLR397C/YGR090W/YBR167C/YEL026W/YPL043W/YNL207W/YBR257W/YDR398W/YJR002W/YGL099W/YIL035C/YNR053C","YBR001C/YOL157C/YKR058W/YPR026W/YCL040W/YMR261C/YPR184W/YDR074W/YDR001C/YBR126C/YKL035W/YDR516C/YEL011W/YLR258W/YFR015C/YMR105C/YPR160W/YML100W/YFR053C","YOR340C/YPR010C/YNL113W/YKL144C/YPR110C/YOR341W/YNL151C/YNL248C/YJL148W/YJR063W/YBR154C/YHR143W-A/YIL021W/YOR207C/YOR224C/YOR210W/YPR187W/YDL150W/YDR045C/YKR025W/YGL070C","YER103W/YFL033C/YDR256C/YPL203W/YDR096W/YLL024C/YJL005W/YHR008C/YMR037C/YKL062W/YNL098C/YPL015C/YJL164C/YBL075C/YAL005C/YLL026W/YGL037C/YDR258C/YGR088W","YML087C/YMR084W/YMR278W/YCL040W/YKL150W/YKL035W/YDR516C/YMR105C/YFR053C","YMR084W/YMR278W/YCL040W/YKL035W/YDR516C/YMR105C/YFR053C","YNR001C/YER026C/YER081W/YKL055C/YDR148C/YER141W/YML035C/YDR032C/YJL045W/YCR004C/YGL205W/YGR255C/YNR034W/YBL011W/YMR278W/YDR256C/YLR174W/YCR073W-A/YBR145W/YKL067W/YIL125W/YKL141W/YJL052W/YKL148C/YAL054C/YJR073C/YBR001C/YIL155C/YKL085W/YDR178W/YFL030W/YBR052C/YKR058W/YGR256W/YPR026W/YDL022W/YDL021W/YCL040W/YOR374W/YMR261C/YPR184W/YAL060W/YGR043C/YAL061W/YDR074W/YNL274C/YDR001C/YBR117C/YOR347C/YBR126C/YKL035W/YDR516C/YMR169C/YEL011W/YMR250W/YLR258W/YFR015C/YGR088W/YMR105C/YGR248W/YPR160W/YML100W/YFR053C","YPL078C/YGR183C/YDL185W/YOL077W-A/YLR395C/YKL016C/YOR065W/YLR038C/YPL172C/YBL045C/YDR377W/YML081C-A/YDR298C/YLR295C/YPL271W/YLL041C/YPR191W/YKL192C/YER141W/YJR121W/YDL004W/YMR256C/YJL045W/YOR020W-A/YHR001W-A/YBL099W/YEL024W/YDR529C/YKL141W/YKL148C/YGL191W/YJL166W/YML120C/YDR178W/YDL085W/YMR145C/YIL111W/YEL039C","YJL200C/YDL131W/YDR234W/YDL182W/YIL094C/YNR050C/YBR115C","YGL009C/YOR108W/YJR016C/YHR208W/YLR355C/YMR108W/YJR148W/YNL104C","YGR287C/YMR278W/YOL157C/YCL040W/YKL035W/YDR516C/YMR105C/YFR053C","YNR034W/YMR278W/YCR073W-A/YGR256W/YGR043C/YBR117C/YMR105C/YGR248W","YLL041C/YOR136W/YGR205W/YNR001C/YER081W/YDR148C/YJL045W/YGL205W/YNR034W/YDR256C/YLR174W/YCR073W-A/YIL125W/YKL141W/YJL052W/YKL148C/YAL054C/YML070W/YKL085W/YDR178W/YFL030W/YGR256W/YDL021W/YCL040W/YGR043C/YBR117C/YOR347C/YDR516C/YGR088W/YGR248W/YFR053C","YPL256C/YGR108W/YGR109C/YFR034C/YML027W/YPR119W/YBR093C/YOR026W/YHR118C/YDR507C/YDL003W/YOR195W/YMR001C/YGR040W/YGL240W/YPR162C/YNL289W/YDR113C/YLR086W/YJL076W/YML064C/YDR499W/YER173W/YFL008W/YAL024C/YLR210W/YIL106W/YDR451C/YDR325W/YNL261W/YLR288C/YOR368W/YDR110W/YDR180W/YFR028C/YLR272C/YBL097W/YFL029C/YGL086W/YGR233C/YGR188C/YGR098C/YJL187C/YBR112C/YAR071W/YKL022C/YBR060C/YBR135W/YPR120C/YLR103C/YLL004W/YIL026C/YCL061C","YER091C/YGL009C/YEL046C/YOL058W/YLR180W/YOR108W/YLR303W/YPR035W/YPR145W/YJL200C/YPR001W/YJR016C/YHR208W/YDL131W/YDR234W/YLR355C/YGL062W/YDL182W/YGR155W/YDR502C/YIL094C/YBL068W/YMR108W/YOR184W/YJR148W/YDR300C/YHL011C/YNR050C/YNL104C/YBR115C/YPR060C/YGR124W","YEL070W/YJL155C/YIL107C/YLR345W/YJR159W/YML070W/YCL040W/YDR516C/YFR053C","YOL013C/YBR229C/YBR170C/YMR022W/YBR273C/YLR207W/YDR411C/YBR201W/YPR181C/YOR288C/YCL043C/YDL232W/YBL058W/YPL106C/YJL034W/YDL126C/YDR059C/YMR186W/YER103W/YDL195W/YNL064C/YML130C/YLL024C/YDL072C/YLR080W/YBL075C/YAL005C/YPL240C/YDR171W/YBR169C/YBR072W","YMR278W/YBR145W/YJL052W/YAL054C/YDL021W/YCL040W/YOR374W/YOR347C/YDR516C/YMR169C/YMR105C/YFR053C","YER091C/YLL062C/YLR180W/YLR303W/YHR208W/YGR155W/YDR502C/YOR184W/YJR148W/YJL101C/YPL273W/YFR055W/YPR118W/YJR130C","YGL009C/YOR108W/YJL200C/YPR001W/YJR016C/YHR208W/YDL131W/YDR234W/YLR355C/YDL182W/YIL094C/YMR108W/YJR148W/YNL104C"]},"columns":[{"id":".rownames","name":"","type":"character","sortable":false,"filterable":false,"rowHeader":true},{"id":"ID","name":"ID","type":"character"},{"id":"Description","name":"Description","type":"character"},{"id":"setSize","name":"setSize","type":"numeric"},{"id":"enrichmentScore","name":"enrichmentScore","type":"numeric"},{"id":"NES","name":"NES","type":"numeric"},{"id":"pvalue","name":"pvalue","type":"numeric"},{"id":"p.adjust","name":"p.adjust","type":"numeric"},{"id":"qvalue","name":"qvalue","type":"numeric"},{"id":"rank","name":"rank","type":"numeric"},{"id":"leading_edge","name":"leading_edge","type":"character"},{"id":"core_enrichment","name":"core_enrichment","type":"character"}],"dataKey":"3bb05ec0ba2e65b817d103d7c4336d6f"},"children":[]},"class":"reactR_markup"},"evals":[],"jsHooks":[]}</script>
+<div class="sourceCode" id="cb409"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb409-1"><a href="kegg-analysis.html#cb409-1" tabindex="-1"></a><span class="co"># shorten the gse_kegg descriptions that are too long</span></span>
+<span id="cb409-2"><a href="kegg-analysis.html#cb409-2" tabindex="-1"></a>gse_kegg<span class="sc">@</span>result<span class="sc">$</span>Description <span class="ot">&lt;-</span> gse_kegg<span class="sc">@</span>result<span class="sc">$</span>Description <span class="sc">%&gt;%</span> </span>
+<span id="cb409-3"><a href="kegg-analysis.html#cb409-3" tabindex="-1"></a>  <span class="fu">str_replace_all</span>(., <span class="fu">fixed</span>(<span class="st">&quot; - Saccharomyces cerevisiae&quot;</span>), <span class="st">&quot;&quot;</span>)</span></code></pre></div>
+<div id="gsekegg-vs-enrichkegg" class="section level3 hasAnchor" number="11.13.1">
+<h3><span class="header-section-number">11.13.1</span> <code>gseKEGG</code> vs <code>enrichKEGG</code><a href="kegg-analysis.html#gsekegg-vs-enrichkegg" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>What is the difference, and when to use each?</p>
+<p>Both <code>gseKEGG</code> and <code>enrichKEGG</code> functions are used for gene set enrichment analysis (GSEA) focusing on KEGG pathways, but they have different underlying methodologies and purposes.</p>
+<ol style="list-style-type: decimal">
+<li><p>gseKEGG:</p>
+<p>Methodology:
+Gene Set Test (GSE): <code>gseKEGG</code> employs a gene set test approach. It calculates an enrichment score for each KEGG pathway based on the distribution of genes within the pathway in the ranked list of genes (usually by their differential expression values).
+Permutations: The method involves permutations to assess the statistical significance of the enrichment scores.</p>
+<p>Output:
+The output is a <code>GSEAResult</code> object containing information about the enriched KEGG pathways, including their names, enrichment scores, and p-values.</p>
+<p>Use Case:
+<code>gseKEGG</code> is suitable when you have a ranked list of genes based on some criteria (e.g., differential expression) and want to perform GSEA to identify KEGG pathways associated with these genes.</p></li>
+<li><p>enrichKEGG:</p>
+<p>Methodology:
+Over-Representation Analysis (ORA): <code>enrichKEGG</code> uses an over-representation analysis approach. It tests whether a predefined set of genes associated with a KEGG pathway is overrepresented in a given gene list compared to what would be expected by chance.
+Hypergeometric Test: The statistical significance is often assessed using a hypergeometric test.</p>
+<p>Output:
+The output is a data frame containing information about the enriched KEGG pathways, including names, p-values, and other statistics.</p>
+<p>Use Case:
+<code>enrichKEGG</code> is appropriate when you have a gene list and want to identify KEGG pathways that are significantly enriched in that list. It doesn’t require a ranked list of genes.</p></li>
+</ol>
+<p>Which to Choose:</p>
+<pre><code>If you have a ranked list of genes (e.g., based on differential expression) and want to perform GSEA, use `gseKEGG`.
+
+If you have a gene list and want to identify overrepresented pathways without ranking genes, use `enrichKEGG`.</code></pre>
+<p>In summary, the choice between <code>gseKEGG</code> and <code>enrichKEGG</code> depends on your data and the analysis you want to perform. Both methods can provide insights into the functional enrichment of gene sets (KEGG pathways, in this case) in the context of different experimental conditions.</p>
+</div>
+<div id="gsea-visualization" class="section level3 hasAnchor" number="11.13.2">
+<h3><span class="header-section-number">11.13.2</span> GSEA visualization<a href="kegg-analysis.html#gsea-visualization" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>We can also visualize the outputs of <code>gseKEGG</code> using the same functions as above.</p>
+<div class="sourceCode" id="cb411"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb411-1"><a href="kegg-analysis.html#cb411-1" tabindex="-1"></a><span class="fu">dotplot</span>(gse_kegg, <span class="at">showCategory =</span> <span class="dv">3</span>, <span class="at">title =</span> <span class="st">&quot;Enriched Pathways&quot;</span> , <span class="at">split=</span><span class="st">&quot;.sign&quot;</span>) <span class="sc">+</span> <span class="fu">facet_grid</span>(.<span class="sc">~</span>.sign)</span></code></pre></div>
+<p><img src="_main_files/figure-html/gse-dotplot-KEGG-1.png" width="672" /></p>
+<div class="sourceCode" id="cb412"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb412-1"><a href="kegg-analysis.html#cb412-1" tabindex="-1"></a><span class="co"># enrichplots of the gseaResult object</span></span>
+<span id="cb412-2"><a href="kegg-analysis.html#cb412-2" tabindex="-1"></a>enrichplot<span class="sc">::</span><span class="fu">upsetplot</span>(gse_kegg)</span></code></pre></div>
+<p><img src="_main_files/figure-html/gse-dotplot-KEGG-2.png" width="672" /></p>
+<p>There are also visualizations specific to the <code>gseaResult</code> output of <code>gseKEGG</code>, shown below. We can see where in the rankings the genes belonging to a given KEGG group are found relative to the entire ranked list. We can change the <code>geneSetID</code> value to get other KEGG pathways.</p>
+<div class="sourceCode" id="cb413"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb413-1"><a href="kegg-analysis.html#cb413-1" tabindex="-1"></a><span class="co"># Visualize the ranking of the genes by set</span></span>
+<span id="cb413-2"><a href="kegg-analysis.html#cb413-2" tabindex="-1"></a><span class="fu">gseaplot</span>(gse_kegg, <span class="at">geneSetID =</span> <span class="dv">1</span>, <span class="at">by =</span> <span class="st">&quot;preranked&quot;</span>, <span class="at">title =</span> gse_kegg<span class="sc">$</span>Description[<span class="dv">1</span>])</span></code></pre></div>
+<p><img src="_main_files/figure-html/gse-gseaplot-KEGG-1.png" width="672" /></p>
+<div class="sourceCode" id="cb414"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb414-1"><a href="kegg-analysis.html#cb414-1" tabindex="-1"></a><span class="fu">gseaplot</span>(gse_kegg, <span class="at">geneSetID =</span> <span class="dv">2</span>, <span class="at">by =</span> <span class="st">&quot;preranked&quot;</span>, <span class="at">title =</span> gse_kegg<span class="sc">$</span>Description[<span class="dv">2</span>])</span></code></pre></div>
+<p><img src="_main_files/figure-html/gse-gseaplot-KEGG-2.png" width="672" /></p>
+<div class="sourceCode" id="cb415"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb415-1"><a href="kegg-analysis.html#cb415-1" tabindex="-1"></a><span class="fu">gseaplot</span>(gse_kegg, <span class="at">geneSetID =</span> <span class="dv">3</span>, <span class="at">by =</span> <span class="st">&quot;preranked&quot;</span>, <span class="at">title =</span> gse_kegg<span class="sc">$</span>Description[<span class="dv">3</span>])</span></code></pre></div>
+<p><img src="_main_files/figure-html/gse-gseaplot-KEGG-3.png" width="672" /></p>
+<div class="sourceCode" id="cb416"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb416-1"><a href="kegg-analysis.html#cb416-1" tabindex="-1"></a><span class="fu">gseaplot</span>(gse_kegg, <span class="at">geneSetID =</span> <span class="dv">4</span>, <span class="at">by =</span> <span class="st">&quot;preranked&quot;</span>, <span class="at">title =</span> gse_kegg<span class="sc">$</span>Description[<span class="dv">4</span>])</span></code></pre></div>
+<p><img src="_main_files/figure-html/gse-gseaplot-KEGG-4.png" width="672" /></p>
+<p>In addition to the plot above, we can create plots with more details by not included the <code>by="preranked"</code> argument. We can now see the calculated enrichment score across the list for this gene set.</p>
+<div class="sourceCode" id="cb417"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb417-1"><a href="kegg-analysis.html#cb417-1" tabindex="-1"></a><span class="co"># take a closer look at the RNA polymerase genes</span></span>
+<span id="cb417-2"><a href="kegg-analysis.html#cb417-2" tabindex="-1"></a><span class="fu">gseaplot</span>(gse_kegg, <span class="at">geneSetID =</span> <span class="dv">4</span>, <span class="at">title =</span> gse_kegg<span class="sc">$</span>Description[<span class="dv">4</span>])</span></code></pre></div>
+<p><img src="_main_files/figure-html/gse-gseaplotEnrichScore-KEGG-1.png" width="2400" />
+What if we want to look at multiple together KEGG pathways simultaneously? We can do that with <code>gseaplot2</code> from the <code>enrichplot</code> package. Here we look at the first 3 KEGG pathways together.</p>
+<div class="sourceCode" id="cb418"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb418-1"><a href="kegg-analysis.html#cb418-1" tabindex="-1"></a><span class="co"># gseaplot2 multiple KEGG pathway enrichments</span></span>
+<span id="cb418-2"><a href="kegg-analysis.html#cb418-2" tabindex="-1"></a>enrichplot<span class="sc">::</span><span class="fu">gseaplot2</span>(gse_kegg, <span class="at">geneSetID =</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">3</span>, <span class="at">pvalue_table =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb418-3"><a href="kegg-analysis.html#cb418-3" tabindex="-1"></a>          <span class="at">color =</span> <span class="fu">c</span>(<span class="st">&quot;#E495A5&quot;</span>, <span class="st">&quot;#86B875&quot;</span>, <span class="st">&quot;#7DB0DD&quot;</span>), <span class="at">ES_geom =</span> <span class="st">&quot;dot&quot;</span>)</span></code></pre></div>
+<p><img src="_main_files/figure-html/gse-multipleGseaplot2-KEGG-1.png" width="3600" /></p>
+</div>
+</div>
+<div id="questions-7" class="section level2 hasAnchor" number="11.14">
+<h2><span class="header-section-number">11.14</span> Questions<a href="kegg-analysis.html#questions-7" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<ol style="list-style-type: decimal">
+<li><p>Can you explain the concept of gene set enrichment analysis and its relevance in functional genomics?</p></li>
+<li><p>How would you interpret the results obtained from clusterProfiler, specifically focusing on enriched terms and associated p-values?</p></li>
+<li><p>Compare and contrast KEGG enrichment with other tools or methods used for functional enrichment analysis.</p></li>
+<li><p>Can you find the KEGG organism for the organism that you are interested in?</p></li>
+</ol>
+<p>Be sure to knit this file into a pdf or html file once you’re finished.</p>
+<p>System information for reproducibility:</p>
+<div class="sourceCode" id="cb419"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb419-1"><a href="kegg-analysis.html#cb419-1" tabindex="-1"></a>pander<span class="sc">::</span><span class="fu">pander</span>(<span class="fu">sessionInfo</span>())</span></code></pre></div>
+<p><strong>R version 4.3.1 (2023-06-16)</strong></p>
+<p><strong>Platform:</strong> aarch64-apple-darwin20 (64-bit)</p>
+<p><strong>locale:</strong>
+en_US.UTF-8||en_US.UTF-8||en_US.UTF-8||C||en_US.UTF-8||en_US.UTF-8</p>
+<p><strong>attached base packages:</strong>
+<em>stats4</em>, <em>stats</em>, <em>graphics</em>, <em>grDevices</em>, <em>utils</em>, <em>datasets</em>, <em>methods</em> and <em>base</em></p>
+<p><strong>other attached packages:</strong>
+<em>NbClust(v.3.0.1)</em>, <em>factoextra(v.1.0.7)</em>, <em>ggfx(v.1.0.1)</em>, <em>patchwork(v.1.1.3)</em>, <em>ggkegg(v.0.99.4)</em>, <em>tidygraph(v.1.2.3)</em>, <em>XML(v.3.99-0.14)</em>, <em>ggraph(v.2.1.0)</em>, <em>KEGGgraph(v.1.62.0)</em>, <em>ggupset(v.0.3.0)</em>, <em>pathview(v.1.42.0)</em>, <em>BiocFileCache(v.2.10.0)</em>, <em>dbplyr(v.2.3.4)</em>, <em>DOSE(v.3.28.0)</em>, <em>ggrepel(v.0.9.4)</em>, <em>viridis(v.0.6.4)</em>, <em>viridisLite(v.0.4.2)</em>, <em>scales(v.1.2.1)</em>, <em>Glimma(v.2.12.0)</em>, <em>DESeq2(v.1.41.12)</em>, <em>edgeR(v.3.99.5)</em>, <em>limma(v.3.58.0)</em>, <em>reactable(v.0.4.4)</em>, <em>webshot2(v.0.1.1)</em>, <em>statmod(v.1.5.0)</em>, <em>Rsubread(v.2.16.0)</em>, <em>ShortRead(v.1.60.0)</em>, <em>GenomicAlignments(v.1.38.0)</em>, <em>SummarizedExperiment(v.1.32.0)</em>, <em>MatrixGenerics(v.1.14.0)</em>, <em>matrixStats(v.1.0.0)</em>, <em>Rsamtools(v.2.18.0)</em>, <em>GenomicRanges(v.1.54.0)</em>, <em>Biostrings(v.2.70.1)</em>, <em>GenomeInfoDb(v.1.38.0)</em>, <em>XVector(v.0.42.0)</em>, <em>BiocParallel(v.1.36.0)</em>, <em>Rfastp(v.1.12.0)</em>, <em>org.Sc.sgd.db(v.3.18.0)</em>, <em>AnnotationDbi(v.1.64.0)</em>, <em>IRanges(v.2.36.0)</em>, <em>S4Vectors(v.0.40.0)</em>, <em>Biobase(v.2.62.0)</em>, <em>BiocGenerics(v.0.48.0)</em>, <em>clusterProfiler(v.4.10.0)</em>, <em>ggVennDiagram(v.1.2.3)</em>, <em>tidytree(v.0.4.5)</em>, <em>igraph(v.1.5.1)</em>, <em>janitor(v.2.2.0)</em>, <em>BiocManager(v.1.30.22)</em>, <em>pander(v.0.6.5)</em>, <em>knitr(v.1.44)</em>, <em>here(v.1.0.1)</em>, <em>lubridate(v.1.9.3)</em>, <em>forcats(v.1.0.0)</em>, <em>stringr(v.1.5.0)</em>, <em>dplyr(v.1.1.3)</em>, <em>purrr(v.1.0.2)</em>, <em>readr(v.2.1.4)</em>, <em>tidyr(v.1.3.0)</em>, <em>tibble(v.3.2.1)</em>, <em>ggplot2(v.3.4.4)</em>, <em>tidyverse(v.2.0.0)</em> and <em>pacman(v.0.5.1)</em></p>
+<p><strong>loaded via a namespace (and not attached):</strong>
+<em>fs(v.1.6.3)</em>, <em>bitops(v.1.0-7)</em>, <em>enrichplot(v.1.22.0)</em>, <em>HDO.db(v.0.99.1)</em>, <em>httr(v.1.4.7)</em>, <em>RColorBrewer(v.1.1-3)</em>, <em>Rgraphviz(v.2.46.0)</em>, <em>tools(v.4.3.1)</em>, <em>utf8(v.1.2.4)</em>, <em>R6(v.2.5.1)</em>, <em>lazyeval(v.0.2.2)</em>, <em>GetoptLong(v.1.0.5)</em>, <em>withr(v.2.5.1)</em>, <em>gridExtra(v.2.3)</em>, <em>textshaping(v.0.3.7)</em>, <em>cli(v.3.6.1)</em>, <em>Cairo(v.1.6-1)</em>, <em>scatterpie(v.0.2.1)</em>, <em>labeling(v.0.4.3)</em>, <em>sass(v.0.4.7)</em>, <em>systemfonts(v.1.0.5)</em>, <em>yulab.utils(v.0.1.0)</em>, <em>gson(v.0.1.0)</em>, <em>rstudioapi(v.0.15.0)</em>, <em>RSQLite(v.2.3.1)</em>, <em>generics(v.0.1.3)</em>, <em>gridGraphics(v.0.5-1)</em>, <em>hwriter(v.1.3.2.1)</em>, <em>crosstalk(v.1.2.0)</em>, <em>GO.db(v.3.18.0)</em>, <em>Matrix(v.1.6-1.1)</em>, <em>interp(v.1.1-4)</em>, <em>fansi(v.1.0.5)</em>, <em>abind(v.1.4-5)</em>, <em>lifecycle(v.1.0.3)</em>, <em>yaml(v.2.3.7)</em>, <em>snakecase(v.0.11.1)</em>, <em>qvalue(v.2.34.0)</em>, <em>SparseArray(v.1.2.0)</em>, <em>grid(v.4.3.1)</em>, <em>blob(v.1.2.4)</em>, <em>promises(v.1.2.1)</em>, <em>crayon(v.1.5.2)</em>, <em>lattice(v.0.22-5)</em>, <em>cowplot(v.1.1.1)</em>, <em>chromote(v.0.1.2)</em>, <em>KEGGREST(v.1.42.0)</em>, <em>magick(v.2.8.1)</em>, <em>pillar(v.1.9.0)</em>, <em>fgsea(v.1.28.0)</em>, <em>rjson(v.0.2.21)</em>, <em>codetools(v.0.2-19)</em>, <em>fastmatch(v.1.1-4)</em>, <em>glue(v.1.6.2)</em>, <em>ggfun(v.0.1.3)</em>, <em>data.table(v.1.14.8)</em>, <em>remotes(v.2.4.2.1)</em>, <em>vctrs(v.0.6.4)</em>, <em>png(v.0.1-8)</em>, <em>treeio(v.1.26.0)</em>, <em>gtable(v.0.3.4)</em>, <em>reactR(v.0.5.0)</em>, <em>cachem(v.1.0.8)</em>, <em>xfun(v.0.40)</em>, <em>S4Arrays(v.1.2.0)</em>, <em>mime(v.0.12)</em>, <em>RVenn(v.1.1.0)</em>, <em>interactiveDisplayBase(v.1.40.0)</em>, <em>ellipsis(v.0.3.2)</em>, <em>nlme(v.3.1-163)</em>, <em>ggtree(v.3.10.0)</em>, <em>bit64(v.4.0.5)</em>, <em>filelock(v.1.0.2)</em>, <em>rprojroot(v.2.0.3)</em>, <em>bslib(v.0.5.1)</em>, <em>colorspace(v.2.1-0)</em>, <em>DBI(v.1.1.3)</em>, <em>tidyselect(v.1.2.0)</em>, <em>processx(v.3.8.2)</em>, <em>bit(v.4.0.5)</em>, <em>compiler(v.4.3.1)</em>, <em>curl(v.5.1.0)</em>, <em>graph(v.1.80.0)</em>, <em>DelayedArray(v.0.28.0)</em>, <em>bookdown(v.0.36)</em>, <em>shadowtext(v.0.1.2)</em>, <em>rappdirs(v.0.3.3)</em>, <em>digest(v.0.6.33)</em>, <em>rmarkdown(v.2.25)</em>, <em>htmltools(v.0.5.6.1)</em>, <em>pkgconfig(v.2.0.3)</em>, <em>jpeg(v.0.1-10)</em>, <em>fastmap(v.1.1.1)</em>, <em>rlang(v.1.1.1)</em>, <em>GlobalOptions(v.0.1.2)</em>, <em>htmlwidgets(v.1.6.2)</em>, <em>shiny(v.1.7.5.1)</em>, <em>farver(v.2.1.1)</em>, <em>jquerylib(v.0.1.4)</em>, <em>jsonlite(v.1.8.7)</em>, <em>GOSemSim(v.2.28.0)</em>, <em>RCurl(v.1.98-1.12)</em>, <em>magrittr(v.2.0.3)</em>, <em>GenomeInfoDbData(v.1.2.11)</em>, <em>ggplotify(v.0.1.2)</em>, <em>munsell(v.0.5.0)</em>, <em>Rcpp(v.1.0.11)</em>, <em>ggnewscale(v.0.4.9)</em>, <em>ape(v.5.7-1)</em>, <em>stringi(v.1.7.12)</em>, <em>zlibbioc(v.1.48.0)</em>, <em>MASS(v.7.3-60)</em>, <em>AnnotationHub(v.3.10.0)</em>, <em>plyr(v.1.8.9)</em>, <em>org.Hs.eg.db(v.3.18.0)</em>, <em>parallel(v.4.3.1)</em>, <em>HPO.db(v.0.99.2)</em>, <em>deldir(v.1.0-9)</em>, <em>graphlayouts(v.1.0.1)</em>, <em>splines(v.4.3.1)</em>, <em>hms(v.1.1.3)</em>, <em>locfit(v.1.5-9.8)</em>, <em>ps(v.1.7.5)</em>, <em>reshape2(v.1.4.4)</em>, <em>BiocVersion(v.3.18.0)</em>, <em>evaluate(v.0.22)</em>, <em>latticeExtra(v.0.6-30)</em>, <em>tzdb(v.0.4.0)</em>, <em>tweenr(v.2.0.2)</em>, <em>httpuv(v.1.6.12)</em>, <em>polyclip(v.1.10-6)</em>, <em>ggforce(v.0.4.1)</em>, <em>xtable(v.1.8-4)</em>, <em>MPO.db(v.0.99.7)</em>, <em>later(v.1.3.1)</em>, <em>ragg(v.1.2.6)</em>, <em>websocket(v.1.4.1)</em>, <em>aplot(v.0.2.2)</em>, <em>memoise(v.2.0.1)</em> and <em>timechange(v.0.2.0)</em></p>
+
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="clustering.html" class="navigation navigation-prev navigation-unique" aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": false,
+"facebook": true,
+"twitter": true,
+"linkedin": false,
+"weibo": false,
+"instapaper": false,
+"vk": false,
+"whatsapp": false,
+"all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": "https://github.com/USERNAME/REPO/edit/BRANCH/11-KEGG_Pathways.Rmd",
+"text": "Edit"
+},
+"history": {
+"link": null,
+"text": null
+},
+"view": {
+"link": null,
+"text": null
+},
+"download": ["_main.pdf", "_main.epub"],
+"search": {
+"engine": "fuse",
+"options": null
+},
+"toc": {
+"collapse": "subsection"
+}
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.9/latest.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>

@@ -23,7 +23,7 @@
 <meta name="author" content="Carson Stacy &amp; Jeffrey Lewis" />
 
 
-<meta name="date" content="2023-10-26" />
+<meta name="date" content="2023-10-27" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -329,6 +329,31 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="10.5" data-path="clustering.html"><a href="clustering.html#performing-clustering-on-yeast-stress-data"><i class="fa fa-check"></i><b>10.5</b> Performing clustering on yeast stress data</a></li>
 <li class="chapter" data-level="10.6" data-path="clustering.html"><a href="clustering.html#questions-6"><i class="fa fa-check"></i><b>10.6</b> Questions</a></li>
 </ul></li>
+<li class="chapter" data-level="11" data-path="kegg-analysis.html"><a href="kegg-analysis.html"><i class="fa fa-check"></i><b>11</b> KEGG Analysis</a>
+<ul>
+<li class="chapter" data-level="11.1" data-path="kegg-analysis.html"><a href="kegg-analysis.html#description-7"><i class="fa fa-check"></i><b>11.1</b> Description</a></li>
+<li class="chapter" data-level="11.2" data-path="kegg-analysis.html"><a href="kegg-analysis.html#learning-outcomes-7"><i class="fa fa-check"></i><b>11.2</b> Learning Outcomes</a></li>
+<li class="chapter" data-level="11.3" data-path="kegg-analysis.html"><a href="kegg-analysis.html#loading-in-the-edger-de-gene-file-output."><i class="fa fa-check"></i><b>11.3</b> Loading in the edgeR DE gene file output.</a></li>
+<li class="chapter" data-level="11.4" data-path="kegg-analysis.html"><a href="kegg-analysis.html#kegg-analysis-1"><i class="fa fa-check"></i><b>11.4</b> KEGG Analysis</a>
+<ul>
+<li class="chapter" data-level="11.4.1" data-path="kegg-analysis.html"><a href="kegg-analysis.html#using-kegga-from-limma"><i class="fa fa-check"></i><b>11.4.1</b> Using <code>kegga()</code> from limma</a></li>
+<li class="chapter" data-level="11.4.2" data-path="kegg-analysis.html"><a href="kegg-analysis.html#pathway-visualization"><i class="fa fa-check"></i><b>11.4.2</b> Pathway Visualization</a></li>
+</ul></li>
+<li class="chapter" data-level="11.5" data-path="kegg-analysis.html"><a href="kegg-analysis.html#visualize-on-the-kegg-website"><i class="fa fa-check"></i><b>11.5</b> Visualize on the KEGG website</a></li>
+<li class="chapter" data-level="11.6" data-path="kegg-analysis.html"><a href="kegg-analysis.html#comparing-paralogs-in-common-pathways"><i class="fa fa-check"></i><b>11.6</b> Comparing Paralogs in common pathways</a></li>
+<li class="chapter" data-level="11.7" data-path="kegg-analysis.html"><a href="kegg-analysis.html#additional-kegg-related-analyses"><i class="fa fa-check"></i><b>11.7</b> Additional KEGG-related analyses</a></li>
+<li class="chapter" data-level="11.8" data-path="kegg-analysis.html"><a href="kegg-analysis.html#dotplot"><i class="fa fa-check"></i><b>11.8</b> Dotplot</a></li>
+<li class="chapter" data-level="11.9" data-path="kegg-analysis.html"><a href="kegg-analysis.html#cnetplot"><i class="fa fa-check"></i><b>11.9</b> cnetplot</a></li>
+<li class="chapter" data-level="11.10" data-path="kegg-analysis.html"><a href="kegg-analysis.html#heatplot"><i class="fa fa-check"></i><b>11.10</b> heatplot</a></li>
+<li class="chapter" data-level="11.11" data-path="kegg-analysis.html"><a href="kegg-analysis.html#upsetplot"><i class="fa fa-check"></i><b>11.11</b> upsetplot</a></li>
+<li class="chapter" data-level="11.12" data-path="kegg-analysis.html"><a href="kegg-analysis.html#emapplot"><i class="fa fa-check"></i><b>11.12</b> emapplot</a></li>
+<li class="chapter" data-level="11.13" data-path="kegg-analysis.html"><a href="kegg-analysis.html#gsea"><i class="fa fa-check"></i><b>11.13</b> GSEA</a>
+<ul>
+<li class="chapter" data-level="11.13.1" data-path="kegg-analysis.html"><a href="kegg-analysis.html#gsekegg-vs-enrichkegg"><i class="fa fa-check"></i><b>11.13.1</b> <code>gseKEGG</code> vs <code>enrichKEGG</code></a></li>
+<li class="chapter" data-level="11.13.2" data-path="kegg-analysis.html"><a href="kegg-analysis.html#gsea-visualization"><i class="fa fa-check"></i><b>11.13.2</b> GSEA visualization</a></li>
+</ul></li>
+<li class="chapter" data-level="11.14" data-path="kegg-analysis.html"><a href="kegg-analysis.html#questions-7"><i class="fa fa-check"></i><b>11.14</b> Questions</a></li>
+</ul></li>
 <li class="divider"></li>
 <li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
 
@@ -351,7 +376,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
             <section class="normal" id="section-">
 <div id="getting-started-in-r" class="section level1 hasAnchor" number="1">
 <h1><span class="header-section-number">Chapter 1</span> Getting Started in R<a href="getting-started-in-r.html#getting-started-in-r" class="anchor-section" aria-label="Anchor link to header"></a></h1>
-<p>last updated: 2023-10-26</p>
+<p>last updated: 2023-10-27</p>
 <p><strong>Installing Packages</strong></p>
 <p>First things first: Click the “Visual” button in the top-left corner of the code box. This makes the code look more like a word processor. You can always switch back to Source anytime you prefer.</p>
 <p>The following code installs a set of R packages used in this document – if not already installed – and then loads the packages into R. Note that we utilize the US CRAN repository, but other repositories may be more convenient according to geographic location.</p>

@@ -1,0 +1,560 @@
+# KEGG Analysis
+
+last updated: `r Sys.Date()`
+
+```{r setup-KEGG, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, cache=TRUE)
+set.seed("1492")
+```
+
+**Package Install**
+
+As usual, make sure we have the right packages for this exercise
+
+```{r ready-packages-KEGG, cache=FALSE}
+if (!require("pacman")) install.packages("pacman"); library(pacman)
+
+# temporary install to fix bug in package
+pacman::p_install_version("dbplyr", version = "2.3.4")
+
+# let's load all of the files we were using and want to have again today
+p_load("tidyverse", "knitr", "readr",
+       "pander", "BiocManager", 
+       "dplyr", "stringr", "DOSE",
+       "purrr", # for working with lists (beautify column names)
+       "reactable", # for pretty tables.
+       "BiocFileCache" # for saving downloaded data files
+       ) 
+
+# a package from github to install (using pacman library to install)
+p_install_gh("noriakis/ggkegg")
+
+# We also need these Bioconductor packages today.
+p_load("edgeR", 
+       "AnnotationDbi", "org.Sc.sgd.db", 
+       "pathview","clusterProfiler", "ggupset",
+       "KEGGgraph", "ggkegg", "patchwork",
+       "igraph", "tidygraph", "ggfx")
+```
+
+
+## Description
+
+
+In this class exercise, we will explore the use of KEGG pathways in genomic data analysis. KEGG is a valuable resource for understanding biological pathways and functions associated with genomic data.
+
+## Learning Outcomes
+
+At the end of this exercise, you should be able to:
+
+-   Understand the basics of KEGG pathways.
+-   Learn how to retrieve and analyze pathway information using R.
+-   Apply KEGG analysis to genomic data.
+-   Identify paralog differences within KEGG pathways
+
+
+```{r load-libraries-KEGG}
+library(edgeR)
+library(org.Sc.sgd.db)
+# for ease of use, set max number of digits after decimal
+options(digits=3)
+```
+
+## Loading in the edgeR DE gene file output.
+
+```{r load-res-KEGG}
+# Choose topTags destination
+dir_output_edgeR <-
+  path.expand("~/Desktop/Genomic_Data_Analysis/Analysis/edgeR/")
+
+# for this, let's load the res objects as an R data object.
+res <- read_rds(file = paste0(dir_output_edgeR, "yeast_res_edgeR.Rds"))
+
+# the below code downloads the file from the internet if you don't have in on your computer
+# comment out the above line of code if it gives an error.
+if (!exists("res", envir = .GlobalEnv)) {
+  # If variable doesn't exist, load from
+  url <- "https://github.com/clstacy/GenomicDataAnalysis_Fa23/raw/main/data/yeast_res_all_edgeR.Rds"
+  res <- read_rds(url)
+  # assign("res", data, envir = .GlobalEnv)
+  cat(paste("Loaded res from", url, "\n"))
+  rm("url", envir = .GlobalEnv)
+} else {
+  url <- "https://github.com/clstacy/GenomicDataAnalysis_Fa23/raw/main/data/yeast_res_all_edgeR.Rds"
+  cat(paste("res object is already loaded. Skipping loading from", url, "\n"))
+  rm("url", envir = .GlobalEnv)
+}
+
+# let's also get the res object for all of the contrasts at once, (from GitHub)
+res_all <- read_rds("https://github.com/clstacy/GenomicDataAnalysis_Fa23/raw/main/data/yeast_res_all_edgeR.Rds")
+```
+
+
+## KEGG Analysis
+
+Recall that the `res` object from the `edgeR` Differential Expression analysis was defined as `glmQLFTest(fit, contrast = my.contrasts[,"EtOHvsWT.MSN24ddvsWT"])`. In other words, we are looking at the difference in the ethanol stress response of the Msn2/4∆∆ mutant and the WT cells. Recall that positive log2 fold changes correspond to relatively higher expression of that gene in the Msn2/4∆∆ mutant cells in response stress compared to how WT cells change during stress.
+
+### Using `kegga()` from limma
+
+One approach is to do a simple KEGG enrichment with the `limma` package, using the function `kegga()`. This approach is nice, because we can directly load in the `res` object we created in the `edgeR` workflow, set our FDR cutoff, and the process happens automatically. See https://www.kegg.jp/kegg/catalog/org_list.html or https://rest.kegg.jp/list/organism for list of organisms available.
+
+```{r kegga-enrichment-KEGG}
+# test for overrepresentation of KEGG pathways in given gene list
+k <- kegga(res,
+           species.KEGG = "sce",# three-letter KEGG species identifier.
+           FDR = 0.01) #FDR cutoff we want in deciding which genes to include.
+
+# we can see the p-value results for both up & down enrichment
+k
+```
+Interesting, but note those are in order of the pathway ID, which are the left-most rowname values above.
+If we want to sort the rows based on their significance, we can use the `topKEGG` function to do so, like this:
+```{r findTop-kegga}
+# extract the top KEGG pathways from kegg output
+topKEGG(k, sort="down")
+```
+Notice I chose to sort on p-value for the "downregulated" genes (aka lower in the mutant). We could change "down" to "up" in the code above to sort on the other column.
+
+
+### Pathway Visualization
+
+So, we've found out which KEGG pathways are enriched in our gene list for this comparison. A common thing we will want to do is visualize those enriched pathways.  The Bioconductor package `pathview` allows us to visualize these pathways. If you prefer web based tools, it has a free web version at: https://pathview.uncc.edu
+
+In addition to just the genes that are DE, we can also include information about their changes by coloring the corresponding parts of the graph accordingly.
+
+```{r prepare-geneList-KEGG}
+# this makes sure you have pathview and tries to install it if you don't
+if (!requireNamespace("pathview", quietly = TRUE))
+    BiocManager::install("pathview")
+library("pathview")
+
+# save the logFC values from the res object to a new variable
+gene_data_logFC <- res$table %>% dplyr::select(logFC)
+
+# put the ORF names as names for each entry
+fold_change_geneList <- setNames(object = data.frame(res)$logFC,
+                                 nm = data.frame(res)$ORF)
+
+# we can see what this look like with head()
+head(fold_change_geneList)
+```
+
+
+```{r generate-pathImage-KEGG}
+# the pathview command saves the file to your current directory.
+# let's create a place for that information to go.
+path_to_kegg_images <- "~/Desktop/Genomic_Data_Analysis/Analysis/KEGG/"
+if (!dir.exists(path_to_kegg_images)) {
+  dir.create(path_to_kegg_images, recursive = TRUE)
+}
+
+# move to this place so images save there.
+setwd(path_to_kegg_images)
+
+# now, we can run the pathview command.
+# you can try changing the pathway.id below to one of the shown examples
+# this will let you see the different pathways.
+test <- pathview(gene.data  = fold_change_geneList,
+                     # pathway.id = "sce01100", #metabolic pathways
+                     pathway.id = "sce00010", #glycolysis/gluconeogenesis
+                     # pathway.id = "sce03050", # proteasome cycle
+                     # pathway.id = "sce00020", # TCA cycle
+                     # pathway.id = "sce00500", # starch & sucrose metabolism (trehalose)
+                     # pathway.id = "sce00030", #PPP
+                     species    = "sce",
+                     gene.idtype="orf",
+                     # expand.node = TRUE,
+                     split.group=T,
+                     map.symbol = T,
+                     is.signal=F,
+                     kegg.native = F, 
+                     match.data = T, 
+                     node.sum='max.abs', # this determines how to choose which gene to show.
+                     multi.state = T, 
+                     bins=20,
+                     same.layer = F,
+                     pdf.size=c(7,7),
+                     limit = list(gene=5, cpd=1))
+```
+
+Of course, you might want more control over the process. In that case, we can use another package. For example, we could use `clusterProfiler` that we've used before. If you want to learn more, this is a useful guide: https://yulab-smu.top/biomedical-knowledge-mining-book/clusterprofiler-kegg.html. In this analysis, we need to manually select the genes that we want to run KEGG enrichment on, and save that character vector of gene names.
+
+```{r define-DEgenes-KEGG}
+# turn res object into a list of genes
+# Recall that these genes are those that are DE between mutant stress response and
+# the WT stress response.
+DE_genes <- res %>% 
+  data.frame() %>%
+  filter(PValue < 0.01 & abs(logFC)>0.5
+         ) %>%
+  pull(ORF)
+```
+
+
+To run the enrichment, we can use the `enrichKEGG()` function from the `clusterProfiler` package. The argument "gene" for this function requires a vector of Entrez gene id's. Right now we have a vector of gene IDs, but they are the ORF names instead of entrez IDs, so for most organisms we need to convert them.
+
+```{r find-yourOrganism-KEGG}
+# how can we find our organism & its code? try this clusterProfiler command:
+search_kegg_organism('yeast', by='common_name')
+```
+
+Thankfully, the `clusterProfiler` package comes with the function `bitr` (Biological Id TRanslator) to translate geneIDs.
+
+Note: the `sce` genome database is coded differently than many genome databases, so it requests the `ORF` instead of the `entrezID`, so we can directly use the DE_genes vector instead of the entrez ID. If you don't work with yeast, you'll probably need to use the entrez ID list for analyses that you do on your own.
+
+```{r enrich-kegg-KEGG}
+# convert gene IDs to entrez IDs
+entrez_ids <- bitr(DE_genes, fromType = "ORF", toType = "ENTREZID", OrgDb = org.Sc.sgd.db)
+
+# Run our KEGG enrichment
+kegg_results <- enrichKEGG(gene = DE_genes, #entrez_ids$ENTREZID, 
+                           organism = 'sce' #options: https://www.genome.jp/kegg/catalog/org_list.html
+                           )
+
+# take a peak at the results
+head(kegg_results)
+
+# create a table for the html file
+data.frame(kegg_results) %>% reactable()
+
+
+# Remove " - Saccharomyces cerevesiae" from each description entry
+kegg_results@result$Description <- kegg_results@result$Description %>% print() %>% str_replace_all(., fixed(" - Saccharomyces cerevisiae"), "")
+```
+
+## Visualize on the KEGG website
+The first way we might want to visualize this plot is part of a KEGG pathway. We can open an html window with genes that are enriched highlighted, like this. Run one of these lines below and it will open a new window in your browser.
+```{r open-KEGGbrowser-KEGG, eval=FALSE}
+browseKEGG(kegg_results, 'sce00500')  # starch & sucrose metabolism
+browseKEGG(kegg_results, 'sce04213')  # longevity
+```
+
+
+## Comparing Paralogs in common pathways
+
+Using the `res_all` object instead, we can compare logFC across contrasts.
+We can create a side by side of the WT EtOH response and the Msn2/4∆∆ EtOH response.
+```{r graphing-paralogs-KEGG, warning=FALSE}
+# choose the pathway we want to visualize:
+
+pathway_to_graph <- "sce00010" # glycolysis/gluconeogenesis
+# pathway_to_graph <- "sce00020" # TCA cycle
+# pathway_to_graph <- "sce04213" # longevity
+# pathway_to_graph <- "sce00500" # starch & sucrose metabolism
+# pathway_to_graph <- "sce00620" # pyruvate metabolism
+
+# get the ID for the pathway we want to see
+pathway_number <- kegg_results %>%
+  data.frame() %>%
+  mutate(row_number = row_number()) %>%
+  filter(ID == pathway_to_graph) %>%
+  pull(row_number)
+
+
+# this saves the kegg list reaction mappings to KEGG_reactions for plotting
+# where these came from: "https://rest.kegg.jp/list/reaction/"
+if (!exists("KEGG_reactions")) {
+  # save the kegglist reaction infromation
+  KEGG_reactions <- KEGGREST::keggList("reaction") %>%
+    as.data.frame() 
+  colnames(KEGG_reactions) <- "long_reaction_description"
+  KEGG_reactions <- KEGG_reactions %>%
+    tibble::rownames_to_column("reaction") %>%
+    dplyr::mutate(reaction_description = str_split_i(
+      long_reaction_description, ";", 1)
+      ) %>%
+    dplyr::select(reaction, reaction_description) %>%
+    dplyr::mutate(reaction = paste0('rn:', reaction))
+}
+
+# save the kegg_data as a ggkegg object
+KEGG_data <- kegg_results %>%
+  ggkegg(
+    convert_first = FALSE,
+    convert_collapse = "\n",
+    pathway_number = pathway_number, # changing this to change the pathway.
+    convert_org = c("sce"),
+    delete_zero_degree = TRUE,
+    return_igraph = FALSE
+  )
+
+# process thsi data to visualize
+graph.data <- KEGG_data$data %>%
+  filter(type == "gene") %>%
+  mutate(showname = strsplit(name, " ") %>% str_remove_all("sce:")) %>%
+  mutate(showname = gsub('c\\(|\\)|"|"|,', '', showname)) %>%
+  separate_rows(showname, sep = " ") %>%
+  left_join(rownames_to_column(res_all$table),
+            by = c("showname" = "rowname")) %>%
+  left_join(KEGG_reactions, by = "reaction") %>%
+  mutate(gene_name = AnnotationDbi::select(org.Sc.sgd.db, 
+                                           keys = showname, 
+                                           columns = "GENENAME")$GENENAME) %>%
+  mutate(gene_name = coalesce(gene_name, showname))
+
+# find our fc values needed for color scale
+max_fc <-
+  ceiling(max(c(
+    abs(graph.data$logFC.EtOHvsMOCK.MSN24dd),
+    abs(graph.data$logFC.EtOHvsMOCK.WT)
+  ), na.rm = TRUE))
+
+# create graph for WT stress response
+WT.graph <- graph.data %>%
+  ggplot(aes(x = x, y = y)) +
+  overlay_raw_map(pathway_to_graph) +
+  ggrepel::geom_label_repel(
+    aes(label = gene_name, fill = logFC.EtOHvsMOCK.WT),
+    box.padding = 0.05,
+    label.padding = 0.05,
+    direction = "y",
+    size = 2,
+    max.overlaps = 100,
+    label.r = 0.002,
+    seed = 123
+  ) +
+  theme_void() +
+  scale_fill_gradientn(
+    colours = rev(RColorBrewer::brewer.pal(n = 10, name = "RdYlBu")),
+    limits = c(-max_fc, max_fc)
+  ) +
+  theme(plot.margin = unit(c(0, 0, 0, 0), "cm")) +
+  labs(fill = "logFC", title = "      WT Response to Ethanol")
+
+# create graph for mutant stress response
+msn24.graph <- graph.data %>%
+  ggplot(aes(x = x, y = y)) +
+  overlay_raw_map(pathway_to_graph) +
+  ggrepel::geom_label_repel(
+    aes(label = gene_name, fill = logFC.EtOHvsMOCK.MSN24dd),
+    box.padding = 0.05,
+    label.padding = 0.05,
+    direction = "y",
+    size = 2,
+    max.overlaps = 100,
+    label.r = 0.002,
+    seed = 123
+  ) +
+  theme_void() +
+  guides(fill = FALSE) +
+  scale_fill_gradientn(
+    colours = rev(RColorBrewer::brewer.pal(n = 10, name = "RdYlBu")),
+    limits = c(-max_fc, max_fc)
+  ) +
+  theme(plot.margin = unit(c(0, 0, 0, 0), "cm")) +
+  labs(fill = "logFC", title = "      Msn2/4∆∆ Response to Ethanol")
+
+
+
+# generate the graph
+side_by_side_graph <- WT.graph + msn24.graph +
+  patchwork::plot_annotation(tag_levels = 'A')
+
+# display the graph
+side_by_side_graph
+```
+
+Once we are happy with our graph. We might want to save it. We can save it like this
+```{r save-graph-KEGG, warning=FALSE}
+# command to save
+ggsave(paste0(path_to_kegg_images,pathway_to_graph,".sidebyside.pdf"), 
+       plot = side_by_side_graph,
+       device = "pdf",
+       width=10,
+       height=6,
+       dpi=300
+       )
+```
+
+## Additional KEGG-related analyses
+
+clusterProfiler let's us visualize the output of `enrichKEGG()`, that we named as `kegg_results` in this exercise, using the `res` object. 
+
+## Dotplot
+
+We can create a dotplot from this object as shown below. The dotplot shows KEGG categories that are enriched, the adjusted p.values, the number of genes in the KEGG category, and the proportion of genes in the KEGG pathway that are included in the DE gene list.
+```{r kegg-dotplot-KEGG, fig.height=8, fig.width=8}
+# Plot the KEGG pathway enrichment results
+dotplot(kegg_results, showCategory = 10)
+```
+
+## cnetplot
+
+The `dotplot()` only shows the most significant or selected enriched terms, while we may want to know which genes are involved in these significant terms. In order to consider the potentially biological complexities in which a gene may belong to multiple annotation categories and provide log2FC information, we can use the `cnetplot()` function to extract the complex association. The `cnetplot()` depicts the linkages of genes and KEGG pathways as a network. We can project the network into 2D space, or we can create a circular version of the graph. See each below.
+
+```{r kegg-cnetplot-KEGG, fig.height=8, fig.width=8}
+# cnetplot
+cnetplot(kegg_results,  
+         showCategory=10,
+         node_label="category",
+         color.params=list(foldChange = fold_change_geneList),
+         cex.params=list(gene_label = 0.1,
+                         category_label=0.5), 
+         max.overlaps=100) +
+  # change the color scale
+  scale_colour_gradientn(colours = rev(RColorBrewer::brewer.pal(n = 10, name = "RdYlBu")), limits=c(-6, 6)) +
+  labs(colour="logFC")
+
+# circular cnetplot
+cnetplot(kegg_results,  
+         showCategory=6,
+         circular=TRUE, # this changes the output graphing
+         node_label="category",
+         color.params=list(foldChange = fold_change_geneList),
+         cex.params=list(gene_label = 0.5,
+                         category_label=0.5), 
+         max.overlaps=100) +
+  # change the color scale
+  scale_colour_gradientn(colours = rev(RColorBrewer::brewer.pal(n = 10, name = "RdYlBu")), limits=c(-6, 6)) +
+  labs(colour="logFC")
+```
+
+
+## heatplot
+
+The `heatplot` is similar to `cnetplot`, while displaying the relationships as a heatmap. The gene-concept network may become too complicated if you want to show a large number significant terms. The heatplot can simplify the result and more easy to identify expression patterns.
+
+```{r kegg-heatplot-KEGG, fig.height=8, fig.width=8}
+# heatplot
+heatplot(kegg_results, showCategory=10, foldChange = fold_change_geneList) +
+  # the below code hides the messy overlapping gene names.
+  theme(axis.title.x=element_blank(),
+        axis.text.x=element_blank(),
+        axis.ticks.x=element_blank())
+```
+
+## upsetplot
+
+The `upsetplot` shows the the overlaps and unique contributions of KEGG pathways across multiple gene sets. It helps to identify which KEGG pathways are shared or distinct between different conditions or experimental groups, providing insights into the common and specific KEGG pathways enriched in each set of genes. Here, the bars show number of genes in the category.
+
+```{r kegg-enrichplot-KEGG}
+enrichplot::upsetplot(kegg_results)
+```
+
+## emapplot
+
+The `emmapplot` enrichment map organizes enriched terms into a network with edges connecting overlapping gene sets. In this way, mutually overlapping gene sets are tend to cluster together, making it easy to identify functional modules.
+
+The `emapplot` function supports results obtained from hypergeometric test and gene set enrichment analysis. We have to first use the `pairwise_termsim` function from the `enrichplot` package on the `kegg_results` object in order to get a similarity matrix.
+```{r kegg-emmapplot-KEGG}
+x2 = enrichplot::pairwise_termsim(kegg_results)
+emapplot(x2, 
+         showCategory = 30,
+         cex.params = list(category_label = 0.4))
+```
+
+
+## GSEA
+
+KEGG pathway gene set enrichment analysis allows us to identify whether a particular set of genes associated with a KEGG pathway is enriched in a given gene list compared to what would be expected by chance.
+```{r gse-analysis-KEGG}
+# For gseKEGG, we need a gene list with na removed and sorted. let's do that now.
+# omit any NA values 
+kegg_gene_list = na.omit(fold_change_geneList)
+
+# sort the list in decreasing order by FOLD CHANGE (required for this analysis)
+kegg_gene_list = sort(kegg_gene_list, decreasing = TRUE)
+
+gse_kegg <- gseKEGG(geneList     = kegg_gene_list,
+               organism     = 'sce',
+               # minGSSize    = 120,
+               pvalueCutoff = 0.05,
+               verbose      = FALSE)
+head(gse_kegg)
+```
+
+```{r gse-tableResults-KEGG}
+# let's turn this into a searchable table for the knit file.
+data.frame(gse_kegg) %>% reactable()
+
+# shorten the gse_kegg descriptions that are too long
+gse_kegg@result$Description <- gse_kegg@result$Description %>% 
+  str_replace_all(., fixed(" - Saccharomyces cerevisiae"), "")
+```
+
+### `gseKEGG` vs `enrichKEGG`
+
+What is the difference, and when to use each?
+
+Both `gseKEGG` and `enrichKEGG` functions are used for gene set enrichment analysis (GSEA) focusing on KEGG pathways, but they have different underlying methodologies and purposes.
+
+1. gseKEGG:
+
+    Methodology:
+        Gene Set Test (GSE): `gseKEGG` employs a gene set test approach. It calculates an enrichment score for each KEGG pathway based on the distribution of genes within the pathway in the ranked list of genes (usually by their differential expression values).
+        Permutations: The method involves permutations to assess the statistical significance of the enrichment scores.
+
+    Output:
+        The output is a `GSEAResult` object containing information about the enriched KEGG pathways, including their names, enrichment scores, and p-values.
+
+    Use Case:
+        `gseKEGG` is suitable when you have a ranked list of genes based on some criteria (e.g., differential expression) and want to perform GSEA to identify KEGG pathways associated with these genes.
+
+2. enrichKEGG:
+
+    Methodology:
+        Over-Representation Analysis (ORA): `enrichKEGG` uses an over-representation analysis approach. It tests whether a predefined set of genes associated with a KEGG pathway is overrepresented in a given gene list compared to what would be expected by chance.
+        Hypergeometric Test: The statistical significance is often assessed using a hypergeometric test.
+
+    Output:
+        The output is a data frame containing information about the enriched KEGG pathways, including names, p-values, and other statistics.
+
+    Use Case:
+        `enrichKEGG` is appropriate when you have a gene list and want to identify KEGG pathways that are significantly enriched in that list. It doesn't require a ranked list of genes.
+
+Which to Choose:
+
+    If you have a ranked list of genes (e.g., based on differential expression) and want to perform GSEA, use `gseKEGG`.
+
+    If you have a gene list and want to identify overrepresented pathways without ranking genes, use `enrichKEGG`.
+
+In summary, the choice between `gseKEGG` and `enrichKEGG` depends on your data and the analysis you want to perform. Both methods can provide insights into the functional enrichment of gene sets (KEGG pathways, in this case) in the context of different experimental conditions.
+
+### GSEA visualization
+
+We can also visualize the outputs of `gseKEGG` using the same functions as above. 
+```{r gse-dotplot-KEGG, fig.height=6}
+dotplot(gse_kegg, showCategory = 3, title = "Enriched Pathways" , split=".sign") + facet_grid(.~.sign)
+
+# enrichplots of the gseaResult object
+enrichplot::upsetplot(gse_kegg)
+```
+
+There are also visualizations specific to the `gseaResult` output of `gseKEGG`, shown below. We can see where in the rankings the genes belonging to a given KEGG group are found relative to the entire ranked list. We can change the `geneSetID` value to get other KEGG pathways.
+```{r gse-gseaplot-KEGG, fig.height=6}
+# Visualize the ranking of the genes by set
+gseaplot(gse_kegg, geneSetID = 1, by = "preranked", title = gse_kegg$Description[1])
+gseaplot(gse_kegg, geneSetID = 2, by = "preranked", title = gse_kegg$Description[2])
+gseaplot(gse_kegg, geneSetID = 3, by = "preranked", title = gse_kegg$Description[3])
+gseaplot(gse_kegg, geneSetID = 4, by = "preranked", title = gse_kegg$Description[4])
+```
+
+
+In addition to the plot above, we can create plots with more details by not included the `by="preranked"` argument. We can now see the calculated enrichment score across the list for this gene set.
+```{r gse-gseaplotEnrichScore-KEGG, fig.height=6, fig.width=8, dpi=300}
+# take a closer look at the RNA polymerase genes
+gseaplot(gse_kegg, geneSetID = 4, title = gse_kegg$Description[4])
+```
+What if we want to look at multiple together KEGG pathways simultaneously? We can do that with `gseaplot2` from the `enrichplot` package. Here we look at the first 3 KEGG pathways together.
+```{r gse-multipleGseaplot2-KEGG, fig.height=6, fig.width=12, dpi=300}
+# gseaplot2 multiple KEGG pathway enrichments
+enrichplot::gseaplot2(gse_kegg, geneSetID = 1:3, pvalue_table = TRUE,
+          color = c("#E495A5", "#86B875", "#7DB0DD"), ES_geom = "dot")
+```
+
+## Questions
+
+1. Can you explain the concept of gene set enrichment analysis and its relevance in functional genomics?
+
+2. How would you interpret the results obtained from clusterProfiler, specifically focusing on enriched terms and associated p-values?
+
+3. Compare and contrast KEGG enrichment with other tools or methods used for functional enrichment analysis.
+
+4. Can you find the KEGG organism for the organism that you are interested in?
+
+Be sure to knit this file into a pdf or html file once you're finished.
+
+System information for reproducibility:
+```{r session-info-KEGG}
+pander::pander(sessionInfo())
+```

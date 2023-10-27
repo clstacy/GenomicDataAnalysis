@@ -120,7 +120,7 @@
 
 \title{Genomic Data Analysis Course Exercises}
 \author{Carson Stacy \& Jeffrey Lewis}
-\date{2023-10-26}
+\date{2023-10-27}
 
 \begin{document}
 \maketitle
@@ -172,7 +172,7 @@ The exercises included are a compilation of resources we have worked with throug
 \hypertarget{getting-started-in-r}{%
 \chapter{Getting Started in R}\label{getting-started-in-r}}
 
-last updated: 2023-10-26
+last updated: 2023-10-27
 
 \textbf{Installing Packages}
 
@@ -427,7 +427,7 @@ en\_US.UTF-8\textbar\textbar en\_US.UTF-8\textbar\textbar en\_US.UTF-8\textbar\t
 \hypertarget{gene-ontology}{%
 \chapter{Gene Ontology}\label{gene-ontology}}
 
-last updated: 2023-10-26
+last updated: 2023-10-27
 
 \textbf{Installing Packages}
 
@@ -929,7 +929,7 @@ en\_US.UTF-8\textbar\textbar en\_US.UTF-8\textbar\textbar en\_US.UTF-8\textbar\t
 \hypertarget{working-with-sequences-raw-data-quality-control}{%
 \chapter{Working with Sequences: Raw Data \& Quality Control}\label{working-with-sequences-raw-data-quality-control}}
 
-last updated: 2023-10-26
+last updated: 2023-10-27
 
 \textbf{Package Install}
 
@@ -2526,7 +2526,7 @@ en\_US.UTF-8\textbar\textbar en\_US.UTF-8\textbar\textbar en\_US.UTF-8\textbar\t
 \hypertarget{read-mapping}{%
 \chapter{Read Mapping}\label{read-mapping}}
 
-last updated: 2023-10-26
+last updated: 2023-10-27
 
 As usual, make sure we have the right packages for this exercise
 
@@ -3092,7 +3092,7 @@ en\_US.UTF-8\textbar\textbar en\_US.UTF-8\textbar\textbar en\_US.UTF-8\textbar\t
 \hypertarget{read-counting}{%
 \chapter{Read Counting}\label{read-counting}}
 
-last updated: 2023-10-26
+last updated: 2023-10-27
 
 As usual, make sure we have the right packages for this exercise
 
@@ -5696,7 +5696,7 @@ en\_US.UTF-8\textbar\textbar en\_US.UTF-8\textbar\textbar en\_US.UTF-8\textbar\t
 \hypertarget{differential-expression-edger}{%
 \chapter{Differential Expression: EdgeR}\label{differential-expression-edger}}
 
-last updated: 2023-10-26
+last updated: 2023-10-27
 
 \textbf{Package Install}
 
@@ -6567,7 +6567,7 @@ en\_US.UTF-8\textbar\textbar en\_US.UTF-8\textbar\textbar en\_US.UTF-8\textbar\t
 \hypertarget{differential-expression-deseq2}{%
 \chapter{Differential Expression: DESeq2}\label{differential-expression-deseq2}}
 
-last updated: 2023-10-26
+last updated: 2023-10-27
 
 \textbf{Package Install}
 
@@ -7227,7 +7227,7 @@ en\_US.UTF-8\textbar\textbar en\_US.UTF-8\textbar\textbar en\_US.UTF-8\textbar\t
 \hypertarget{differential-expression-limma}{%
 \chapter{Differential Expression: limma}\label{differential-expression-limma}}
 
-last updated: 2023-10-26
+last updated: 2023-10-27
 
 \textbf{Install Packages}
 
@@ -8387,7 +8387,7 @@ en\_US.UTF-8\textbar\textbar en\_US.UTF-8\textbar\textbar en\_US.UTF-8\textbar\t
 \hypertarget{visualizing-differential-expression-results}{%
 \chapter{Visualizing Differential Expression Results}\label{visualizing-differential-expression-results}}
 
-last updated: 2023-10-26
+last updated: 2023-10-27
 
 \textbf{Install Packages}
 
@@ -8888,7 +8888,7 @@ en\_US.UTF-8\textbar\textbar en\_US.UTF-8\textbar\textbar en\_US.UTF-8\textbar\t
 \hypertarget{clustering}{%
 \chapter{Clustering}\label{clustering}}
 
-last updated: 2023-10-26
+last updated: 2023-10-27
 
 \hypertarget{description-6}{%
 \section{Description}\label{description-6}}
@@ -9506,6 +9506,1346 @@ Now it's your turn to play around with data. Download the Gasch\_2000\_stress.pc
 \item
   Using the clustering that you settled on for question \#4, identify the single main cluster for each that contains genes affected by the muations in \emph{msn2/4}. Make a figure highlighting those clusters by exporting the thumbnail images and importing into PowerPoint (or another graphics program if you prefer) and drawing a line next to the clusters (e.g., Figure 4 \href{https://pubmed.ncbi.nlm.nih.gov/32027144/}{from this paper}). Use the \href{https://go.princeton.edu/cgi-bin/GOTermFinder}{Princeton GO term Finder} to identify BP enrichments for those clusters, and annotate the top 5 terms to the figure. Save as a PDF to embed into your homework document.
 \end{enumerate}
+
+\hypertarget{kegg-analysis}{%
+\chapter{KEGG Analysis}\label{kegg-analysis}}
+
+last updated: 2023-10-27
+
+\textbf{Package Install}
+
+As usual, make sure we have the right packages for this exercise
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\ControlFlowTok{if}\NormalTok{ (}\SpecialCharTok{!}\FunctionTok{require}\NormalTok{(}\StringTok{"pacman"}\NormalTok{)) }\FunctionTok{install.packages}\NormalTok{(}\StringTok{"pacman"}\NormalTok{); }\FunctionTok{library}\NormalTok{(pacman)}
+
+\CommentTok{\# temporary install to fix bug in package}
+\NormalTok{pacman}\SpecialCharTok{::}\FunctionTok{p\_install\_version}\NormalTok{(}\StringTok{"dbplyr"}\NormalTok{, }\AttributeTok{version =} \StringTok{"2.3.4"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## 
+## Version of dbplyr (v. 2.3.4) is suitable
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# let\textquotesingle{}s load all of the files we were using and want to have again today}
+\FunctionTok{p\_load}\NormalTok{(}\StringTok{"tidyverse"}\NormalTok{, }\StringTok{"knitr"}\NormalTok{, }\StringTok{"readr"}\NormalTok{,}
+       \StringTok{"pander"}\NormalTok{, }\StringTok{"BiocManager"}\NormalTok{, }
+       \StringTok{"dplyr"}\NormalTok{, }\StringTok{"stringr"}\NormalTok{, }\StringTok{"DOSE"}\NormalTok{,}
+       \StringTok{"purrr"}\NormalTok{, }\CommentTok{\# for working with lists (beautify column names)}
+       \StringTok{"reactable"}\NormalTok{, }\CommentTok{\# for pretty tables.}
+       \StringTok{"BiocFileCache"} \CommentTok{\# for saving downloaded data files}
+\NormalTok{       ) }
+
+\CommentTok{\# a package from github to install (using pacman library to install)}
+\FunctionTok{p\_install\_gh}\NormalTok{(}\StringTok{"noriakis/ggkegg"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Skipping install of 'ggkegg' from a github remote, the SHA1 (0cece6db) has not changed since last install.
+##   Use `force = TRUE` to force installation
+\end{verbatim}
+
+\begin{verbatim}
+## 
+## The following packages were installed:
+## ggkegg
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# We also need these Bioconductor packages today.}
+\FunctionTok{p\_load}\NormalTok{(}\StringTok{"edgeR"}\NormalTok{, }
+       \StringTok{"AnnotationDbi"}\NormalTok{, }\StringTok{"org.Sc.sgd.db"}\NormalTok{, }
+       \StringTok{"pathview"}\NormalTok{,}\StringTok{"clusterProfiler"}\NormalTok{, }\StringTok{"ggupset"}\NormalTok{,}
+       \StringTok{"KEGGgraph"}\NormalTok{, }\StringTok{"ggkegg"}\NormalTok{, }\StringTok{"patchwork"}\NormalTok{,}
+       \StringTok{"igraph"}\NormalTok{, }\StringTok{"tidygraph"}\NormalTok{, }\StringTok{"ggfx"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\hypertarget{description-7}{%
+\section{Description}\label{description-7}}
+
+In this class exercise, we will explore the use of KEGG pathways in genomic data analysis. KEGG is a valuable resource for understanding biological pathways and functions associated with genomic data.
+
+\hypertarget{learning-outcomes-7}{%
+\section{Learning Outcomes}\label{learning-outcomes-7}}
+
+At the end of this exercise, you should be able to:
+
+\begin{itemize}
+\tightlist
+\item
+  Understand the basics of KEGG pathways.
+\item
+  Learn how to retrieve and analyze pathway information using R.
+\item
+  Apply KEGG analysis to genomic data.
+\item
+  Identify paralog differences within KEGG pathways
+\end{itemize}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{library}\NormalTok{(edgeR)}
+\FunctionTok{library}\NormalTok{(org.Sc.sgd.db)}
+\CommentTok{\# for ease of use, set max number of digits after decimal}
+\FunctionTok{options}\NormalTok{(}\AttributeTok{digits=}\DecValTok{3}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\hypertarget{loading-in-the-edger-de-gene-file-output.}{%
+\section{Loading in the edgeR DE gene file output.}\label{loading-in-the-edger-de-gene-file-output.}}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Choose topTags destination}
+\NormalTok{dir\_output\_edgeR }\OtherTok{\textless{}{-}}
+  \FunctionTok{path.expand}\NormalTok{(}\StringTok{"\textasciitilde{}/Desktop/Genomic\_Data\_Analysis/Analysis/edgeR/"}\NormalTok{)}
+
+\CommentTok{\# for this, let\textquotesingle{}s load the res objects as an R data object.}
+\NormalTok{res }\OtherTok{\textless{}{-}} \FunctionTok{read\_rds}\NormalTok{(}\AttributeTok{file =} \FunctionTok{paste0}\NormalTok{(dir\_output\_edgeR, }\StringTok{"yeast\_res\_edgeR.Rds"}\NormalTok{))}
+
+\CommentTok{\# the below code downloads the file from the internet if you don\textquotesingle{}t have in on your computer}
+\CommentTok{\# comment out the above line of code if it gives an error.}
+\ControlFlowTok{if}\NormalTok{ (}\SpecialCharTok{!}\FunctionTok{exists}\NormalTok{(}\StringTok{"res"}\NormalTok{, }\AttributeTok{envir =}\NormalTok{ .GlobalEnv)) \{}
+  \CommentTok{\# If variable doesn\textquotesingle{}t exist, load from}
+\NormalTok{  url }\OtherTok{\textless{}{-}} \StringTok{"https://github.com/clstacy/GenomicDataAnalysis\_Fa23/raw/main/data/yeast\_res\_all\_edgeR.Rds"}
+\NormalTok{  res }\OtherTok{\textless{}{-}} \FunctionTok{read\_rds}\NormalTok{(url)}
+  \CommentTok{\# assign("res", data, envir = .GlobalEnv)}
+  \FunctionTok{cat}\NormalTok{(}\FunctionTok{paste}\NormalTok{(}\StringTok{"Loaded res from"}\NormalTok{, url, }\StringTok{"}\SpecialCharTok{\textbackslash{}n}\StringTok{"}\NormalTok{))}
+  \FunctionTok{rm}\NormalTok{(}\StringTok{"url"}\NormalTok{, }\AttributeTok{envir =}\NormalTok{ .GlobalEnv)}
+\NormalTok{\} }\ControlFlowTok{else}\NormalTok{ \{}
+\NormalTok{  url }\OtherTok{\textless{}{-}} \StringTok{"https://github.com/clstacy/GenomicDataAnalysis\_Fa23/raw/main/data/yeast\_res\_all\_edgeR.Rds"}
+  \FunctionTok{cat}\NormalTok{(}\FunctionTok{paste}\NormalTok{(}\StringTok{"res object is already loaded. Skipping loading from"}\NormalTok{, url, }\StringTok{"}\SpecialCharTok{\textbackslash{}n}\StringTok{"}\NormalTok{))}
+  \FunctionTok{rm}\NormalTok{(}\StringTok{"url"}\NormalTok{, }\AttributeTok{envir =}\NormalTok{ .GlobalEnv)}
+\NormalTok{\}}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## res object is already loaded. Skipping loading from https://github.com/clstacy/GenomicDataAnalysis_Fa23/raw/main/data/yeast_res_all_edgeR.Rds
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# let\textquotesingle{}s also get the res object for all of the contrasts at once, (from GitHub)}
+\NormalTok{res\_all }\OtherTok{\textless{}{-}} \FunctionTok{read\_rds}\NormalTok{(}\StringTok{"https://github.com/clstacy/GenomicDataAnalysis\_Fa23/raw/main/data/yeast\_res\_all\_edgeR.Rds"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\hypertarget{kegg-analysis-1}{%
+\section{KEGG Analysis}\label{kegg-analysis-1}}
+
+Recall that the \texttt{res} object from the \texttt{edgeR} Differential Expression analysis was defined as \texttt{glmQLFTest(fit,\ contrast\ =\ my.contrasts{[},"EtOHvsWT.MSN24ddvsWT"{]})}. In other words, we are looking at the difference in the ethanol stress response of the Msn2/4∆∆ mutant and the WT cells. Recall that positive log2 fold changes correspond to relatively higher expression of that gene in the Msn2/4∆∆ mutant cells in response stress compared to how WT cells change during stress.
+
+\hypertarget{using-kegga-from-limma}{%
+\subsection{\texorpdfstring{Using \texttt{kegga()} from limma}{Using kegga() from limma}}\label{using-kegga-from-limma}}
+
+One approach is to do a simple KEGG enrichment with the \texttt{limma} package, using the function \texttt{kegga()}. This approach is nice, because we can directly load in the \texttt{res} object we created in the \texttt{edgeR} workflow, set our FDR cutoff, and the process happens automatically. See \url{https://www.kegg.jp/kegg/catalog/org_list.html} or \url{https://rest.kegg.jp/list/organism} for list of organisms available.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# test for overrepresentation of KEGG pathways in given gene list}
+\NormalTok{k }\OtherTok{\textless{}{-}} \FunctionTok{kegga}\NormalTok{(res,}
+           \AttributeTok{species.KEGG =} \StringTok{"sce"}\NormalTok{,}\CommentTok{\# three{-}letter KEGG species identifier.}
+           \AttributeTok{FDR =} \FloatTok{0.01}\NormalTok{) }\CommentTok{\#FDR cutoff we want in deciding which genes to include.}
+
+\CommentTok{\# we can see the p{-}value results for both up \& down enrichment}
+\NormalTok{k}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##                                                         Pathway   N Up Down
+## sce00010                           Glycolysis / Gluconeogenesis  51  5   11
+## sce00020                              Citrate cycle (TCA cycle)  30  1   10
+## sce00030                              Pentose phosphate pathway  27  3    6
+## sce00040               Pentose and glucuronate interconversions  10  0    3
+## sce00051                        Fructose and mannose metabolism  20  0    7
+## sce00052                                   Galactose metabolism  22  0    7
+## sce00053                      Ascorbate and aldarate metabolism  11  2    4
+## sce00061                                Fatty acid biosynthesis  13  2    1
+## sce00062                                  Fatty acid elongation   8  1    0
+## sce00071                                 Fatty acid degradation  20  7    5
+## sce00100                                   Steroid biosynthesis  18  6    3
+## sce00130    Ubiquinone and other terpenoid-quinone biosynthesis  10  0    5
+## sce00190                              Oxidative phosphorylation  71  0   27
+## sce00220                                  Arginine biosynthesis  16  3    1
+## sce00230                                      Purine metabolism  57  9    8
+## sce00240                                  Pyrimidine metabolism  31  5    2
+## sce00250            Alanine, aspartate and glutamate metabolism  27  5    5
+## sce00260               Glycine, serine and threonine metabolism  30  4    5
+## sce00261                                Monobactam biosynthesis   3  1    0
+## sce00270                     Cysteine and methionine metabolism  43 12    3
+## sce00280             Valine, leucine and isoleucine degradation  14  6    4
+## sce00290            Valine, leucine and isoleucine biosynthesis  12  8    0
+## sce00300                                    Lysine biosynthesis  12  6    0
+## sce00310                                     Lysine degradation  16  4    5
+## sce00330                        Arginine and proline metabolism  23  3    4
+## sce00332                                Carbapenem biosynthesis   3  1    0
+## sce00340                                   Histidine metabolism  14  2    3
+## sce00350                                    Tyrosine metabolism  13  3    2
+## sce00360                               Phenylalanine metabolism   7  2    0
+## sce00380                                  Tryptophan metabolism  20  3    6
+## sce00400    Phenylalanine, tyrosine and tryptophan biosynthesis  17  3    0
+## sce00410                                beta-Alanine metabolism  13  3    6
+## sce00430                     Taurine and hypotaurine metabolism   3  0    3
+## sce00440                 Phosphonate and phosphinate metabolism   4  1    0
+## sce00450                              Selenocompound metabolism  12  2    0
+## sce00460                             Cyanoamino acid metabolism   5  0    1
+## sce00470                                D-Amino acid metabolism   3  0    1
+## sce00480                                 Glutathione metabolism  23  1    5
+## sce00500                          Starch and sucrose metabolism  39  1   20
+## sce00510                                  N-Glycan biosynthesis  30  2    1
+## sce00511                               Other glycan degradation   1  0    1
+## sce00513                 Various types of N-glycan biosynthesis  31  4    1
+## sce00514                   Other types of O-glycan biosynthesis  14  2    0
+## sce00515                     Mannose type O-glycan biosynthesis   7  0    0
+## sce00520            Amino sugar and nucleotide sugar metabolism  31  0    7
+## sce00561                                Glycerolipid metabolism  31  2   13
+## sce00562                          Inositol phosphate metabolism  21  0    1
+## sce00563 Glycosylphosphatidylinositol (GPI)-anchor biosynthesis  25  0    2
+## sce00564                         Glycerophospholipid metabolism  40  2   10
+## sce00565                                 Ether lipid metabolism   8  0    3
+## sce00590                            Arachidonic acid metabolism   3  0    2
+## sce00592                        alpha-Linolenic acid metabolism   4  0    1
+## sce00600                                Sphingolipid metabolism  14  0    3
+## sce00620                                    Pyruvate metabolism  48 12   12
+## sce00630                Glyoxylate and dicarboxylate metabolism  27  4    6
+## sce00640                                  Propanoate metabolism  13  2    1
+## sce00650                                   Butanoate metabolism   9  3    4
+## sce00660                    C5-Branched dibasic acid metabolism   3  1    0
+## sce00670                              One carbon pool by folate  15  2    0
+## sce00680                                     Methane metabolism  20  3    3
+## sce00730                                    Thiamine metabolism  16  0    1
+## sce00740                                  Riboflavin metabolism  16  0    1
+## sce00750                                  Vitamin B6 metabolism  11  2    1
+## sce00760                 Nicotinate and nicotinamide metabolism  20  2    3
+## sce00770                      Pantothenate and CoA biosynthesis  23 10    4
+## sce00780                                      Biotin metabolism   6  0    0
+## sce00785                                 Lipoic acid metabolism  12  1    2
+## sce00790                                    Folate biosynthesis  11  0    1
+## sce00791                                   Atrazine degradation   2  0    0
+## sce00860                                   Porphyrin metabolism  17  0    2
+## sce00900                        Terpenoid backbone biosynthesis  19  5    1
+## sce00909          Sesquiterpenoid and triterpenoid biosynthesis   2  0    0
+## sce00910                                    Nitrogen metabolism   7  2    1
+## sce00920                                      Sulfur metabolism  15  3    1
+## sce00970                            Aminoacyl-tRNA biosynthesis  40  4    1
+## sce00999    Biosynthesis of various plant secondary metabolites   3  2    0
+## sce01040                Biosynthesis of unsaturated fatty acids  10  1    0
+## sce01100                                     Metabolic pathways 766 86  132
+## sce01110                  Biosynthesis of secondary metabolites 339 56   65
+## sce01200                                      Carbon metabolism 104 10   24
+## sce01210                        2-Oxocarboxylic acid metabolism  42 13    6
+## sce01212                                  Fatty acid metabolism  23  4    1
+## sce01230                            Biosynthesis of amino acids 122 32    7
+## sce01232                                  Nucleotide metabolism  42  6    3
+## sce01240                              Biosynthesis of cofactors 126 18   18
+## sce01250                      Biosynthesis of nucleotide sugars  22  0    6
+## sce02010                                       ABC transporters  18  1    3
+## sce03008                      Ribosome biogenesis in eukaryotes  74 32    1
+## sce03010                                               Ribosome 174 61    1
+## sce03013                            Nucleocytoplasmic transport  65  8    2
+## sce03015                              mRNA surveillance pathway  48  6    1
+## sce03018                                        RNA degradation  61  6    3
+## sce03020                                         RNA polymerase  31 14    0
+## sce03022                            Basal transcription factors  32  2    0
+## sce03030                                        DNA replication  31  4    0
+## sce03040                                            Spliceosome  75  4    4
+## sce03050                                             Proteasome  36  0    0
+## sce03060                                         Protein export  22  1    1
+## sce03082                     ATP-dependent chromatin remodeling  35  3    1
+## sce03083                            Polycomb repressive complex  13  2    2
+## sce03250                               Viral life cycle - HIV-1  15  0    1
+## sce03410                                   Base excision repair  25  2    0
+## sce03420                             Nucleotide excision repair  49  5    0
+## sce03430                                        Mismatch repair  20  1    0
+## sce03440                               Homologous recombination  21  0    0
+## sce03450                             Non-homologous end-joining  10  0    0
+## sce04011                         MAPK signaling pathway - yeast 108  7   12
+## sce04070                  Phosphatidylinositol signaling system  23  0    1
+## sce04111                                     Cell cycle - yeast 129 12    2
+## sce04113                                        Meiosis - yeast 117  9   15
+## sce04120                         Ubiquitin mediated proteolysis  50  1    1
+## sce04122                                    Sulfur relay system   7  0    1
+## sce04130              SNARE interactions in vesicular transport  20  0    0
+## sce04136                                      Autophagy - other  23  0    1
+## sce04138                                      Autophagy - yeast  90  2    8
+## sce04139                                      Mitophagy - yeast  40  1    3
+## sce04141            Protein processing in endoplasmic reticulum  92  1   17
+## sce04144                                            Endocytosis  79  1   11
+## sce04145                                              Phagosome  35  0    0
+## sce04146                                             Peroxisome  39  2    8
+## sce04148                                          Efferocytosis  24  0    4
+## sce04213        Longevity regulating pathway - multiple species  38  1   17
+## sce04392             Hippo signaling pathway - multiple species   8  2    0
+## sce04814                                         Motor proteins  24  2    1
+##              P.Up   P.Down
+## sce00010 4.59e-01 1.13e-02
+## sce00020 9.35e-01 4.71e-04
+## sce00030 4.21e-01 4.86e-02
+## sce00040 1.00e+00 7.17e-02
+## sce00051 1.00e+00 2.47e-03
+## sce00052 1.00e+00 4.55e-03
+## sce00053 2.47e-01 1.90e-02
+## sce00061 3.14e-01 7.50e-01
+## sce00062 5.17e-01 1.00e+00
+## sce00071 1.02e-03 4.45e-02
+## sce00100 3.13e-03 2.71e-01
+## sce00130 1.00e+00 1.69e-03
+## sce00190 1.00e+00 2.93e-10
+## sce00220 1.57e-01 8.18e-01
+## sce00230 5.55e-02 2.13e-01
+## sce00240 1.27e-01 8.35e-01
+## sce00250 7.96e-02 1.30e-01
+## sce00260 2.61e-01 1.80e-01
+## sce00261 2.39e-01 1.00e+00
+## sce00270 2.03e-04 8.24e-01
+## sce00280 6.85e-04 4.53e-02
+## sce00290 1.11e-06 1.00e+00
+## sce00300 2.45e-04 1.00e+00
+## sce00310 4.42e-02 1.75e-02
+## sce00330 3.23e-01 1.97e-01
+## sce00332 2.39e-01 1.00e+00
+## sce00340 3.47e-01 1.62e-01
+## sce00350 9.69e-02 3.84e-01
+## sce00360 1.18e-01 1.00e+00
+## sce00380 2.49e-01 1.16e-02
+## sce00400 1.79e-01 1.00e+00
+## sce00410 9.69e-02 9.52e-04
+## sce00430 1.00e+00 1.02e-03
+## sce00440 3.05e-01 1.00e+00
+## sce00450 2.80e-01 1.00e+00
+## sce00460 1.00e+00 4.13e-01
+## sce00470 1.00e+00 2.73e-01
+## sce00480 8.77e-01 7.52e-02
+## sce00500 9.72e-01 9.65e-11
+## sce00510 7.49e-01 9.59e-01
+## sce00511 1.00e+00 1.01e-01
+## sce00513 2.81e-01 9.63e-01
+## sce00514 3.47e-01 1.00e+00
+## sce00515 1.00e+00 1.00e+00
+## sce00520 1.00e+00 3.16e-02
+## sce00561 7.65e-01 3.67e-06
+## sce00562 1.00e+00 8.94e-01
+## sce00563 1.00e+00 7.35e-01
+## sce00564 8.74e-01 5.25e-03
+## sce00565 1.00e+00 3.90e-02
+## sce00590 1.00e+00 2.85e-02
+## sce00592 1.00e+00 3.47e-01
+## sce00600 1.00e+00 1.62e-01
+## sce00620 6.17e-04 2.31e-03
+## sce00630 2.03e-01 4.86e-02
+## sce00640 3.14e-01 7.50e-01
+## sce00650 3.69e-02 8.57e-03
+## sce00660 2.39e-01 1.00e+00
+## sce00670 3.79e-01 1.00e+00
+## sce00680 2.49e-01 3.29e-01
+## sce00730 1.00e+00 8.18e-01
+## sce00740 1.00e+00 8.18e-01
+## sce00750 2.47e-01 6.90e-01
+## sce00760 5.29e-01 3.29e-01
+## sce00770 9.09e-06 1.97e-01
+## sce00780 1.00e+00 1.00e+00
+## sce00785 6.65e-01 3.46e-01
+## sce00790 1.00e+00 6.90e-01
+## sce00791 1.00e+00 1.00e+00
+## sce00860 1.00e+00 5.24e-01
+## sce00900 2.03e-02 8.68e-01
+## sce00909 1.00e+00 1.00e+00
+## sce00910 1.18e-01 5.26e-01
+## sce00920 1.36e-01 7.98e-01
+## sce00970 4.63e-01 9.86e-01
+## sce00999 2.13e-02 1.00e+00
+## sce01040 5.97e-01 1.00e+00
+## sce01100 5.52e-03 3.24e-11
+## sce01110 1.16e-06 1.37e-07
+## sce01200 4.18e-01 7.56e-05
+## sce01210 3.33e-05 2.46e-01
+## sce01212 1.34e-01 9.14e-01
+## sce01230 6.35e-09 9.70e-01
+## sce01232 1.53e-01 8.11e-01
+## sce01240 2.36e-02 8.12e-02
+## sce01250 1.00e+00 1.88e-02
+## sce02010 8.06e-01 2.71e-01
+## sce03008 1.21e-15 1.00e+00
+## sce03010 3.84e-23 1.00e+00
+## sce03013 2.00e-01 9.92e-01
+## sce03015 2.35e-01 9.94e-01
+## sce03018 4.39e-01 9.54e-01
+## sce03020 7.75e-08 1.00e+00
+## sce03022 7.80e-01 1.00e+00
+## sce03030 2.81e-01 1.00e+00
+## sce03040 9.02e-01 9.53e-01
+## sce03050 1.00e+00 1.00e+00
+## sce03060 8.65e-01 9.04e-01
+## sce03082 5.97e-01 9.76e-01
+## sce03083 3.14e-01 3.84e-01
+## sce03250 1.00e+00 7.98e-01
+## sce03410 6.53e-01 1.00e+00
+## sce03420 4.24e-01 1.00e+00
+## sce03430 8.38e-01 1.00e+00
+## sce03440 1.00e+00 1.00e+00
+## sce03450 1.00e+00 1.00e+00
+## sce04011 8.41e-01 4.09e-01
+## sce04070 1.00e+00 9.14e-01
+## sce04111 4.47e-01 1.00e+00
+## sce04113 6.99e-01 1.99e-01
+## sce04120 9.90e-01 9.95e-01
+## sce04122 1.00e+00 5.26e-01
+## sce04130 1.00e+00 1.00e+00
+## sce04136 1.00e+00 9.14e-01
+## sce04138 9.97e-01 7.01e-01
+## sce04139 9.74e-01 7.84e-01
+## sce04141 1.00e+00 9.67e-03
+## sce04144 9.99e-01 1.69e-01
+## sce04145 1.00e+00 1.00e+00
+## sce04146 8.65e-01 3.79e-02
+## sce04148 1.00e+00 2.19e-01
+## sce04213 9.69e-01 3.55e-08
+## sce04392 1.49e-01 1.00e+00
+## sce04814 6.30e-01 9.23e-01
+\end{verbatim}
+
+Interesting, but note those are in order of the pathway ID, which are the left-most rowname values above.
+If we want to sort the rows based on their significance, we can use the \texttt{topKEGG} function to do so, like this:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# extract the top KEGG pathways from kegg output}
+\FunctionTok{topKEGG}\NormalTok{(k, }\AttributeTok{sort=}\StringTok{"down"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##                                                      Pathway   N Up Down
+## sce01100                                  Metabolic pathways 766 86  132
+## sce00500                       Starch and sucrose metabolism  39  1   20
+## sce00190                           Oxidative phosphorylation  71  0   27
+## sce04213     Longevity regulating pathway - multiple species  38  1   17
+## sce01110               Biosynthesis of secondary metabolites 339 56   65
+## sce00561                             Glycerolipid metabolism  31  2   13
+## sce01200                                   Carbon metabolism 104 10   24
+## sce00020                           Citrate cycle (TCA cycle)  30  1   10
+## sce00410                             beta-Alanine metabolism  13  3    6
+## sce00430                  Taurine and hypotaurine metabolism   3  0    3
+## sce00130 Ubiquinone and other terpenoid-quinone biosynthesis  10  0    5
+## sce00620                                 Pyruvate metabolism  48 12   12
+## sce00051                     Fructose and mannose metabolism  20  0    7
+## sce00052                                Galactose metabolism  22  0    7
+## sce00564                      Glycerophospholipid metabolism  40  2   10
+## sce00650                                Butanoate metabolism   9  3    4
+## sce04141         Protein processing in endoplasmic reticulum  92  1   17
+## sce00010                        Glycolysis / Gluconeogenesis  51  5   11
+## sce00380                               Tryptophan metabolism  20  3    6
+## sce00310                                  Lysine degradation  16  4    5
+##              P.Up   P.Down
+## sce01100 5.52e-03 3.24e-11
+## sce00500 9.72e-01 9.65e-11
+## sce00190 1.00e+00 2.93e-10
+## sce04213 9.69e-01 3.55e-08
+## sce01110 1.16e-06 1.37e-07
+## sce00561 7.65e-01 3.67e-06
+## sce01200 4.18e-01 7.56e-05
+## sce00020 9.35e-01 4.71e-04
+## sce00410 9.69e-02 9.52e-04
+## sce00430 1.00e+00 1.02e-03
+## sce00130 1.00e+00 1.69e-03
+## sce00620 6.17e-04 2.31e-03
+## sce00051 1.00e+00 2.47e-03
+## sce00052 1.00e+00 4.55e-03
+## sce00564 8.74e-01 5.25e-03
+## sce00650 3.69e-02 8.57e-03
+## sce04141 1.00e+00 9.67e-03
+## sce00010 4.59e-01 1.13e-02
+## sce00380 2.49e-01 1.16e-02
+## sce00310 4.42e-02 1.75e-02
+\end{verbatim}
+
+Notice I chose to sort on p-value for the ``downregulated'' genes (aka lower in the mutant). We could change ``down'' to ``up'' in the code above to sort on the other column.
+
+\hypertarget{pathway-visualization}{%
+\subsection{Pathway Visualization}\label{pathway-visualization}}
+
+So, we've found out which KEGG pathways are enriched in our gene list for this comparison. A common thing we will want to do is visualize those enriched pathways. The Bioconductor package \texttt{pathview} allows us to visualize these pathways. If you prefer web based tools, it has a free web version at: \url{https://pathview.uncc.edu}
+
+In addition to just the genes that are DE, we can also include information about their changes by coloring the corresponding parts of the graph accordingly.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# this makes sure you have pathview and tries to install it if you don\textquotesingle{}t}
+\ControlFlowTok{if}\NormalTok{ (}\SpecialCharTok{!}\FunctionTok{requireNamespace}\NormalTok{(}\StringTok{"pathview"}\NormalTok{, }\AttributeTok{quietly =} \ConstantTok{TRUE}\NormalTok{))}
+\NormalTok{    BiocManager}\SpecialCharTok{::}\FunctionTok{install}\NormalTok{(}\StringTok{"pathview"}\NormalTok{)}
+\FunctionTok{library}\NormalTok{(}\StringTok{"pathview"}\NormalTok{)}
+
+\CommentTok{\# save the logFC values from the res object to a new variable}
+\NormalTok{gene\_data\_logFC }\OtherTok{\textless{}{-}}\NormalTok{ res}\SpecialCharTok{$}\NormalTok{table }\SpecialCharTok{\%\textgreater{}\%}\NormalTok{ dplyr}\SpecialCharTok{::}\FunctionTok{select}\NormalTok{(logFC)}
+
+\CommentTok{\# put the ORF names as names for each entry}
+\NormalTok{fold\_change\_geneList }\OtherTok{\textless{}{-}} \FunctionTok{setNames}\NormalTok{(}\AttributeTok{object =} \FunctionTok{data.frame}\NormalTok{(res)}\SpecialCharTok{$}\NormalTok{logFC,}
+                                 \AttributeTok{nm =} \FunctionTok{data.frame}\NormalTok{(res)}\SpecialCharTok{$}\NormalTok{ORF)}
+
+\CommentTok{\# we can see what this look like with head()}
+\FunctionTok{head}\NormalTok{(fold\_change\_geneList)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##  YIL170W  YFL056C  YAR061W  YGR014W  YPR031W  YIL003W 
+##  1.00593  0.82290 -0.63346 -0.00538 -0.10371  0.25097
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# the pathview command saves the file to your current directory.}
+\CommentTok{\# let\textquotesingle{}s create a place for that information to go.}
+\NormalTok{path\_to\_kegg\_images }\OtherTok{\textless{}{-}} \StringTok{"\textasciitilde{}/Desktop/Genomic\_Data\_Analysis/Analysis/KEGG/"}
+\ControlFlowTok{if}\NormalTok{ (}\SpecialCharTok{!}\FunctionTok{dir.exists}\NormalTok{(path\_to\_kegg\_images)) \{}
+  \FunctionTok{dir.create}\NormalTok{(path\_to\_kegg\_images, }\AttributeTok{recursive =} \ConstantTok{TRUE}\NormalTok{)}
+\NormalTok{\}}
+
+\CommentTok{\# move to this place so images save there.}
+\FunctionTok{setwd}\NormalTok{(path\_to\_kegg\_images)}
+
+\CommentTok{\# now, we can run the pathview command.}
+\CommentTok{\# you can try changing the pathway.id below to one of the shown examples}
+\CommentTok{\# this will let you see the different pathways.}
+\NormalTok{test }\OtherTok{\textless{}{-}} \FunctionTok{pathview}\NormalTok{(}\AttributeTok{gene.data  =}\NormalTok{ fold\_change\_geneList,}
+                     \CommentTok{\# pathway.id = "sce01100", \#metabolic pathways}
+                     \AttributeTok{pathway.id =} \StringTok{"sce00010"}\NormalTok{, }\CommentTok{\#glycolysis/gluconeogenesis}
+                     \CommentTok{\# pathway.id = "sce03050", \# proteasome cycle}
+                     \CommentTok{\# pathway.id = "sce00020", \# TCA cycle}
+                     \CommentTok{\# pathway.id = "sce00500", \# starch \& sucrose metabolism (trehalose)}
+                     \CommentTok{\# pathway.id = "sce00030", \#PPP}
+                     \AttributeTok{species    =} \StringTok{"sce"}\NormalTok{,}
+                     \AttributeTok{gene.idtype=}\StringTok{"orf"}\NormalTok{,}
+                     \CommentTok{\# expand.node = TRUE,}
+                     \AttributeTok{split.group=}\NormalTok{T,}
+                     \AttributeTok{map.symbol =}\NormalTok{ T,}
+                     \AttributeTok{is.signal=}\NormalTok{F,}
+                     \AttributeTok{kegg.native =}\NormalTok{ F, }
+                     \AttributeTok{match.data =}\NormalTok{ T, }
+                     \AttributeTok{node.sum=}\StringTok{\textquotesingle{}max.abs\textquotesingle{}}\NormalTok{, }\CommentTok{\# this determines how to choose which gene to show.}
+                     \AttributeTok{multi.state =}\NormalTok{ T, }
+                     \AttributeTok{bins=}\DecValTok{20}\NormalTok{,}
+                     \AttributeTok{same.layer =}\NormalTok{ F,}
+                     \AttributeTok{pdf.size=}\FunctionTok{c}\NormalTok{(}\DecValTok{7}\NormalTok{,}\DecValTok{7}\NormalTok{),}
+                     \AttributeTok{limit =} \FunctionTok{list}\NormalTok{(}\AttributeTok{gene=}\DecValTok{5}\NormalTok{, }\AttributeTok{cpd=}\DecValTok{1}\NormalTok{))}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## 'select()' returned 1:1 mapping between keys and columns
+\end{verbatim}
+
+\begin{verbatim}
+## [1] "Note: 148 of 5615 unique input IDs unmapped."
+\end{verbatim}
+
+\begin{verbatim}
+## Info: Getting gene ID data from KEGG...
+\end{verbatim}
+
+\begin{verbatim}
+## Info: Done with data retrieval!
+\end{verbatim}
+
+\begin{verbatim}
+## Warning in .local(from, to, graph): edges replaced: '139|61', '139|62',
+## '118|121'
+\end{verbatim}
+
+\begin{verbatim}
+## Info: Working in directory /Users/clstacy/Desktop/Genomic_Data_Analysis/Analysis/KEGG
+\end{verbatim}
+
+\begin{verbatim}
+## Info: Writing image file sce00010.pathview.pdf
+\end{verbatim}
+
+Of course, you might want more control over the process. In that case, we can use another package. For example, we could use \texttt{clusterProfiler} that we've used before. If you want to learn more, this is a useful guide: \url{https://yulab-smu.top/biomedical-knowledge-mining-book/clusterprofiler-kegg.html}. In this analysis, we need to manually select the genes that we want to run KEGG enrichment on, and save that character vector of gene names.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# turn res object into a list of genes}
+\CommentTok{\# Recall that these genes are those that are DE between mutant stress response and}
+\CommentTok{\# the WT stress response.}
+\NormalTok{DE\_genes }\OtherTok{\textless{}{-}}\NormalTok{ res }\SpecialCharTok{\%\textgreater{}\%} 
+  \FunctionTok{data.frame}\NormalTok{() }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{filter}\NormalTok{(PValue }\SpecialCharTok{\textless{}} \FloatTok{0.01} \SpecialCharTok{\&} \FunctionTok{abs}\NormalTok{(logFC)}\SpecialCharTok{\textgreater{}}\FloatTok{0.5}
+\NormalTok{         ) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{pull}\NormalTok{(ORF)}
+\end{Highlighting}
+\end{Shaded}
+
+To run the enrichment, we can use the \texttt{enrichKEGG()} function from the \texttt{clusterProfiler} package. The argument ``gene'' for this function requires a vector of Entrez gene id's. Right now we have a vector of gene IDs, but they are the ORF names instead of entrez IDs, so for most organisms we need to convert them.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# how can we find our organism \& its code? try this clusterProfiler command:}
+\FunctionTok{search\_kegg\_organism}\NormalTok{(}\StringTok{\textquotesingle{}yeast\textquotesingle{}}\NormalTok{, }\AttributeTok{by=}\StringTok{\textquotesingle{}common\_name\textquotesingle{}}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##     kegg_code           scientific_name   common_name
+## 708       sce  Saccharomyces cerevisiae budding yeast
+## 820       spo Schizosaccharomyces pombe fission yeast
+\end{verbatim}
+
+Thankfully, the \texttt{clusterProfiler} package comes with the function \texttt{bitr} (Biological Id TRanslator) to translate geneIDs.
+
+Note: the \texttt{sce} genome database is coded differently than many genome databases, so it requests the \texttt{ORF} instead of the \texttt{entrezID}, so we can directly use the DE\_genes vector instead of the entrez ID. If you don't work with yeast, you'll probably need to use the entrez ID list for analyses that you do on your own.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# convert gene IDs to entrez IDs}
+\NormalTok{entrez\_ids }\OtherTok{\textless{}{-}} \FunctionTok{bitr}\NormalTok{(DE\_genes, }\AttributeTok{fromType =} \StringTok{"ORF"}\NormalTok{, }\AttributeTok{toType =} \StringTok{"ENTREZID"}\NormalTok{, }\AttributeTok{OrgDb =}\NormalTok{ org.Sc.sgd.db)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## 'select()' returned 1:1 mapping between keys and columns
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Run our KEGG enrichment}
+\NormalTok{kegg\_results }\OtherTok{\textless{}{-}} \FunctionTok{enrichKEGG}\NormalTok{(}\AttributeTok{gene =}\NormalTok{ DE\_genes, }\CommentTok{\#entrez\_ids$ENTREZID, }
+                           \AttributeTok{organism =} \StringTok{\textquotesingle{}sce\textquotesingle{}} \CommentTok{\#options: https://www.genome.jp/kegg/catalog/org\_list.html}
+\NormalTok{                           )}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Reading KEGG annotation online: "https://rest.kegg.jp/link/sce/pathway"...
+\end{verbatim}
+
+\begin{verbatim}
+## Reading KEGG annotation online: "https://rest.kegg.jp/list/pathway/sce"...
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# take a peak at the results}
+\FunctionTok{head}\NormalTok{(kegg\_results)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##                    category                          subcategory       ID
+## sce01110         Metabolism             Global and overview maps sce01110
+## sce00500         Metabolism              Carbohydrate metabolism sce00500
+## sce04213 Organismal Systems                                Aging sce04213
+## sce00620         Metabolism              Carbohydrate metabolism sce00620
+## sce01200         Metabolism             Global and overview maps sce01200
+## sce00770         Metabolism Metabolism of cofactors and vitamins sce00770
+##                                                                                         Description
+## sce01110           Biosynthesis of secondary metabolites - Saccharomyces cerevisiae (budding yeast)
+## sce00500                   Starch and sucrose metabolism - Saccharomyces cerevisiae (budding yeast)
+## sce04213 Longevity regulating pathway - multiple species - Saccharomyces cerevisiae (budding yeast)
+## sce00620                             Pyruvate metabolism - Saccharomyces cerevisiae (budding yeast)
+## sce01200                               Carbon metabolism - Saccharomyces cerevisiae (budding yeast)
+## sce00770               Pantothenate and CoA biosynthesis - Saccharomyces cerevisiae (budding yeast)
+##          GeneRatio  BgRatio   pvalue p.adjust   qvalue
+## sce01110   108/385 351/2467 4.48e-15 4.26e-13 3.11e-13
+## sce00500    20/385  41/2467 5.18e-07 1.96e-05 1.43e-05
+## sce04213    19/385  38/2467 6.19e-07 1.96e-05 1.43e-05
+## sce00620    22/385  52/2467 2.91e-06 6.90e-05 5.05e-05
+## sce01200    36/385 112/2467 5.89e-06 1.09e-04 7.99e-05
+## sce00770    13/385  23/2467 6.90e-06 1.09e-04 7.99e-05
+##                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     geneID
+## sce01110 YPL028W/YER091C/YKR067W/YMR169C/YDR178W/YER026C/YKL085W/YGR088W/YNL274C/YIL145C/YJR148W/YBL011W/YJR016C/YHR137W/YLR355C/YBR052C/YPL061W/YFR015C/YML110C/YER073W/YGR155W/YGR060W/YOR347C/YOR374W/YMR108W/YOR108W/YDR256C/YLR258W/YLL041C/YLR432W/YKL035W/YDR074W/YOR176W/YDR300C/YBR001C/YJL200C/YNR001C/YHR063C/YLR372W/YLL062C/YOR184W/YMR105C/YER141W/YAL054C/YKL067W/YPR145W/YIL094C/YCR073W-A/YLR303W/YLR174W/YGR248W/YAL061W/YDR502C/YPR184W/YDL131W/YJR010W/YMR189W/YIL155C/YDR032C/YNR043W/YCR004C/YIL125W/YDR019C/YPR160W/YBR117C/YML126C/YDR001C/YEL011W/YJL052W/YGR255C/YNL280C/YGL009C/YDL166C/YML035C/YDL022W/YDR516C/YMR261C/YKL148C/YHR208W/YAL060W/YNR034W/YGR157W/YBR126C/YEL046C/YBR145W/YER081W/YLR180W/YMR278W/YML100W/YLR153C/YDL182W/YMR250W/YBL068W/YJR073C/YOL058W/YPR026W/YFL030W/YGL256W/YDR148C/YGR205W/YKL141W/YKR058W/YGR256W/YFR053C/YDR234W/YDL021W/YOR136W/YCL040W
+## sce00500                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   YFR015C/YLR258W/YKL035W/YDR074W/YBR001C/YMR105C/YGR287C/YPR184W/YPR160W/YDR001C/YEL011W/YDR516C/YMR261C/YBR126C/YMR278W/YML100W/YPR026W/YKR058W/YFR053C/YCL040W
+## sce04213                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           YGR088W/YPL203W/YJL164C/YHR008C/YDR256C/YLL024C/YER103W/YDR258C/YFL033C/YPL015C/YLL026W/YDR096W/YBL075C/YOR025W/YAL005C/YGL037C/YNL098C/YJL005W/YJR104C
+## sce00620                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   YPL028W/YMR169C/YKL085W/YPL061W/YER073W/YOR347C/YOR374W/YOR108W/YGL062W/YML004C/YAL054C/YDL174C/YDL131W/YDR272W/YBR145W/YEL071W/YLR153C/YDL182W/YBL015W/YML054C/YGL256W/YDR533C
+## sce01200                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 YPL028W/YDR178W/YKL085W/YGR088W/YML070W/YOR347C/YDR256C/YLL041C/YGL062W/YNR001C/YOR184W/YAL054C/YCR073W-A/YLR303W/YLR174W/YGR248W/YMR189W/YIL125W/YDR019C/YBR117C/YJL052W/YDR516C/YKL148C/YNR034W/YER081W/YLR153C/YBL068W/YFL030W/YDR148C/YGR205W/YKL141W/YGR256W/YFR053C/YDL021W/YOR136W/YCL040W
+## sce00770                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           YMR169C/YIL145C/YJR148W/YJR016C/YLR355C/YPL061W/YER073W/YOR374W/YMR108W/YHR063C/YGL154C/YHR208W/YMR020W
+##          Count
+## sce01110   108
+## sce00500    20
+## sce04213    19
+## sce00620    22
+## sce01200    36
+## sce00770    13
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# create a table for the html file}
+\FunctionTok{data.frame}\NormalTok{(kegg\_results) }\SpecialCharTok{\%\textgreater{}\%} \FunctionTok{reactable}\NormalTok{()}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{_main_files/figure-latex/enrich-kegg-KEGG-1.pdf}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Remove " {-} Saccharomyces cerevesiae" from each description entry}
+\NormalTok{kegg\_results}\SpecialCharTok{@}\NormalTok{result}\SpecialCharTok{$}\NormalTok{Description }\OtherTok{\textless{}{-}}\NormalTok{ kegg\_results}\SpecialCharTok{@}\NormalTok{result}\SpecialCharTok{$}\NormalTok{Description }\SpecialCharTok{\%\textgreater{}\%} \FunctionTok{print}\NormalTok{() }\SpecialCharTok{\%\textgreater{}\%} \FunctionTok{str\_replace\_all}\NormalTok{(., }\FunctionTok{fixed}\NormalTok{(}\StringTok{" {-} Saccharomyces cerevisiae"}\NormalTok{), }\StringTok{""}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##  [1] "Biosynthesis of secondary metabolites - Saccharomyces cerevisiae (budding yeast)"                 
+##  [2] "Starch and sucrose metabolism - Saccharomyces cerevisiae (budding yeast)"                         
+##  [3] "Longevity regulating pathway - multiple species - Saccharomyces cerevisiae (budding yeast)"       
+##  [4] "Pyruvate metabolism - Saccharomyces cerevisiae (budding yeast)"                                   
+##  [5] "Carbon metabolism - Saccharomyces cerevisiae (budding yeast)"                                     
+##  [6] "Pantothenate and CoA biosynthesis - Saccharomyces cerevisiae (budding yeast)"                     
+##  [7] "2-Oxocarboxylic acid metabolism - Saccharomyces cerevisiae (budding yeast)"                       
+##  [8] "Ribosome biogenesis in eukaryotes - Saccharomyces cerevisiae (budding yeast)"                     
+##  [9] "Valine, leucine and isoleucine degradation - Saccharomyces cerevisiae (budding yeast)"            
+## [10] "Glyoxylate and dicarboxylate metabolism - Saccharomyces cerevisiae (budding yeast)"               
+## [11] "beta-Alanine metabolism - Saccharomyces cerevisiae (budding yeast)"                               
+## [12] "Valine, leucine and isoleucine biosynthesis - Saccharomyces cerevisiae (budding yeast)"           
+## [13] "Biosynthesis of amino acids - Saccharomyces cerevisiae (budding yeast)"                           
+## [14] "RNA polymerase - Saccharomyces cerevisiae (budding yeast)"                                        
+## [15] "Ribosome - Saccharomyces cerevisiae (budding yeast)"                                              
+## [16] "Tryptophan metabolism - Saccharomyces cerevisiae (budding yeast)"                                 
+## [17] "Glycerolipid metabolism - Saccharomyces cerevisiae (budding yeast)"                               
+## [18] "Biosynthesis of cofactors - Saccharomyces cerevisiae (budding yeast)"                             
+## [19] "Glycine, serine and threonine metabolism - Saccharomyces cerevisiae (budding yeast)"              
+## [20] "Citrate cycle (TCA cycle) - Saccharomyces cerevisiae (budding yeast)"                             
+## [21] "Lysine degradation - Saccharomyces cerevisiae (budding yeast)"                                    
+## [22] "Fatty acid degradation - Saccharomyces cerevisiae (budding yeast)"                                
+## [23] "Oxidative phosphorylation - Saccharomyces cerevisiae (budding yeast)"                             
+## [24] "Glycolysis / Gluconeogenesis - Saccharomyces cerevisiae (budding yeast)"                          
+## [25] "Cysteine and methionine metabolism - Saccharomyces cerevisiae (budding yeast)"                    
+## [26] "Ubiquinone and other terpenoid-quinone biosynthesis - Saccharomyces cerevisiae (budding yeast)"   
+## [27] "Ascorbate and aldarate metabolism - Saccharomyces cerevisiae (budding yeast)"                     
+## [28] "Purine metabolism - Saccharomyces cerevisiae (budding yeast)"                                     
+## [29] "Lysine biosynthesis - Saccharomyces cerevisiae (budding yeast)"                                   
+## [30] "Alanine, aspartate and glutamate metabolism - Saccharomyces cerevisiae (budding yeast)"           
+## [31] "Fructose and mannose metabolism - Saccharomyces cerevisiae (budding yeast)"                       
+## [32] "Pentose phosphate pathway - Saccharomyces cerevisiae (budding yeast)"                             
+## [33] "Galactose metabolism - Saccharomyces cerevisiae (budding yeast)"                                  
+## [34] "Methane metabolism - Saccharomyces cerevisiae (budding yeast)"                                    
+## [35] "Lipoic acid metabolism - Saccharomyces cerevisiae (budding yeast)"                                
+## [36] "Tyrosine metabolism - Saccharomyces cerevisiae (budding yeast)"                                   
+## [37] "Propanoate metabolism - Saccharomyces cerevisiae (budding yeast)"                                 
+## [38] "Arginine and proline metabolism - Saccharomyces cerevisiae (budding yeast)"                       
+## [39] "Biosynthesis of nucleotide sugars - Saccharomyces cerevisiae (budding yeast)"                     
+## [40] "Glycerophospholipid metabolism - Saccharomyces cerevisiae (budding yeast)"                        
+## [41] "Peroxisome - Saccharomyces cerevisiae (budding yeast)"                                            
+## [42] "Histidine metabolism - Saccharomyces cerevisiae (budding yeast)"                                  
+## [43] "Nicotinate and nicotinamide metabolism - Saccharomyces cerevisiae (budding yeast)"                
+## [44] "Sulfur metabolism - Saccharomyces cerevisiae (budding yeast)"                                     
+## [45] "Nucleotide metabolism - Saccharomyces cerevisiae (budding yeast)"                                 
+## [46] "Arginine biosynthesis - Saccharomyces cerevisiae (budding yeast)"                                 
+## [47] "Amino sugar and nucleotide sugar metabolism - Saccharomyces cerevisiae (budding yeast)"           
+## [48] "Glutathione metabolism - Saccharomyces cerevisiae (budding yeast)"                                
+## [49] "Fatty acid metabolism - Saccharomyces cerevisiae (budding yeast)"                                 
+## [50] "Pentose and glucuronate interconversions - Saccharomyces cerevisiae (budding yeast)"              
+## [51] "Fatty acid biosynthesis - Saccharomyces cerevisiae (budding yeast)"                               
+## [52] "Vitamin B6 metabolism - Saccharomyces cerevisiae (budding yeast)"                                 
+## [53] "Polycomb repressive complex - Saccharomyces cerevisiae (budding yeast)"                           
+## [54] "Pyrimidine metabolism - Saccharomyces cerevisiae (budding yeast)"                                 
+## [55] "Meiosis - yeast - Saccharomyces cerevisiae (budding yeast)"                                       
+## [56] "MAPK signaling pathway - yeast - Saccharomyces cerevisiae (budding yeast)"                        
+## [57] "Steroid biosynthesis - Saccharomyces cerevisiae (budding yeast)"                                  
+## [58] "ABC transporters - Saccharomyces cerevisiae (budding yeast)"                                      
+## [59] "Efferocytosis - Saccharomyces cerevisiae (budding yeast)"                                         
+## [60] "Selenocompound metabolism - Saccharomyces cerevisiae (budding yeast)"                             
+## [61] "Terpenoid backbone biosynthesis - Saccharomyces cerevisiae (budding yeast)"                       
+## [62] "Other types of O-glycan biosynthesis - Saccharomyces cerevisiae (budding yeast)"                  
+## [63] "Sphingolipid metabolism - Saccharomyces cerevisiae (budding yeast)"                               
+## [64] "Protein processing in endoplasmic reticulum - Saccharomyces cerevisiae (budding yeast)"           
+## [65] "One carbon pool by folate - Saccharomyces cerevisiae (budding yeast)"                             
+## [66] "Porphyrin metabolism - Saccharomyces cerevisiae (budding yeast)"                                  
+## [67] "RNA degradation - Saccharomyces cerevisiae (budding yeast)"                                       
+## [68] "Endocytosis - Saccharomyces cerevisiae (budding yeast)"                                           
+## [69] "Biosynthesis of unsaturated fatty acids - Saccharomyces cerevisiae (budding yeast)"               
+## [70] "Folate biosynthesis - Saccharomyces cerevisiae (budding yeast)"                                   
+## [71] "Various types of N-glycan biosynthesis - Saccharomyces cerevisiae (budding yeast)"                
+## [72] "DNA replication - Saccharomyces cerevisiae (budding yeast)"                                       
+## [73] "Mitophagy - yeast - Saccharomyces cerevisiae (budding yeast)"                                     
+## [74] "Autophagy - other - Saccharomyces cerevisiae (budding yeast)"                                     
+## [75] "Motor proteins - Saccharomyces cerevisiae (budding yeast)"                                        
+## [76] "Glycosylphosphatidylinositol (GPI)-anchor biosynthesis - Saccharomyces cerevisiae (budding yeast)"
+## [77] "Viral life cycle - HIV-1 - Saccharomyces cerevisiae (budding yeast)"                              
+## [78] "Cell cycle - yeast - Saccharomyces cerevisiae (budding yeast)"                                    
+## [79] "Riboflavin metabolism - Saccharomyces cerevisiae (budding yeast)"                                 
+## [80] "Phenylalanine, tyrosine and tryptophan biosynthesis - Saccharomyces cerevisiae (budding yeast)"   
+## [81] "Thiamine metabolism - Saccharomyces cerevisiae (budding yeast)"                                   
+## [82] "Nucleocytoplasmic transport - Saccharomyces cerevisiae (budding yeast)"                           
+## [83] "Autophagy - yeast - Saccharomyces cerevisiae (budding yeast)"                                     
+## [84] "N-Glycan biosynthesis - Saccharomyces cerevisiae (budding yeast)"                                 
+## [85] "Spliceosome - Saccharomyces cerevisiae (budding yeast)"                                           
+## [86] "Inositol phosphate metabolism - Saccharomyces cerevisiae (budding yeast)"                         
+## [87] "Homologous recombination - Saccharomyces cerevisiae (budding yeast)"                              
+## [88] "Phosphatidylinositol signaling system - Saccharomyces cerevisiae (budding yeast)"                 
+## [89] "Base excision repair - Saccharomyces cerevisiae (budding yeast)"                                  
+## [90] "Basal transcription factors - Saccharomyces cerevisiae (budding yeast)"                           
+## [91] "mRNA surveillance pathway - Saccharomyces cerevisiae (budding yeast)"                             
+## [92] "ATP-dependent chromatin remodeling - Saccharomyces cerevisiae (budding yeast)"                    
+## [93] "Nucleotide excision repair - Saccharomyces cerevisiae (budding yeast)"                            
+## [94] "Ubiquitin mediated proteolysis - Saccharomyces cerevisiae (budding yeast)"                        
+## [95] "Aminoacyl-tRNA biosynthesis - Saccharomyces cerevisiae (budding yeast)"
+\end{verbatim}
+
+\hypertarget{visualize-on-the-kegg-website}{%
+\section{Visualize on the KEGG website}\label{visualize-on-the-kegg-website}}
+
+The first way we might want to visualize this plot is part of a KEGG pathway. We can open an html window with genes that are enriched highlighted, like this. Run one of these lines below and it will open a new window in your browser.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{browseKEGG}\NormalTok{(kegg\_results, }\StringTok{\textquotesingle{}sce00500\textquotesingle{}}\NormalTok{)  }\CommentTok{\# starch \& sucrose metabolism}
+\FunctionTok{browseKEGG}\NormalTok{(kegg\_results, }\StringTok{\textquotesingle{}sce04213\textquotesingle{}}\NormalTok{)  }\CommentTok{\# longevity}
+\end{Highlighting}
+\end{Shaded}
+
+\hypertarget{comparing-paralogs-in-common-pathways}{%
+\section{Comparing Paralogs in common pathways}\label{comparing-paralogs-in-common-pathways}}
+
+Using the \texttt{res\_all} object instead, we can compare logFC across contrasts.
+We can create a side by side of the WT EtOH response and the Msn2/4∆∆ EtOH response.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# choose the pathway we want to visualize:}
+
+\NormalTok{pathway\_to\_graph }\OtherTok{\textless{}{-}} \StringTok{"sce00010"} \CommentTok{\# glycolysis/gluconeogenesis}
+\CommentTok{\# pathway\_to\_graph \textless{}{-} "sce00020" \# TCA cycle}
+\CommentTok{\# pathway\_to\_graph \textless{}{-} "sce04213" \# longevity}
+\CommentTok{\# pathway\_to\_graph \textless{}{-} "sce00500" \# starch \& sucrose metabolism}
+\CommentTok{\# pathway\_to\_graph \textless{}{-} "sce00620" \# pyruvate metabolism}
+
+\CommentTok{\# get the ID for the pathway we want to see}
+\NormalTok{pathway\_number }\OtherTok{\textless{}{-}}\NormalTok{ kegg\_results }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{data.frame}\NormalTok{() }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{mutate}\NormalTok{(}\AttributeTok{row\_number =} \FunctionTok{row\_number}\NormalTok{()) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{filter}\NormalTok{(ID }\SpecialCharTok{==}\NormalTok{ pathway\_to\_graph) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{pull}\NormalTok{(row\_number)}
+
+
+\CommentTok{\# this saves the kegg list reaction mappings to KEGG\_reactions for plotting}
+\CommentTok{\# where these came from: "https://rest.kegg.jp/list/reaction/"}
+\ControlFlowTok{if}\NormalTok{ (}\SpecialCharTok{!}\FunctionTok{exists}\NormalTok{(}\StringTok{"KEGG\_reactions"}\NormalTok{)) \{}
+  \CommentTok{\# save the kegglist reaction infromation}
+\NormalTok{  KEGG\_reactions }\OtherTok{\textless{}{-}}\NormalTok{ KEGGREST}\SpecialCharTok{::}\FunctionTok{keggList}\NormalTok{(}\StringTok{"reaction"}\NormalTok{) }\SpecialCharTok{\%\textgreater{}\%}
+    \FunctionTok{as.data.frame}\NormalTok{() }
+  \FunctionTok{colnames}\NormalTok{(KEGG\_reactions) }\OtherTok{\textless{}{-}} \StringTok{"long\_reaction\_description"}
+\NormalTok{  KEGG\_reactions }\OtherTok{\textless{}{-}}\NormalTok{ KEGG\_reactions }\SpecialCharTok{\%\textgreater{}\%}
+\NormalTok{    tibble}\SpecialCharTok{::}\FunctionTok{rownames\_to\_column}\NormalTok{(}\StringTok{"reaction"}\NormalTok{) }\SpecialCharTok{\%\textgreater{}\%}
+\NormalTok{    dplyr}\SpecialCharTok{::}\FunctionTok{mutate}\NormalTok{(}\AttributeTok{reaction\_description =} \FunctionTok{str\_split\_i}\NormalTok{(}
+\NormalTok{      long\_reaction\_description, }\StringTok{";"}\NormalTok{, }\DecValTok{1}\NormalTok{)}
+\NormalTok{      ) }\SpecialCharTok{\%\textgreater{}\%}
+\NormalTok{    dplyr}\SpecialCharTok{::}\FunctionTok{select}\NormalTok{(reaction, reaction\_description) }\SpecialCharTok{\%\textgreater{}\%}
+\NormalTok{    dplyr}\SpecialCharTok{::}\FunctionTok{mutate}\NormalTok{(}\AttributeTok{reaction =} \FunctionTok{paste0}\NormalTok{(}\StringTok{\textquotesingle{}rn:\textquotesingle{}}\NormalTok{, reaction))}
+\NormalTok{\}}
+
+\CommentTok{\# save the kegg\_data as a ggkegg object}
+\NormalTok{KEGG\_data }\OtherTok{\textless{}{-}}\NormalTok{ kegg\_results }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{ggkegg}\NormalTok{(}
+    \AttributeTok{convert\_first =} \ConstantTok{FALSE}\NormalTok{,}
+    \AttributeTok{convert\_collapse =} \StringTok{"}\SpecialCharTok{\textbackslash{}n}\StringTok{"}\NormalTok{,}
+    \AttributeTok{pathway\_number =}\NormalTok{ pathway\_number, }\CommentTok{\# changing this to change the pathway.}
+    \AttributeTok{convert\_org =} \FunctionTok{c}\NormalTok{(}\StringTok{"sce"}\NormalTok{),}
+    \AttributeTok{delete\_zero\_degree =} \ConstantTok{TRUE}\NormalTok{,}
+    \AttributeTok{return\_igraph =} \ConstantTok{FALSE}
+\NormalTok{  )}
+
+\CommentTok{\# process thsi data to visualize}
+\NormalTok{graph.data }\OtherTok{\textless{}{-}}\NormalTok{ KEGG\_data}\SpecialCharTok{$}\NormalTok{data }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{filter}\NormalTok{(type }\SpecialCharTok{==} \StringTok{"gene"}\NormalTok{) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{mutate}\NormalTok{(}\AttributeTok{showname =} \FunctionTok{strsplit}\NormalTok{(name, }\StringTok{" "}\NormalTok{) }\SpecialCharTok{\%\textgreater{}\%} \FunctionTok{str\_remove\_all}\NormalTok{(}\StringTok{"sce:"}\NormalTok{)) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{mutate}\NormalTok{(}\AttributeTok{showname =} \FunctionTok{gsub}\NormalTok{(}\StringTok{\textquotesingle{}c}\SpecialCharTok{\textbackslash{}\textbackslash{}}\StringTok{(|}\SpecialCharTok{\textbackslash{}\textbackslash{}}\StringTok{)|"|"|,\textquotesingle{}}\NormalTok{, }\StringTok{\textquotesingle{}\textquotesingle{}}\NormalTok{, showname)) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{separate\_rows}\NormalTok{(showname, }\AttributeTok{sep =} \StringTok{" "}\NormalTok{) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{left\_join}\NormalTok{(}\FunctionTok{rownames\_to\_column}\NormalTok{(res\_all}\SpecialCharTok{$}\NormalTok{table),}
+            \AttributeTok{by =} \FunctionTok{c}\NormalTok{(}\StringTok{"showname"} \OtherTok{=} \StringTok{"rowname"}\NormalTok{)) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{left\_join}\NormalTok{(KEGG\_reactions, }\AttributeTok{by =} \StringTok{"reaction"}\NormalTok{) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{mutate}\NormalTok{(}\AttributeTok{gene\_name =}\NormalTok{ AnnotationDbi}\SpecialCharTok{::}\FunctionTok{select}\NormalTok{(org.Sc.sgd.db, }
+                                           \AttributeTok{keys =}\NormalTok{ showname, }
+                                           \AttributeTok{columns =} \StringTok{"GENENAME"}\NormalTok{)}\SpecialCharTok{$}\NormalTok{GENENAME) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{mutate}\NormalTok{(}\AttributeTok{gene\_name =} \FunctionTok{coalesce}\NormalTok{(gene\_name, showname))}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## 'select()' returned many:1 mapping between keys and columns
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# find our fc values needed for color scale}
+\NormalTok{max\_fc }\OtherTok{\textless{}{-}}
+  \FunctionTok{ceiling}\NormalTok{(}\FunctionTok{max}\NormalTok{(}\FunctionTok{c}\NormalTok{(}
+    \FunctionTok{abs}\NormalTok{(graph.data}\SpecialCharTok{$}\NormalTok{logFC.EtOHvsMOCK.MSN24dd),}
+    \FunctionTok{abs}\NormalTok{(graph.data}\SpecialCharTok{$}\NormalTok{logFC.EtOHvsMOCK.WT)}
+\NormalTok{  ), }\AttributeTok{na.rm =} \ConstantTok{TRUE}\NormalTok{))}
+
+\CommentTok{\# create graph for WT stress response}
+\NormalTok{WT.graph }\OtherTok{\textless{}{-}}\NormalTok{ graph.data }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{ggplot}\NormalTok{(}\FunctionTok{aes}\NormalTok{(}\AttributeTok{x =}\NormalTok{ x, }\AttributeTok{y =}\NormalTok{ y)) }\SpecialCharTok{+}
+  \FunctionTok{overlay\_raw\_map}\NormalTok{(pathway\_to\_graph) }\SpecialCharTok{+}
+\NormalTok{  ggrepel}\SpecialCharTok{::}\FunctionTok{geom\_label\_repel}\NormalTok{(}
+    \FunctionTok{aes}\NormalTok{(}\AttributeTok{label =}\NormalTok{ gene\_name, }\AttributeTok{fill =}\NormalTok{ logFC.EtOHvsMOCK.WT),}
+    \AttributeTok{box.padding =} \FloatTok{0.05}\NormalTok{,}
+    \AttributeTok{label.padding =} \FloatTok{0.05}\NormalTok{,}
+    \AttributeTok{direction =} \StringTok{"y"}\NormalTok{,}
+    \AttributeTok{size =} \DecValTok{2}\NormalTok{,}
+    \AttributeTok{max.overlaps =} \DecValTok{100}\NormalTok{,}
+    \AttributeTok{label.r =} \FloatTok{0.002}\NormalTok{,}
+    \AttributeTok{seed =} \DecValTok{123}
+\NormalTok{  ) }\SpecialCharTok{+}
+  \FunctionTok{theme\_void}\NormalTok{() }\SpecialCharTok{+}
+  \FunctionTok{scale\_fill\_gradientn}\NormalTok{(}
+    \AttributeTok{colours =} \FunctionTok{rev}\NormalTok{(RColorBrewer}\SpecialCharTok{::}\FunctionTok{brewer.pal}\NormalTok{(}\AttributeTok{n =} \DecValTok{10}\NormalTok{, }\AttributeTok{name =} \StringTok{"RdYlBu"}\NormalTok{)),}
+    \AttributeTok{limits =} \FunctionTok{c}\NormalTok{(}\SpecialCharTok{{-}}\NormalTok{max\_fc, max\_fc)}
+\NormalTok{  ) }\SpecialCharTok{+}
+  \FunctionTok{theme}\NormalTok{(}\AttributeTok{plot.margin =} \FunctionTok{unit}\NormalTok{(}\FunctionTok{c}\NormalTok{(}\DecValTok{0}\NormalTok{, }\DecValTok{0}\NormalTok{, }\DecValTok{0}\NormalTok{, }\DecValTok{0}\NormalTok{), }\StringTok{"cm"}\NormalTok{)) }\SpecialCharTok{+}
+  \FunctionTok{labs}\NormalTok{(}\AttributeTok{fill =} \StringTok{"logFC"}\NormalTok{, }\AttributeTok{title =} \StringTok{"      WT Response to Ethanol"}\NormalTok{)}
+
+\CommentTok{\# create graph for mutant stress response}
+\NormalTok{msn24.graph }\OtherTok{\textless{}{-}}\NormalTok{ graph.data }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{ggplot}\NormalTok{(}\FunctionTok{aes}\NormalTok{(}\AttributeTok{x =}\NormalTok{ x, }\AttributeTok{y =}\NormalTok{ y)) }\SpecialCharTok{+}
+  \FunctionTok{overlay\_raw\_map}\NormalTok{(pathway\_to\_graph) }\SpecialCharTok{+}
+\NormalTok{  ggrepel}\SpecialCharTok{::}\FunctionTok{geom\_label\_repel}\NormalTok{(}
+    \FunctionTok{aes}\NormalTok{(}\AttributeTok{label =}\NormalTok{ gene\_name, }\AttributeTok{fill =}\NormalTok{ logFC.EtOHvsMOCK.MSN24dd),}
+    \AttributeTok{box.padding =} \FloatTok{0.05}\NormalTok{,}
+    \AttributeTok{label.padding =} \FloatTok{0.05}\NormalTok{,}
+    \AttributeTok{direction =} \StringTok{"y"}\NormalTok{,}
+    \AttributeTok{size =} \DecValTok{2}\NormalTok{,}
+    \AttributeTok{max.overlaps =} \DecValTok{100}\NormalTok{,}
+    \AttributeTok{label.r =} \FloatTok{0.002}\NormalTok{,}
+    \AttributeTok{seed =} \DecValTok{123}
+\NormalTok{  ) }\SpecialCharTok{+}
+  \FunctionTok{theme\_void}\NormalTok{() }\SpecialCharTok{+}
+  \FunctionTok{guides}\NormalTok{(}\AttributeTok{fill =} \ConstantTok{FALSE}\NormalTok{) }\SpecialCharTok{+}
+  \FunctionTok{scale\_fill\_gradientn}\NormalTok{(}
+    \AttributeTok{colours =} \FunctionTok{rev}\NormalTok{(RColorBrewer}\SpecialCharTok{::}\FunctionTok{brewer.pal}\NormalTok{(}\AttributeTok{n =} \DecValTok{10}\NormalTok{, }\AttributeTok{name =} \StringTok{"RdYlBu"}\NormalTok{)),}
+    \AttributeTok{limits =} \FunctionTok{c}\NormalTok{(}\SpecialCharTok{{-}}\NormalTok{max\_fc, max\_fc)}
+\NormalTok{  ) }\SpecialCharTok{+}
+  \FunctionTok{theme}\NormalTok{(}\AttributeTok{plot.margin =} \FunctionTok{unit}\NormalTok{(}\FunctionTok{c}\NormalTok{(}\DecValTok{0}\NormalTok{, }\DecValTok{0}\NormalTok{, }\DecValTok{0}\NormalTok{, }\DecValTok{0}\NormalTok{), }\StringTok{"cm"}\NormalTok{)) }\SpecialCharTok{+}
+  \FunctionTok{labs}\NormalTok{(}\AttributeTok{fill =} \StringTok{"logFC"}\NormalTok{, }\AttributeTok{title =} \StringTok{"      Msn2/4∆∆ Response to Ethanol"}\NormalTok{)}
+
+
+
+\CommentTok{\# generate the graph}
+\NormalTok{side\_by\_side\_graph }\OtherTok{\textless{}{-}}\NormalTok{ WT.graph }\SpecialCharTok{+}\NormalTok{ msn24.graph }\SpecialCharTok{+}
+\NormalTok{  patchwork}\SpecialCharTok{::}\FunctionTok{plot\_annotation}\NormalTok{(}\AttributeTok{tag\_levels =} \StringTok{\textquotesingle{}A\textquotesingle{}}\NormalTok{)}
+
+\CommentTok{\# display the graph}
+\NormalTok{side\_by\_side\_graph}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{_main_files/figure-latex/graphing-paralogs-KEGG-1.pdf}
+
+Once we are happy with our graph. We might want to save it. We can save it like this
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# command to save}
+\FunctionTok{ggsave}\NormalTok{(}\FunctionTok{paste0}\NormalTok{(path\_to\_kegg\_images,pathway\_to\_graph,}\StringTok{".sidebyside.pdf"}\NormalTok{), }
+       \AttributeTok{plot =}\NormalTok{ side\_by\_side\_graph,}
+       \AttributeTok{device =} \StringTok{"pdf"}\NormalTok{,}
+       \AttributeTok{width=}\DecValTok{10}\NormalTok{,}
+       \AttributeTok{height=}\DecValTok{6}\NormalTok{,}
+       \AttributeTok{dpi=}\DecValTok{300}
+\NormalTok{       )}
+\end{Highlighting}
+\end{Shaded}
+
+\hypertarget{additional-kegg-related-analyses}{%
+\section{Additional KEGG-related analyses}\label{additional-kegg-related-analyses}}
+
+clusterProfiler let's us visualize the output of \texttt{enrichKEGG()}, that we named as \texttt{kegg\_results} in this exercise, using the \texttt{res} object.
+
+\hypertarget{dotplot}{%
+\section{Dotplot}\label{dotplot}}
+
+We can create a dotplot from this object as shown below. The dotplot shows KEGG categories that are enriched, the adjusted p.values, the number of genes in the KEGG category, and the proportion of genes in the KEGG pathway that are included in the DE gene list.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Plot the KEGG pathway enrichment results}
+\FunctionTok{dotplot}\NormalTok{(kegg\_results, }\AttributeTok{showCategory =} \DecValTok{10}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{_main_files/figure-latex/kegg-dotplot-KEGG-1.pdf}
+
+\hypertarget{cnetplot}{%
+\section{cnetplot}\label{cnetplot}}
+
+The \texttt{dotplot()} only shows the most significant or selected enriched terms, while we may want to know which genes are involved in these significant terms. In order to consider the potentially biological complexities in which a gene may belong to multiple annotation categories and provide log2FC information, we can use the \texttt{cnetplot()} function to extract the complex association. The \texttt{cnetplot()} depicts the linkages of genes and KEGG pathways as a network. We can project the network into 2D space, or we can create a circular version of the graph. See each below.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# cnetplot}
+\FunctionTok{cnetplot}\NormalTok{(kegg\_results,  }
+         \AttributeTok{showCategory=}\DecValTok{10}\NormalTok{,}
+         \AttributeTok{node\_label=}\StringTok{"category"}\NormalTok{,}
+         \AttributeTok{color.params=}\FunctionTok{list}\NormalTok{(}\AttributeTok{foldChange =}\NormalTok{ fold\_change\_geneList),}
+         \AttributeTok{cex.params=}\FunctionTok{list}\NormalTok{(}\AttributeTok{gene\_label =} \FloatTok{0.1}\NormalTok{,}
+                         \AttributeTok{category\_label=}\FloatTok{0.5}\NormalTok{), }
+         \AttributeTok{max.overlaps=}\DecValTok{100}\NormalTok{) }\SpecialCharTok{+}
+  \CommentTok{\# change the color scale}
+  \FunctionTok{scale\_colour\_gradientn}\NormalTok{(}\AttributeTok{colours =} \FunctionTok{rev}\NormalTok{(RColorBrewer}\SpecialCharTok{::}\FunctionTok{brewer.pal}\NormalTok{(}\AttributeTok{n =} \DecValTok{10}\NormalTok{, }\AttributeTok{name =} \StringTok{"RdYlBu"}\NormalTok{)), }\AttributeTok{limits=}\FunctionTok{c}\NormalTok{(}\SpecialCharTok{{-}}\DecValTok{6}\NormalTok{, }\DecValTok{6}\NormalTok{)) }\SpecialCharTok{+}
+  \FunctionTok{labs}\NormalTok{(}\AttributeTok{colour=}\StringTok{"logFC"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Scale for size is already present.
+## Adding another scale for size, which will replace the existing scale.
+## Scale for colour is already present.
+## Adding another scale for colour, which will replace the existing scale.
+\end{verbatim}
+
+\begin{verbatim}
+## Warning: Removed 167 rows containing missing values (`geom_text_repel()`).
+\end{verbatim}
+
+\includegraphics{_main_files/figure-latex/kegg-cnetplot-KEGG-1.pdf}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# circular cnetplot}
+\FunctionTok{cnetplot}\NormalTok{(kegg\_results,  }
+         \AttributeTok{showCategory=}\DecValTok{6}\NormalTok{,}
+         \AttributeTok{circular=}\ConstantTok{TRUE}\NormalTok{, }\CommentTok{\# this changes the output graphing}
+         \AttributeTok{node\_label=}\StringTok{"category"}\NormalTok{,}
+         \AttributeTok{color.params=}\FunctionTok{list}\NormalTok{(}\AttributeTok{foldChange =}\NormalTok{ fold\_change\_geneList),}
+         \AttributeTok{cex.params=}\FunctionTok{list}\NormalTok{(}\AttributeTok{gene\_label =} \FloatTok{0.5}\NormalTok{,}
+                         \AttributeTok{category\_label=}\FloatTok{0.5}\NormalTok{), }
+         \AttributeTok{max.overlaps=}\DecValTok{100}\NormalTok{) }\SpecialCharTok{+}
+  \CommentTok{\# change the color scale}
+  \FunctionTok{scale\_colour\_gradientn}\NormalTok{(}\AttributeTok{colours =} \FunctionTok{rev}\NormalTok{(RColorBrewer}\SpecialCharTok{::}\FunctionTok{brewer.pal}\NormalTok{(}\AttributeTok{n =} \DecValTok{10}\NormalTok{, }\AttributeTok{name =} \StringTok{"RdYlBu"}\NormalTok{)), }\AttributeTok{limits=}\FunctionTok{c}\NormalTok{(}\SpecialCharTok{{-}}\DecValTok{6}\NormalTok{, }\DecValTok{6}\NormalTok{)) }\SpecialCharTok{+}
+  \FunctionTok{labs}\NormalTok{(}\AttributeTok{colour=}\StringTok{"logFC"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Scale for size is already present.
+## Adding another scale for size, which will replace the existing scale.
+## Scale for colour is already present.
+## Adding another scale for colour, which will replace the existing scale.
+\end{verbatim}
+
+\begin{verbatim}
+## Warning: Removed 137 rows containing missing values (`geom_text_repel()`).
+\end{verbatim}
+
+\begin{verbatim}
+## Warning: ggrepel: 4 unlabeled data points (too many overlaps). Consider
+## increasing max.overlaps
+\end{verbatim}
+
+\includegraphics{_main_files/figure-latex/kegg-cnetplot-KEGG-2.pdf}
+
+\hypertarget{heatplot}{%
+\section{heatplot}\label{heatplot}}
+
+The \texttt{heatplot} is similar to \texttt{cnetplot}, while displaying the relationships as a heatmap. The gene-concept network may become too complicated if you want to show a large number significant terms. The heatplot can simplify the result and more easy to identify expression patterns.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# heatplot}
+\FunctionTok{heatplot}\NormalTok{(kegg\_results, }\AttributeTok{showCategory=}\DecValTok{10}\NormalTok{, }\AttributeTok{foldChange =}\NormalTok{ fold\_change\_geneList) }\SpecialCharTok{+}
+  \CommentTok{\# the below code hides the messy overlapping gene names.}
+  \FunctionTok{theme}\NormalTok{(}\AttributeTok{axis.title.x=}\FunctionTok{element\_blank}\NormalTok{(),}
+        \AttributeTok{axis.text.x=}\FunctionTok{element\_blank}\NormalTok{(),}
+        \AttributeTok{axis.ticks.x=}\FunctionTok{element\_blank}\NormalTok{())}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{_main_files/figure-latex/kegg-heatplot-KEGG-1.pdf}
+
+\hypertarget{upsetplot}{%
+\section{upsetplot}\label{upsetplot}}
+
+The \texttt{upsetplot} shows the the overlaps and unique contributions of KEGG pathways across multiple gene sets. It helps to identify which KEGG pathways are shared or distinct between different conditions or experimental groups, providing insights into the common and specific KEGG pathways enriched in each set of genes. Here, the bars show number of genes in the category.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{enrichplot}\SpecialCharTok{::}\FunctionTok{upsetplot}\NormalTok{(kegg\_results)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{_main_files/figure-latex/kegg-enrichplot-KEGG-1.pdf}
+
+\hypertarget{emapplot}{%
+\section{emapplot}\label{emapplot}}
+
+The \texttt{emmapplot} enrichment map organizes enriched terms into a network with edges connecting overlapping gene sets. In this way, mutually overlapping gene sets are tend to cluster together, making it easy to identify functional modules.
+
+The \texttt{emapplot} function supports results obtained from hypergeometric test and gene set enrichment analysis. We have to first use the \texttt{pairwise\_termsim} function from the \texttt{enrichplot} package on the \texttt{kegg\_results} object in order to get a similarity matrix.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{x2 }\OtherTok{=}\NormalTok{ enrichplot}\SpecialCharTok{::}\FunctionTok{pairwise\_termsim}\NormalTok{(kegg\_results)}
+\FunctionTok{emapplot}\NormalTok{(x2, }
+         \AttributeTok{showCategory =} \DecValTok{30}\NormalTok{,}
+         \AttributeTok{cex.params =} \FunctionTok{list}\NormalTok{(}\AttributeTok{category\_label =} \FloatTok{0.4}\NormalTok{))}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{_main_files/figure-latex/kegg-emmapplot-KEGG-1.pdf}
+
+\hypertarget{gsea}{%
+\section{GSEA}\label{gsea}}
+
+KEGG pathway gene set enrichment analysis allows us to identify whether a particular set of genes associated with a KEGG pathway is enriched in a given gene list compared to what would be expected by chance.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# For gseKEGG, we need a gene list with na removed and sorted. let\textquotesingle{}s do that now.}
+\CommentTok{\# omit any NA values }
+\NormalTok{kegg\_gene\_list }\OtherTok{=} \FunctionTok{na.omit}\NormalTok{(fold\_change\_geneList)}
+
+\CommentTok{\# sort the list in decreasing order by FOLD CHANGE (required for this analysis)}
+\NormalTok{kegg\_gene\_list }\OtherTok{=} \FunctionTok{sort}\NormalTok{(kegg\_gene\_list, }\AttributeTok{decreasing =} \ConstantTok{TRUE}\NormalTok{)}
+
+\NormalTok{gse\_kegg }\OtherTok{\textless{}{-}} \FunctionTok{gseKEGG}\NormalTok{(}\AttributeTok{geneList     =}\NormalTok{ kegg\_gene\_list,}
+               \AttributeTok{organism     =} \StringTok{\textquotesingle{}sce\textquotesingle{}}\NormalTok{,}
+               \CommentTok{\# minGSSize    = 120,}
+               \AttributeTok{pvalueCutoff =} \FloatTok{0.05}\NormalTok{,}
+               \AttributeTok{verbose      =} \ConstantTok{FALSE}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Warning in fgseaMultilevel(pathways = pathways, stats = stats, minSize =
+## minSize, : For some pathways, in reality P-values are less than 1e-10. You can
+## set the `eps` argument to zero for better estimation.
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{head}\NormalTok{(gse\_kegg)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##                ID
+## sce03010 sce03010
+## sce03008 sce03008
+## sce00500 sce00500
+## sce03020 sce03020
+## sce04213 sce04213
+## sce00520 sce00520
+##                                                                                         Description
+## sce03010                                        Ribosome - Saccharomyces cerevisiae (budding yeast)
+## sce03008               Ribosome biogenesis in eukaryotes - Saccharomyces cerevisiae (budding yeast)
+## sce00500                   Starch and sucrose metabolism - Saccharomyces cerevisiae (budding yeast)
+## sce03020                                  RNA polymerase - Saccharomyces cerevisiae (budding yeast)
+## sce04213 Longevity regulating pathway - multiple species - Saccharomyces cerevisiae (budding yeast)
+## sce00520     Amino sugar and nucleotide sugar metabolism - Saccharomyces cerevisiae (budding yeast)
+##          setSize enrichmentScore   NES   pvalue p.adjust   qvalue rank
+## sce03010     174           0.620  2.64 1.00e-10 1.01e-08 8.00e-09 1481
+## sce03008      74           0.660  2.53 5.27e-10 2.47e-08 1.95e-08 1094
+## sce00500      39          -0.857 -2.21 7.33e-10 2.47e-08 1.95e-08  319
+## sce03020      31           0.723  2.35 1.96e-06 4.94e-05 3.92e-05 1091
+## sce04213      38          -0.770 -1.98 1.29e-05 2.61e-04 2.07e-04  615
+## sce00520      31          -0.796 -2.00 1.65e-05 2.77e-04 2.20e-04  166
+##                            leading_edge
+## sce03010 tags=68%, list=26%, signal=52%
+## sce03008 tags=68%, list=19%, signal=55%
+## sce00500  tags=49%, list=6%, signal=46%
+## sce03020 tags=68%, list=19%, signal=55%
+## sce04213 tags=50%, list=11%, signal=45%
+## sce00520  tags=29%, list=3%, signal=28%
+##                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  core_enrichment
+## sce03010 YLR406C/YIL069C/YKL156W/YNL002C/YDR471W/YMR194W/YOR234C/YGR085C/YBR189W/YPL198W/YGR214W/YDL082W/YFL034C-A/YNL096C/YHL033C/YJL177W/YIL133C/YNL067W/YHL001W/YOL121C/YOR312C/YLR448W/YDR025W/YOR293W/YPL079W/YLR061W/YJL190C/YML063W/YDR447C/YGL076C/YDR500C/YLR344W/YLR048W/YER131W/YOR096W/YDR418W/YML026C/YDL083C/YNL301C/YEL054C/YBL027W/YGR148C/YDL136W/YBR181C/YER117W/YMR142C/YNL162W/YML073C/YER102W/YLR325C/YKR057W/YBR191W/YLR441C/YGR034W/YFR031C-A/YDL075W/YKR094C/YER074W/YCR003W/YHR010W/YLR009W/YPL090C/YHR141C/YGL123W/YLL045C/YER056C-A/YHR203C/YMR230W/YDR405W/YOR063W/YMR242C/YJL136C/YLR167W/YGR118W/YLR264W/YNL302C/YPR102C/YKL180W/YPR132W/YBR084C-A/YLR029C/YPL249C-A/YDR450W/YJL191W/YJR123W/YLR388W/YDL191W/YBL072C/YIL052C/YMR143W/YDR064W/YNL178W/YPL081W/YBL087C/YNL069C/YOL127W/YGL031C/YBL092W/YOL120C/YML024W/YPR043W/YJR145C/YOR182C/YDL133C-A/YLR333C/YBR048W/YFR032C-A/YLR340W/YHL004W/YPL143W/YIL018W/YLR367W/YGL030W/YDL202W/YML025C/YJR094W-A/YGL189C/YJL189W/YLR185W
+## sce03008                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         YOR119C/YDR449C/YNL132W/YLR106C/YLL034C/YLR186W/YJL069C/YOR310C/YKL186C/YLR175W/YLR197W/YDL014W/YHR170W/YNL282W/YDL208W/YHR089C/YPL093W/YDL166C/YOR056C/YGR030C/YNL075W/YCR057C/YJL109C/YLR222C/YML093W/YHR148W/YGR128C/YOL010W/YLR129W/YLR409C/YLR022C/YHR196W/YDR339C/YPL217C/YMR239C/YBL018C/YOR048C/YDR324C/YLR397C/YGR090W/YBR167C/YEL026W/YPL043W/YNL207W/YBR257W/YDR398W/YJR002W/YGL099W/YIL035C/YNR053C
+## sce00500                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 YBR001C/YOL157C/YKR058W/YPR026W/YCL040W/YMR261C/YPR184W/YDR074W/YDR001C/YBR126C/YKL035W/YDR516C/YEL011W/YLR258W/YFR015C/YMR105C/YPR160W/YML100W/YFR053C
+## sce03020                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               YOR340C/YPR010C/YNL113W/YKL144C/YPR110C/YOR341W/YNL151C/YNL248C/YJL148W/YJR063W/YBR154C/YHR143W-A/YIL021W/YOR207C/YOR224C/YOR210W/YPR187W/YDL150W/YDR045C/YKR025W/YGL070C
+## sce04213                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 YER103W/YFL033C/YDR256C/YPL203W/YDR096W/YLL024C/YJL005W/YHR008C/YMR037C/YKL062W/YNL098C/YPL015C/YJL164C/YBL075C/YAL005C/YLL026W/YGL037C/YDR258C/YGR088W
+## sce00520                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 YML087C/YMR084W/YMR278W/YCL040W/YKL150W/YKL035W/YDR516C/YMR105C/YFR053C
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# let\textquotesingle{}s turn this into a searchable table for the knit file.}
+\FunctionTok{data.frame}\NormalTok{(gse\_kegg) }\SpecialCharTok{\%\textgreater{}\%} \FunctionTok{reactable}\NormalTok{()}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{_main_files/figure-latex/gse-tableResults-KEGG-1.pdf}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# shorten the gse\_kegg descriptions that are too long}
+\NormalTok{gse\_kegg}\SpecialCharTok{@}\NormalTok{result}\SpecialCharTok{$}\NormalTok{Description }\OtherTok{\textless{}{-}}\NormalTok{ gse\_kegg}\SpecialCharTok{@}\NormalTok{result}\SpecialCharTok{$}\NormalTok{Description }\SpecialCharTok{\%\textgreater{}\%} 
+  \FunctionTok{str\_replace\_all}\NormalTok{(., }\FunctionTok{fixed}\NormalTok{(}\StringTok{" {-} Saccharomyces cerevisiae"}\NormalTok{), }\StringTok{""}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\hypertarget{gsekegg-vs-enrichkegg}{%
+\subsection{\texorpdfstring{\texttt{gseKEGG} vs \texttt{enrichKEGG}}{gseKEGG vs enrichKEGG}}\label{gsekegg-vs-enrichkegg}}
+
+What is the difference, and when to use each?
+
+Both \texttt{gseKEGG} and \texttt{enrichKEGG} functions are used for gene set enrichment analysis (GSEA) focusing on KEGG pathways, but they have different underlying methodologies and purposes.
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\item
+  gseKEGG:
+
+  Methodology:
+  Gene Set Test (GSE): \texttt{gseKEGG} employs a gene set test approach. It calculates an enrichment score for each KEGG pathway based on the distribution of genes within the pathway in the ranked list of genes (usually by their differential expression values).
+  Permutations: The method involves permutations to assess the statistical significance of the enrichment scores.
+
+  Output:
+  The output is a \texttt{GSEAResult} object containing information about the enriched KEGG pathways, including their names, enrichment scores, and p-values.
+
+  Use Case:
+  \texttt{gseKEGG} is suitable when you have a ranked list of genes based on some criteria (e.g., differential expression) and want to perform GSEA to identify KEGG pathways associated with these genes.
+\item
+  enrichKEGG:
+
+  Methodology:
+  Over-Representation Analysis (ORA): \texttt{enrichKEGG} uses an over-representation analysis approach. It tests whether a predefined set of genes associated with a KEGG pathway is overrepresented in a given gene list compared to what would be expected by chance.
+  Hypergeometric Test: The statistical significance is often assessed using a hypergeometric test.
+
+  Output:
+  The output is a data frame containing information about the enriched KEGG pathways, including names, p-values, and other statistics.
+
+  Use Case:
+  \texttt{enrichKEGG} is appropriate when you have a gene list and want to identify KEGG pathways that are significantly enriched in that list. It doesn't require a ranked list of genes.
+\end{enumerate}
+
+Which to Choose:
+
+\begin{verbatim}
+If you have a ranked list of genes (e.g., based on differential expression) and want to perform GSEA, use `gseKEGG`.
+
+If you have a gene list and want to identify overrepresented pathways without ranking genes, use `enrichKEGG`.
+\end{verbatim}
+
+In summary, the choice between \texttt{gseKEGG} and \texttt{enrichKEGG} depends on your data and the analysis you want to perform. Both methods can provide insights into the functional enrichment of gene sets (KEGG pathways, in this case) in the context of different experimental conditions.
+
+\hypertarget{gsea-visualization}{%
+\subsection{GSEA visualization}\label{gsea-visualization}}
+
+We can also visualize the outputs of \texttt{gseKEGG} using the same functions as above.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{dotplot}\NormalTok{(gse\_kegg, }\AttributeTok{showCategory =} \DecValTok{3}\NormalTok{, }\AttributeTok{title =} \StringTok{"Enriched Pathways"}\NormalTok{ , }\AttributeTok{split=}\StringTok{".sign"}\NormalTok{) }\SpecialCharTok{+} \FunctionTok{facet\_grid}\NormalTok{(.}\SpecialCharTok{\textasciitilde{}}\NormalTok{.sign)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{_main_files/figure-latex/gse-dotplot-KEGG-1.pdf}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# enrichplots of the gseaResult object}
+\NormalTok{enrichplot}\SpecialCharTok{::}\FunctionTok{upsetplot}\NormalTok{(gse\_kegg)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{_main_files/figure-latex/gse-dotplot-KEGG-2.pdf}
+
+There are also visualizations specific to the \texttt{gseaResult} output of \texttt{gseKEGG}, shown below. We can see where in the rankings the genes belonging to a given KEGG group are found relative to the entire ranked list. We can change the \texttt{geneSetID} value to get other KEGG pathways.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Visualize the ranking of the genes by set}
+\FunctionTok{gseaplot}\NormalTok{(gse\_kegg, }\AttributeTok{geneSetID =} \DecValTok{1}\NormalTok{, }\AttributeTok{by =} \StringTok{"preranked"}\NormalTok{, }\AttributeTok{title =}\NormalTok{ gse\_kegg}\SpecialCharTok{$}\NormalTok{Description[}\DecValTok{1}\NormalTok{])}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{_main_files/figure-latex/gse-gseaplot-KEGG-1.pdf}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{gseaplot}\NormalTok{(gse\_kegg, }\AttributeTok{geneSetID =} \DecValTok{2}\NormalTok{, }\AttributeTok{by =} \StringTok{"preranked"}\NormalTok{, }\AttributeTok{title =}\NormalTok{ gse\_kegg}\SpecialCharTok{$}\NormalTok{Description[}\DecValTok{2}\NormalTok{])}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{_main_files/figure-latex/gse-gseaplot-KEGG-2.pdf}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{gseaplot}\NormalTok{(gse\_kegg, }\AttributeTok{geneSetID =} \DecValTok{3}\NormalTok{, }\AttributeTok{by =} \StringTok{"preranked"}\NormalTok{, }\AttributeTok{title =}\NormalTok{ gse\_kegg}\SpecialCharTok{$}\NormalTok{Description[}\DecValTok{3}\NormalTok{])}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{_main_files/figure-latex/gse-gseaplot-KEGG-3.pdf}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{gseaplot}\NormalTok{(gse\_kegg, }\AttributeTok{geneSetID =} \DecValTok{4}\NormalTok{, }\AttributeTok{by =} \StringTok{"preranked"}\NormalTok{, }\AttributeTok{title =}\NormalTok{ gse\_kegg}\SpecialCharTok{$}\NormalTok{Description[}\DecValTok{4}\NormalTok{])}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{_main_files/figure-latex/gse-gseaplot-KEGG-4.pdf}
+
+In addition to the plot above, we can create plots with more details by not included the \texttt{by="preranked"} argument. We can now see the calculated enrichment score across the list for this gene set.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# take a closer look at the RNA polymerase genes}
+\FunctionTok{gseaplot}\NormalTok{(gse\_kegg, }\AttributeTok{geneSetID =} \DecValTok{4}\NormalTok{, }\AttributeTok{title =}\NormalTok{ gse\_kegg}\SpecialCharTok{$}\NormalTok{Description[}\DecValTok{4}\NormalTok{])}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{_main_files/figure-latex/gse-gseaplotEnrichScore-KEGG-1.pdf}
+What if we want to look at multiple together KEGG pathways simultaneously? We can do that with \texttt{gseaplot2} from the \texttt{enrichplot} package. Here we look at the first 3 KEGG pathways together.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# gseaplot2 multiple KEGG pathway enrichments}
+\NormalTok{enrichplot}\SpecialCharTok{::}\FunctionTok{gseaplot2}\NormalTok{(gse\_kegg, }\AttributeTok{geneSetID =} \DecValTok{1}\SpecialCharTok{:}\DecValTok{3}\NormalTok{, }\AttributeTok{pvalue\_table =} \ConstantTok{TRUE}\NormalTok{,}
+          \AttributeTok{color =} \FunctionTok{c}\NormalTok{(}\StringTok{"\#E495A5"}\NormalTok{, }\StringTok{"\#86B875"}\NormalTok{, }\StringTok{"\#7DB0DD"}\NormalTok{), }\AttributeTok{ES\_geom =} \StringTok{"dot"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{_main_files/figure-latex/gse-multipleGseaplot2-KEGG-1.pdf}
+
+\hypertarget{questions-7}{%
+\section{Questions}\label{questions-7}}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\item
+  Can you explain the concept of gene set enrichment analysis and its relevance in functional genomics?
+\item
+  How would you interpret the results obtained from clusterProfiler, specifically focusing on enriched terms and associated p-values?
+\item
+  Compare and contrast KEGG enrichment with other tools or methods used for functional enrichment analysis.
+\item
+  Can you find the KEGG organism for the organism that you are interested in?
+\end{enumerate}
+
+Be sure to knit this file into a pdf or html file once you're finished.
+
+System information for reproducibility:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{pander}\SpecialCharTok{::}\FunctionTok{pander}\NormalTok{(}\FunctionTok{sessionInfo}\NormalTok{())}
+\end{Highlighting}
+\end{Shaded}
+
+\textbf{R version 4.3.1 (2023-06-16)}
+
+\textbf{Platform:} aarch64-apple-darwin20 (64-bit)
+
+\textbf{locale:}
+en\_US.UTF-8\textbar\textbar en\_US.UTF-8\textbar\textbar en\_US.UTF-8\textbar\textbar C\textbar\textbar en\_US.UTF-8\textbar\textbar en\_US.UTF-8
+
+\textbf{attached base packages:}
+\emph{stats4}, \emph{stats}, \emph{graphics}, \emph{grDevices}, \emph{utils}, \emph{datasets}, \emph{methods} and \emph{base}
+
+\textbf{other attached packages:}
+\emph{ggfx(v.1.0.1)}, \emph{patchwork(v.1.1.3)}, \emph{ggkegg(v.0.99.4)}, \emph{tidygraph(v.1.2.3)}, \emph{XML(v.3.99-0.14)}, \emph{ggraph(v.2.1.0)}, \emph{KEGGgraph(v.1.62.0)}, \emph{ggupset(v.0.3.0)}, \emph{pathview(v.1.42.0)}, \emph{BiocFileCache(v.2.10.0)}, \emph{dbplyr(v.2.3.4)}, \emph{DOSE(v.3.28.0)}, \emph{NbClust(v.3.0.1)}, \emph{factoextra(v.1.0.7)}, \emph{ggrepel(v.0.9.4)}, \emph{viridis(v.0.6.4)}, \emph{viridisLite(v.0.4.2)}, \emph{scales(v.1.2.1)}, \emph{Glimma(v.2.12.0)}, \emph{DESeq2(v.1.41.12)}, \emph{edgeR(v.3.99.5)}, \emph{limma(v.3.58.0)}, \emph{reactable(v.0.4.4)}, \emph{webshot2(v.0.1.1)}, \emph{statmod(v.1.5.0)}, \emph{Rsubread(v.2.16.0)}, \emph{ShortRead(v.1.60.0)}, \emph{GenomicAlignments(v.1.38.0)}, \emph{SummarizedExperiment(v.1.32.0)}, \emph{MatrixGenerics(v.1.14.0)}, \emph{matrixStats(v.1.0.0)}, \emph{Rsamtools(v.2.18.0)}, \emph{GenomicRanges(v.1.54.0)}, \emph{Biostrings(v.2.70.1)}, \emph{GenomeInfoDb(v.1.38.0)}, \emph{XVector(v.0.42.0)}, \emph{BiocParallel(v.1.36.0)}, \emph{Rfastp(v.1.12.0)}, \emph{org.Sc.sgd.db(v.3.18.0)}, \emph{AnnotationDbi(v.1.64.0)}, \emph{IRanges(v.2.36.0)}, \emph{S4Vectors(v.0.40.0)}, \emph{Biobase(v.2.62.0)}, \emph{BiocGenerics(v.0.48.0)}, \emph{clusterProfiler(v.4.10.0)}, \emph{ggVennDiagram(v.1.2.3)}, \emph{tidytree(v.0.4.5)}, \emph{igraph(v.1.5.1)}, \emph{janitor(v.2.2.0)}, \emph{BiocManager(v.1.30.22)}, \emph{pander(v.0.6.5)}, \emph{knitr(v.1.44)}, \emph{here(v.1.0.1)}, \emph{lubridate(v.1.9.3)}, \emph{forcats(v.1.0.0)}, \emph{stringr(v.1.5.0)}, \emph{dplyr(v.1.1.3)}, \emph{purrr(v.1.0.2)}, \emph{readr(v.2.1.4)}, \emph{tidyr(v.1.3.0)}, \emph{tibble(v.3.2.1)}, \emph{ggplot2(v.3.4.4)}, \emph{tidyverse(v.2.0.0)} and \emph{pacman(v.0.5.1)}
+
+\textbf{loaded via a namespace (and not attached):}
+\emph{fs(v.1.6.3)}, \emph{bitops(v.1.0-7)}, \emph{enrichplot(v.1.22.0)}, \emph{webshot(v.0.5.5)}, \emph{HDO.db(v.0.99.1)}, \emph{httr(v.1.4.7)}, \emph{RColorBrewer(v.1.1-3)}, \emph{Rgraphviz(v.2.46.0)}, \emph{tools(v.4.3.1)}, \emph{utf8(v.1.2.4)}, \emph{R6(v.2.5.1)}, \emph{lazyeval(v.0.2.2)}, \emph{GetoptLong(v.1.0.5)}, \emph{withr(v.2.5.1)}, \emph{gridExtra(v.2.3)}, \emph{textshaping(v.0.3.7)}, \emph{cli(v.3.6.1)}, \emph{Cairo(v.1.6-1)}, \emph{scatterpie(v.0.2.1)}, \emph{labeling(v.0.4.3)}, \emph{systemfonts(v.1.0.5)}, \emph{yulab.utils(v.0.1.0)}, \emph{gson(v.0.1.0)}, \emph{rstudioapi(v.0.15.0)}, \emph{RSQLite(v.2.3.1)}, \emph{generics(v.0.1.3)}, \emph{gridGraphics(v.0.5-1)}, \emph{hwriter(v.1.3.2.1)}, \emph{crosstalk(v.1.2.0)}, \emph{GO.db(v.3.18.0)}, \emph{Matrix(v.1.6-1.1)}, \emph{interp(v.1.1-4)}, \emph{fansi(v.1.0.5)}, \emph{abind(v.1.4-5)}, \emph{lifecycle(v.1.0.3)}, \emph{yaml(v.2.3.7)}, \emph{snakecase(v.0.11.1)}, \emph{qvalue(v.2.34.0)}, \emph{SparseArray(v.1.2.0)}, \emph{grid(v.4.3.1)}, \emph{blob(v.1.2.4)}, \emph{promises(v.1.2.1)}, \emph{crayon(v.1.5.2)}, \emph{lattice(v.0.22-5)}, \emph{cowplot(v.1.1.1)}, \emph{chromote(v.0.1.2)}, \emph{KEGGREST(v.1.42.0)}, \emph{magick(v.2.8.1)}, \emph{pillar(v.1.9.0)}, \emph{fgsea(v.1.28.0)}, \emph{rjson(v.0.2.21)}, \emph{codetools(v.0.2-19)}, \emph{fastmatch(v.1.1-4)}, \emph{glue(v.1.6.2)}, \emph{ggfun(v.0.1.3)}, \emph{data.table(v.1.14.8)}, \emph{remotes(v.2.4.2.1)}, \emph{vctrs(v.0.6.4)}, \emph{png(v.0.1-8)}, \emph{treeio(v.1.26.0)}, \emph{gtable(v.0.3.4)}, \emph{reactR(v.0.5.0)}, \emph{cachem(v.1.0.8)}, \emph{xfun(v.0.40)}, \emph{S4Arrays(v.1.2.0)}, \emph{mime(v.0.12)}, \emph{RVenn(v.1.1.0)}, \emph{interactiveDisplayBase(v.1.40.0)}, \emph{ellipsis(v.0.3.2)}, \emph{nlme(v.3.1-163)}, \emph{ggtree(v.3.10.0)}, \emph{bit64(v.4.0.5)}, \emph{filelock(v.1.0.2)}, \emph{rprojroot(v.2.0.3)}, \emph{colorspace(v.2.1-0)}, \emph{DBI(v.1.1.3)}, \emph{tidyselect(v.1.2.0)}, \emph{processx(v.3.8.2)}, \emph{bit(v.4.0.5)}, \emph{compiler(v.4.3.1)}, \emph{curl(v.5.1.0)}, \emph{graph(v.1.80.0)}, \emph{DelayedArray(v.0.28.0)}, \emph{bookdown(v.0.36)}, \emph{shadowtext(v.0.1.2)}, \emph{rappdirs(v.0.3.3)}, \emph{digest(v.0.6.33)}, \emph{rmarkdown(v.2.25)}, \emph{htmltools(v.0.5.6.1)}, \emph{pkgconfig(v.2.0.3)}, \emph{jpeg(v.0.1-10)}, \emph{fastmap(v.1.1.1)}, \emph{rlang(v.1.1.1)}, \emph{GlobalOptions(v.0.1.2)}, \emph{htmlwidgets(v.1.6.2)}, \emph{shiny(v.1.7.5.1)}, \emph{farver(v.2.1.1)}, \emph{jsonlite(v.1.8.7)}, \emph{GOSemSim(v.2.28.0)}, \emph{RCurl(v.1.98-1.12)}, \emph{magrittr(v.2.0.3)}, \emph{GenomeInfoDbData(v.1.2.11)}, \emph{ggplotify(v.0.1.2)}, \emph{munsell(v.0.5.0)}, \emph{Rcpp(v.1.0.11)}, \emph{ggnewscale(v.0.4.9)}, \emph{ape(v.5.7-1)}, \emph{stringi(v.1.7.12)}, \emph{zlibbioc(v.1.48.0)}, \emph{MASS(v.7.3-60)}, \emph{AnnotationHub(v.3.10.0)}, \emph{plyr(v.1.8.9)}, \emph{org.Hs.eg.db(v.3.18.0)}, \emph{parallel(v.4.3.1)}, \emph{HPO.db(v.0.99.2)}, \emph{deldir(v.1.0-9)}, \emph{graphlayouts(v.1.0.1)}, \emph{splines(v.4.3.1)}, \emph{hms(v.1.1.3)}, \emph{locfit(v.1.5-9.8)}, \emph{ps(v.1.7.5)}, \emph{reshape2(v.1.4.4)}, \emph{BiocVersion(v.3.18.0)}, \emph{evaluate(v.0.22)}, \emph{latticeExtra(v.0.6-30)}, \emph{tzdb(v.0.4.0)}, \emph{tweenr(v.2.0.2)}, \emph{httpuv(v.1.6.12)}, \emph{polyclip(v.1.10-6)}, \emph{ggforce(v.0.4.1)}, \emph{xtable(v.1.8-4)}, \emph{MPO.db(v.0.99.7)}, \emph{later(v.1.3.1)}, \emph{ragg(v.1.2.6)}, \emph{websocket(v.1.4.1)}, \emph{aplot(v.0.2.2)}, \emph{memoise(v.2.0.1)} and \emph{timechange(v.0.2.0)}
 
   \bibliography{book.bib,packages.bib}
 

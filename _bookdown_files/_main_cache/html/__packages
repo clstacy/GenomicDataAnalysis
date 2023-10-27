@@ -50,3 +50,15 @@ viridis
 ggrepel
 factoextra
 NbClust
+dbplyr
+BiocFileCache
+pathview
+ggupset
+KEGGgraph
+ggraph
+XML
+tidygraph
+ggkegg
+patchwork
+ggfx
+DOSE
