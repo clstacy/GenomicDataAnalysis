@@ -1,6 +1,6 @@
---- 
+---
 title: "Genomic Data Analysis Course Exercises"
-author: "Carson Stacy"
+author: "Carson Stacy & Jeffrey Lewis"
 date: "`r Sys.Date()`"
 site: bookdown::bookdown_site
 documentclass: book
@@ -13,42 +13,30 @@ link-citations: yes
 github-repo: clstacy/GenomicDataAnalysis
 ---
 
-# About
+# Preface {.unnumbered}
 
-This is a compilation of exercises created for a graduate level course in Genomic Data Analysis at the University of Arkansas.
+This online resource is a compilation of exercises created for a graduate level course in Genomic Data Analysis at the University of Arkansas, taught by [Dr. Jeffrey Lewis](thelewislab.com). The exercises included have been developed by graduate student [Carson Stacy](clstacy.github.io) in collaboration with Dr. Jeffrey Lewis.
 
-## Usage 
+## Usage
 
-Each **bookdown** chapter is an .Rmd file, and each .Rmd file can contain one (and only one) chapter. A chapter *must* start with a first-level heading: `# A good chapter`, and can contain one (and only one) first-level heading.
+Each chapter corresponds to a class exercise, most of which are completed in R. There are .Rmd files available for each of the chapters available [here](https://github.com/clstacy/GenomicDataAnalysis_Fa23/tree/main/exercises), where you can complete the exercises yourself.
 
-Use second-level and higher headings within chapters like: `## A short section` or `### An even shorter section`.
+## **Key Features**
 
-The `index.Rmd` file is required, and is also your first book chapter. It will be the homepage when you render the book.
+-   **Real Genomic Datasets:** Explore exercises using genuine genomic datasets. This hands-on experience allows users to bridge theoretical knowledge with practical application, mirroring the challenges encountered in real-world genomics research.
 
-## Render book
+-   **Focus on Biological Context:** Beyond coding, the exercises emphasize the biological questions addressed by genomic data analysis. Understanding the context behind the code is crucial for meaningful interpretation of results in genomics research.
 
-You can render the HTML version of this example book without changing anything:
-
-1. Find the **Build** pane in the RStudio IDE, and
-
-1. Click on **Build Book**, then select your output format, or select "All formats" if you'd like to use multiple formats from the same book source files.
-
-Or build the book from the R console:
-
-```{r, eval=FALSE}
-bookdown::render_book()
+```{=html}
+<!-- -->
 ```
+-   **Self-Paced Learning:** Tailor your learning experience to your pace. The exercises are designed to accommodate a range of skill levels, allowing users to progress gradually and revisit concepts as needed.
 
-To render this example to PDF as a `bookdown::pdf_book`, you'll need to install XeLaTeX. You are recommended to install TinyTeX (which includes XeLaTeX): <https://yihui.org/tinytex/>.
-
-## Preview book
-
-As you work, you may start a local server to live preview this HTML book. This preview will update as you edit the book when you save individual .Rmd files. You can start the server in a work session by using the RStudio add-in "Preview book", or from the R console:
+**Happy Learning!** 🧬📊
 
 ```{r eval=FALSE}
 bookdown::serve_book()
 ```
-
 
 ```{r include=FALSE}
 # automatically create a bib database for R packages
@@ -56,3 +44,7 @@ knitr::write_bib(c(
   .packages(), 'bookdown', 'knitr', 'rmarkdown'
 ), 'packages.bib')
 ```
+
+## Disclaimer
+
+The exercises included are a compilation of resources we have worked with through the years. Earnest attempts has been made to give credit where credit is due, but we can provide no guarantee to the origins of every piece of this document.

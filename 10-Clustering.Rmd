@@ -27,8 +27,8 @@ There are lots of software packages that will perform clustering analysis. One o
 
 Cluster reads in tab-delimited text files with a minimum of 1 column with the gene IDs, columns of your expression values (generally logFC, but can be TPMs), and then a row with column names. I also include an extra column with gene annotations and gene weight (GWEIGHT, all set to 1 to start) and experiment weight (EWEIGHT, also set to 1 for all). More on what weights are to follow. To open a PCL file, select from the Cluster drop-down menu "File" -\> "Open Data."
 
-```{r PCL_file-clustering, include=FALSE}
-knitr::include_graphics("https://github.com/clstacy/GenomicDataAnalysis_Fa23/raw/main/figures/PCL_File.png")
+```{r PCL_file-clustering, echo=FALSE}
+knitr::include_graphics(normalizePath("figures/PCL_File.png"))
 ```
 
 <!-- ![](https://github.com/clstacy/GenomicDataAnalysis_Fa23/raw/main/figures/PCL_File.png){width="750"} -->
@@ -48,8 +48,8 @@ Cluster allows filtering on:
 
 I generally filter on 80% or 100% present, and will often only include significantly differentially expressed genes in my PCL file (instead of applying a specific filter).
 
-```{r filter-data-clustering, include=FALSE}
-knitr::include_graphics("https://github.com/clstacy/GenomicDataAnalysis_Fa23/raw/main/figures/Filter_Data.png")
+```{r filter-data-clustering, echo=FALSE}
+knitr::include_graphics(normalizePath("figures/Filter_Data.png"))
 ```
 
 <!-- ![](https://github.com/clstacy/GenomicDataAnalysis_Fa23/raw/main/figures/Filter_Data.png){width="500"} -->
@@ -63,7 +63,7 @@ By default, all experiments (arrays) are treated equally (set to 1). Sometimes y
 This is implemented through the following equation, where L is the local density score for each row (i):
 
 $$
-L(i) = \sum_{j\ with\ d(i,j)<k} (\frac{k-d(i,j)}{k})^n
+L(i) = \sum_{j\ with\ d(i,j)<k} \bigg(\frac{k-d(i,j)}{k}\bigg)^n
 $$
 <!-- ![](https://github.com/clstacy/GenomicDataAnalysis_Fa23/raw/main/figures/Weight_equation.png){width="300"} -->
 
@@ -73,8 +73,8 @@ The outputs of Cluster will be a clustered data table (JobName.cdt), and the gen
 
 **Make sure your job name is informative (e.g., EtOH_Response_CenteredPearson_CentroidDistance).**
 
-```{r calculate-weights-clustering, include=FALSE}
-knitr::include_graphics("https://github.com/clstacy/GenomicDataAnalysis_Fa23/raw/main/figures/Calculating_Weights.png")
+```{r calculate-weights-clustering, echo=FALSE}
+knitr::include_graphics(normalizePath("figures/Calculating_Weights.png"))
 ```
 
 <!-- ![](https://github.com/clstacy/GenomicDataAnalysis_Fa23/raw/main/figures/Calculating_Weights.png){width="500"} -->
@@ -119,8 +119,8 @@ fviz_nbclust(PCL_nbclust, kmeans, nstart = 25,  method = "gap_stat", nboot = 50)
 
 Treeview uses the cdt file to generate a heat map of the clustered data and the gtr/atr files to draw the tree (similar to a phylogenetic tree). Here's an example heat map.
 
-```{r TreeView-heatmap-clustering, include=FALSE}
-knitr::include_graphics("https://github.com/clstacy/GenomicDataAnalysis_Fa23/raw/main/figures/TreeView_Heatmap.png")
+```{r TreeView-heatmap-clustering, echo=FALSE}
+knitr::include_graphics(normalizePath("figures/TreeView_Heatmap.png"))
 ```
 <!-- ![](https://github.com/clstacy/GenomicDataAnalysis_Fa23/raw/main/figures/TreeView_Heatmap.png) -->
 
@@ -130,8 +130,8 @@ The large panel in the middle is the heat map of all the data (global), with eac
 
 The colors on the heat map are user defined by the pixel settings tab, where you can set the max logFC for the color scheme and change the colors for the positive, negative, and zero values. The default for the global tree is to not show the full scale, but you can set it to "fill" to fit the entire screen.
 
-```{r pixel-settings-clustering, include=FALSE}
-knitr::include_graphics("https://github.com/clstacy/GenomicDataAnalysis_Fa23/raw/main/figures/Pixel_Settings.png")
+```{r pixel-settings-clustering, echo=FALSE}
+knitr::include_graphics(normalizePath("figures/Pixel_Settings.png"))
 ```
 
 <!-- ![](https://github.com/clstacy/GenomicDataAnalysis_Fa23/raw/main/figures/Pixel_Settings.png){width="500"} -->
@@ -140,15 +140,15 @@ knitr::include_graphics("https://github.com/clstacy/GenomicDataAnalysis_Fa23/raw
 
 When picking out clusters of genes, we often want to know their functional enrichments. We can select groups of genes by clicking on the "Export" tab and then "Save List."
 
-```{r export-list-clustering, include=FALSE}
-knitr::include_graphics("https://github.com/clstacy/GenomicDataAnalysis_Fa23/raw/main/figures/Exporting_List.png")
+```{r export-list-clustering, echo=FALSE}
+knitr::include_graphics(normalizePath("figures/Exporting_List.png"))
 ```
 <!-- ![](https://github.com/clstacy/GenomicDataAnalysis_Fa23/raw/main/figures/Exporting_List.png){width="500"} -->
 
 The resulting list can then be either copy and pasted into Excel or saved directly as a text file. The lists can then be used as inputs for clusterProfiler or online enrichment analysis tools (such as the Princeton Go Finder).
 
-```{r Exported_Gene_List-clustering, include=FALSE}
-knitr::include_graphics("https://github.com/clstacy/GenomicDataAnalysis_Fa23/raw/main/figures/Exported_Gene_List.png")
+```{r Exported_Gene_List-clustering, echo=FALSE}
+knitr::include_graphics(normalizePath("figures/Exported_Gene_List.png"))
 ```
 <!-- ![](https://github.com/clstacy/GenomicDataAnalysis_Fa23/raw/main/figures/Exported_Gene_List.png){width="500"} -->
 

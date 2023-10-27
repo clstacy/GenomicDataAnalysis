@@ -1,7 +1,6 @@
-about
 usage
-render-book
-preview-book
+key-features
+disclaimer
 getting-started-in-r
 exercise-description
 learning-outcomes
