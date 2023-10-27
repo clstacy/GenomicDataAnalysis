@@ -1,0 +1,1102 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>Chapter 12 Motif Analysis: MEME Suite | Genomic Data Analysis Course Exercises</title>
+  <meta name="description" content="These are exercises created for the 2023 course: Genomic Data Analysis at the University of Arkansas." />
+  <meta name="generator" content="bookdown 0.36 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="Chapter 12 Motif Analysis: MEME Suite | Genomic Data Analysis Course Exercises" />
+  <meta property="og:type" content="book" />
+  
+  <meta property="og:description" content="These are exercises created for the 2023 course: Genomic Data Analysis at the University of Arkansas." />
+  <meta name="github-repo" content="clstacy/GenomicDataAnalysis" />
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Chapter 12 Motif Analysis: MEME Suite | Genomic Data Analysis Course Exercises" />
+  
+  <meta name="twitter:description" content="These are exercises created for the 2023 course: Genomic Data Analysis at the University of Arkansas." />
+  
+
+<meta name="author" content="Carson Stacy &amp; Jeffrey Lewis" />
+
+
+<meta name="date" content="2023-10-27" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="kegg-analysis.html"/>
+
+<script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+<link href="libs/anchor-sections-1.1.0/anchor-sections.css" rel="stylesheet" />
+<link href="libs/anchor-sections-1.1.0/anchor-sections-hash.css" rel="stylesheet" />
+<script src="libs/anchor-sections-1.1.0/anchor-sections.js"></script>
+<script src="libs/core-js-2.5.3/shim.min.js"></script>
+<script src="libs/react-18.2.0/react.min.js"></script>
+<script src="libs/react-18.2.0/react-dom.min.js"></script>
+<script src="libs/reactwidget-1.0.0/react-tools.js"></script>
+<script src="libs/htmlwidgets-1.6.2/htmlwidgets.js"></script>
+<link href="libs/reactable-0.4.4/reactable.css" rel="stylesheet" />
+<script src="libs/reactable-binding-0.4.4/reactable.js"></script>
+<link href="libs/datatables-1/datatables.css" rel="stylesheet" />
+<script src="libs/datatables-1/datatables.min.js"></script>
+<link href="libs/vega-1/vega_plots.css" rel="stylesheet" />
+<script src="libs/vega-1/vega.min.js"></script>
+<link href="libs/vega-tooltip-1/vega-tooltip.css" rel="stylesheet" />
+<script src="libs/vega-tooltip-1/vega-tooltip.js"></script>
+<script src="libs/FileSaver-1/FileSaver.js"></script>
+<script src="libs/GlimmaV2-1/XYSpecs.js"></script>
+<script src="libs/GlimmaV2-1/MDSSpecs.js"></script>
+<script src="libs/GlimmaV2-1/expressionSpec.js"></script>
+<script src="libs/GlimmaV2-1/makeTooltip.js"></script>
+<script src="libs/GlimmaV2-1/saveTools.js"></script>
+<script src="libs/glimmaXY-binding-2.10.0/glimmaXY.js"></script>
+
+
+<style type="text/css">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+<style type="text/css">
+  
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+</style>
+
+<link rel="stylesheet" href="style.css" type="text/css" />
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li><a href="./">Genomic Data Analysis Exercises</a></li>
+
+<li class="divider"></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Preface</a>
+<ul>
+<li class="chapter" data-level="0.1" data-path="index.html"><a href="index.html#usage"><i class="fa fa-check"></i><b>0.1</b> Usage</a></li>
+<li class="chapter" data-level="0.2" data-path="index.html"><a href="index.html#key-features"><i class="fa fa-check"></i><b>0.2</b> <strong>Key Features</strong></a></li>
+<li class="chapter" data-level="0.3" data-path="index.html"><a href="index.html#disclaimer"><i class="fa fa-check"></i><b>0.3</b> Disclaimer</a></li>
+</ul></li>
+<li class="chapter" data-level="1" data-path="getting-started-in-r.html"><a href="getting-started-in-r.html"><i class="fa fa-check"></i><b>1</b> Getting Started in R</a>
+<ul>
+<li class="chapter" data-level="1.1" data-path="getting-started-in-r.html"><a href="getting-started-in-r.html#exercise-description"><i class="fa fa-check"></i><b>1.1</b> Exercise Description</a></li>
+<li class="chapter" data-level="1.2" data-path="getting-started-in-r.html"><a href="getting-started-in-r.html#learning-outcomes"><i class="fa fa-check"></i><b>1.2</b> Learning outcomes</a></li>
+<li class="chapter" data-level="1.3" data-path="getting-started-in-r.html"><a href="getting-started-in-r.html#using-r-and-rstudio"><i class="fa fa-check"></i><b>1.3</b> Using R and RStudio</a></li>
+<li class="chapter" data-level="1.4" data-path="getting-started-in-r.html"><a href="getting-started-in-r.html#load-data-directly-from-the-url"><i class="fa fa-check"></i><b>1.4</b> Load data directly from the URL</a></li>
+<li class="chapter" data-level="1.5" data-path="getting-started-in-r.html"><a href="getting-started-in-r.html#working-with-data-in-r"><i class="fa fa-check"></i><b>1.5</b> Working with data in R</a></li>
+<li class="chapter" data-level="1.6" data-path="getting-started-in-r.html"><a href="getting-started-in-r.html#looking-at-data-in-rstudio"><i class="fa fa-check"></i><b>1.6</b> Looking at Data in RStudio</a></li>
+<li class="chapter" data-level="1.7" data-path="getting-started-in-r.html"><a href="getting-started-in-r.html#exploring-the-data"><i class="fa fa-check"></i><b>1.7</b> Exploring the data</a></li>
+</ul></li>
+<li class="chapter" data-level="2" data-path="gene-ontology.html"><a href="gene-ontology.html"><i class="fa fa-check"></i><b>2</b> Gene Ontology</a>
+<ul>
+<li class="chapter" data-level="2.1" data-path="gene-ontology.html"><a href="gene-ontology.html#description"><i class="fa fa-check"></i><b>2.1</b> Description</a></li>
+<li class="chapter" data-level="2.2" data-path="gene-ontology.html"><a href="gene-ontology.html#learning-outcomes-1"><i class="fa fa-check"></i><b>2.2</b> Learning outcomes</a></li>
+<li class="chapter" data-level="2.3" data-path="gene-ontology.html"><a href="gene-ontology.html#analysis-workflow"><i class="fa fa-check"></i><b>2.3</b> Analysis Workflow</a></li>
+<li class="chapter" data-level="2.4" data-path="gene-ontology.html"><a href="gene-ontology.html#get-de-gene-list"><i class="fa fa-check"></i><b>2.4</b> Get DE gene list</a>
+<ul>
+<li class="chapter" data-level="2.4.1" data-path="gene-ontology.html"><a href="gene-ontology.html#saving-ggplot-output-to-a-file"><i class="fa fa-check"></i><b>2.4.1</b> Saving ggplot output to a file</a></li>
+</ul></li>
+<li class="chapter" data-level="2.5" data-path="gene-ontology.html"><a href="gene-ontology.html#the-hypergeometric-distribution-in-practice"><i class="fa fa-check"></i><b>2.5</b> The Hypergeometric Distribution in practice</a></li>
+<li class="chapter" data-level="2.6" data-path="gene-ontology.html"><a href="gene-ontology.html#now-it-is-your-turn"><i class="fa fa-check"></i><b>2.6</b> Now it is your turn</a>
+<ul>
+<li class="chapter" data-level="2.6.1" data-path="gene-ontology.html"><a href="gene-ontology.html#run-enrichment"><i class="fa fa-check"></i><b>2.6.1</b> Run Enrichment</a></li>
+<li class="chapter" data-level="2.6.2" data-path="gene-ontology.html"><a href="gene-ontology.html#see-the-data"><i class="fa fa-check"></i><b>2.6.2</b> see the data</a></li>
+<li class="chapter" data-level="2.6.3" data-path="gene-ontology.html"><a href="gene-ontology.html#create-plots"><i class="fa fa-check"></i><b>2.6.3</b> create plots</a></li>
+</ul></li>
+<li class="chapter" data-level="2.7" data-path="gene-ontology.html"><a href="gene-ontology.html#questions"><i class="fa fa-check"></i><b>2.7</b> Questions</a></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="working-with-sequences-raw-data-quality-control.html"><a href="working-with-sequences-raw-data-quality-control.html"><i class="fa fa-check"></i><b>3</b> Working with Sequences: Raw Data &amp; Quality Control</a>
+<ul>
+<li class="chapter" data-level="3.1" data-path="working-with-sequences-raw-data-quality-control.html"><a href="working-with-sequences-raw-data-quality-control.html#description-1"><i class="fa fa-check"></i><b>3.1</b> Description</a></li>
+<li class="chapter" data-level="3.2" data-path="working-with-sequences-raw-data-quality-control.html"><a href="working-with-sequences-raw-data-quality-control.html#learning-outcomes-2"><i class="fa fa-check"></i><b>3.2</b> Learning outcomes</a></li>
+<li class="chapter" data-level="3.3" data-path="working-with-sequences-raw-data-quality-control.html"><a href="working-with-sequences-raw-data-quality-control.html#download-fastq"><i class="fa fa-check"></i><b>3.3</b> Download fastq</a></li>
+<li class="chapter" data-level="3.4" data-path="working-with-sequences-raw-data-quality-control.html"><a href="working-with-sequences-raw-data-quality-control.html#examining-fastq"><i class="fa fa-check"></i><b>3.4</b> Examining fastq</a></li>
+<li class="chapter" data-level="3.5" data-path="working-with-sequences-raw-data-quality-control.html"><a href="working-with-sequences-raw-data-quality-control.html#trimming"><i class="fa fa-check"></i><b>3.5</b> Trimming</a>
+<ul>
+<li class="chapter" data-level="3.5.1" data-path="working-with-sequences-raw-data-quality-control.html"><a href="working-with-sequences-raw-data-quality-control.html#automate-for-list-of-files"><i class="fa fa-check"></i><b>3.5.1</b> Automate for list of files</a></li>
+</ul></li>
+<li class="chapter" data-level="3.6" data-path="working-with-sequences-raw-data-quality-control.html"><a href="working-with-sequences-raw-data-quality-control.html#batch-file-processing"><i class="fa fa-check"></i><b>3.6</b> Batch file processing</a>
+<ul>
+<li class="chapter" data-level="3.6.1" data-path="working-with-sequences-raw-data-quality-control.html"><a href="working-with-sequences-raw-data-quality-control.html#running-rfastp-creates-several-files"><i class="fa fa-check"></i><b>3.6.1</b> Running RfastP creates several files:</a></li>
+</ul></li>
+<li class="chapter" data-level="3.7" data-path="working-with-sequences-raw-data-quality-control.html"><a href="working-with-sequences-raw-data-quality-control.html#qc-and-adapters"><i class="fa fa-check"></i><b>3.7</b> QC and adapters</a></li>
+<li class="chapter" data-level="3.8" data-path="working-with-sequences-raw-data-quality-control.html"><a href="working-with-sequences-raw-data-quality-control.html#running-fastqc"><i class="fa fa-check"></i><b>3.8</b> Running fastqc</a></li>
+<li class="chapter" data-level="3.9" data-path="working-with-sequences-raw-data-quality-control.html"><a href="working-with-sequences-raw-data-quality-control.html#multiqc-for-qc-on-mutliple-samples"><i class="fa fa-check"></i><b>3.9</b> Multiqc for QC on mutliple samples</a></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="read-mapping.html"><a href="read-mapping.html"><i class="fa fa-check"></i><b>4</b> Read Mapping</a>
+<ul>
+<li class="chapter" data-level="4.1" data-path="read-mapping.html"><a href="read-mapping.html#alignment"><i class="fa fa-check"></i><b>4.1</b> Alignment</a></li>
+<li class="chapter" data-level="4.2" data-path="read-mapping.html"><a href="read-mapping.html#retrieve-the-genome"><i class="fa fa-check"></i><b>4.2</b> Retrieve the genome</a></li>
+<li class="chapter" data-level="4.3" data-path="read-mapping.html"><a href="read-mapping.html#build-rsubread-index"><i class="fa fa-check"></i><b>4.3</b> Build Rsubread Index</a></li>
+<li class="chapter" data-level="4.4" data-path="read-mapping.html"><a href="read-mapping.html#pseudomapping-with-salmon"><i class="fa fa-check"></i><b>4.4</b> Pseudomapping with Salmon</a>
+<ul>
+<li class="chapter" data-level="4.4.1" data-path="read-mapping.html"><a href="read-mapping.html#create-conda-env"><i class="fa fa-check"></i><b>4.4.1</b> Create Conda Env</a></li>
+<li class="chapter" data-level="4.4.2" data-path="read-mapping.html"><a href="read-mapping.html#download-transcriptome"><i class="fa fa-check"></i><b>4.4.2</b> Download transcriptome</a></li>
+<li class="chapter" data-level="4.4.3" data-path="read-mapping.html"><a href="read-mapping.html#building-the-salmon-index"><i class="fa fa-check"></i><b>4.4.3</b> Building the Salmon index</a></li>
+</ul></li>
+<li class="chapter" data-level="4.5" data-path="read-mapping.html"><a href="read-mapping.html#questions-1"><i class="fa fa-check"></i><b>4.5</b> Questions</a>
+<ul>
+<li class="chapter" data-level="4.5.1" data-path="read-mapping.html"><a href="read-mapping.html#with-rsubread"><i class="fa fa-check"></i><b>4.5.1</b> With Rsubread:</a></li>
+<li class="chapter" data-level="4.5.2" data-path="read-mapping.html"><a href="read-mapping.html#with-salmon"><i class="fa fa-check"></i><b>4.5.2</b> With Salmon:</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="5" data-path="read-counting.html"><a href="read-counting.html"><i class="fa fa-check"></i><b>5</b> Read Counting</a>
+<ul>
+<li class="chapter" data-level="5.1" data-path="read-counting.html"><a href="read-counting.html#featurecounts"><i class="fa fa-check"></i><b>5.1</b> featureCounts</a>
+<ul>
+<li class="chapter" data-level="5.1.1" data-path="read-counting.html"><a href="read-counting.html#locate-bam-files"><i class="fa fa-check"></i><b>5.1.1</b> Locate BAM files</a></li>
+<li class="chapter" data-level="5.1.2" data-path="read-counting.html"><a href="read-counting.html#retrieve-the-genome-annotation"><i class="fa fa-check"></i><b>5.1.2</b> Retrieve the genome annotation</a></li>
+<li class="chapter" data-level="5.1.3" data-path="read-counting.html"><a href="read-counting.html#counting-with-featurecounts"><i class="fa fa-check"></i><b>5.1.3</b> Counting with FeatureCounts</a></li>
+<li class="chapter" data-level="5.1.4" data-path="read-counting.html"><a href="read-counting.html#counts-object"><i class="fa fa-check"></i><b>5.1.4</b> Counts object</a></li>
+<li class="chapter" data-level="5.1.5" data-path="read-counting.html"><a href="read-counting.html#saving-fc-object-for-future-use"><i class="fa fa-check"></i><b>5.1.5</b> Saving <code>fc</code> object for future use</a></li>
+<li class="chapter" data-level="5.1.6" data-path="read-counting.html"><a href="read-counting.html#rsubread-qc"><i class="fa fa-check"></i><b>5.1.6</b> RSubread QC</a></li>
+</ul></li>
+<li class="chapter" data-level="5.2" data-path="read-counting.html"><a href="read-counting.html#salmon"><i class="fa fa-check"></i><b>5.2</b> Salmon</a>
+<ul>
+<li class="chapter" data-level="5.2.1" data-path="read-counting.html"><a href="read-counting.html#pseudomapping-counting"><i class="fa fa-check"></i><b>5.2.1</b> Pseudomapping &amp; Counting</a></li>
+</ul></li>
+<li class="chapter" data-level="5.3" data-path="read-counting.html"><a href="read-counting.html#questions-2"><i class="fa fa-check"></i><b>5.3</b> Questions</a></li>
+</ul></li>
+<li class="chapter" data-level="6" data-path="differential-expression-edger.html"><a href="differential-expression-edger.html"><i class="fa fa-check"></i><b>6</b> Differential Expression: EdgeR</a>
+<ul>
+<li class="chapter" data-level="6.1" data-path="differential-expression-edger.html"><a href="differential-expression-edger.html#description-2"><i class="fa fa-check"></i><b>6.1</b> Description</a></li>
+<li class="chapter" data-level="6.2" data-path="differential-expression-edger.html"><a href="differential-expression-edger.html#learning-outcomes-3"><i class="fa fa-check"></i><b>6.2</b> Learning outcomes</a></li>
+<li class="chapter" data-level="6.3" data-path="differential-expression-edger.html"><a href="differential-expression-edger.html#loading-in-the-featurecounts-object"><i class="fa fa-check"></i><b>6.3</b> Loading in the featureCounts object</a></li>
+<li class="chapter" data-level="6.4" data-path="differential-expression-edger.html"><a href="differential-expression-edger.html#count-loading-and-annotation"><i class="fa fa-check"></i><b>6.4</b> Count loading and Annotation</a></li>
+<li class="chapter" data-level="6.5" data-path="differential-expression-edger.html"><a href="differential-expression-edger.html#filtering-to-remove-low-counts"><i class="fa fa-check"></i><b>6.5</b> Filtering to remove low counts</a></li>
+<li class="chapter" data-level="6.6" data-path="differential-expression-edger.html"><a href="differential-expression-edger.html#normalization-for-composition-bias"><i class="fa fa-check"></i><b>6.6</b> Normalization for composition bias</a></li>
+<li class="chapter" data-level="6.7" data-path="differential-expression-edger.html"><a href="differential-expression-edger.html#mds-plots"><i class="fa fa-check"></i><b>6.7</b> MDS plots</a></li>
+<li class="chapter" data-level="6.8" data-path="differential-expression-edger.html"><a href="differential-expression-edger.html#exploring-differences-between-libraries"><i class="fa fa-check"></i><b>6.8</b> Exploring differences between libraries</a></li>
+<li class="chapter" data-level="6.9" data-path="differential-expression-edger.html"><a href="differential-expression-edger.html#estimate-dispersion"><i class="fa fa-check"></i><b>6.9</b> Estimate Dispersion</a></li>
+<li class="chapter" data-level="6.10" data-path="differential-expression-edger.html"><a href="differential-expression-edger.html#testing-for-differential-expression"><i class="fa fa-check"></i><b>6.10</b> Testing for differential expression</a></li>
+<li class="chapter" data-level="6.11" data-path="differential-expression-edger.html"><a href="differential-expression-edger.html#looking-at-all-contrasts-at-once"><i class="fa fa-check"></i><b>6.11</b> Looking at all contrasts at once</a></li>
+<li class="chapter" data-level="6.12" data-path="differential-expression-edger.html"><a href="differential-expression-edger.html#questions-3"><i class="fa fa-check"></i><b>6.12</b> Questions</a></li>
+<li class="chapter" data-level="6.13" data-path="differential-expression-edger.html"><a href="differential-expression-edger.html#a-template-set-of-code-chunks-for-doing-this-is-below"><i class="fa fa-check"></i><b>6.13</b> A template set of code chunks for doing this is below:</a></li>
+</ul></li>
+<li class="chapter" data-level="7" data-path="differential-expression-deseq2.html"><a href="differential-expression-deseq2.html"><i class="fa fa-check"></i><b>7</b> Differential Expression: DESeq2</a>
+<ul>
+<li class="chapter" data-level="7.1" data-path="differential-expression-deseq2.html"><a href="differential-expression-deseq2.html#description-3"><i class="fa fa-check"></i><b>7.1</b> Description</a></li>
+<li class="chapter" data-level="7.2" data-path="differential-expression-deseq2.html"><a href="differential-expression-deseq2.html#learning-outcomes-4"><i class="fa fa-check"></i><b>7.2</b> Learning outcomes</a></li>
+<li class="chapter" data-level="7.3" data-path="differential-expression-deseq2.html"><a href="differential-expression-deseq2.html#loading-in-the-featurecounts-object-1"><i class="fa fa-check"></i><b>7.3</b> Loading in the featureCounts object</a></li>
+<li class="chapter" data-level="7.4" data-path="differential-expression-deseq2.html"><a href="differential-expression-deseq2.html#count-loading-and-annotation-1"><i class="fa fa-check"></i><b>7.4</b> Count loading and Annotation</a></li>
+<li class="chapter" data-level="7.5" data-path="differential-expression-deseq2.html"><a href="differential-expression-deseq2.html#filtering-to-remove-low-counts-1"><i class="fa fa-check"></i><b>7.5</b> Filtering to remove low counts</a></li>
+<li class="chapter" data-level="7.6" data-path="differential-expression-deseq2.html"><a href="differential-expression-deseq2.html#testing-for-differential-expression-1"><i class="fa fa-check"></i><b>7.6</b> Testing for differential expression</a></li>
+<li class="chapter" data-level="7.7" data-path="differential-expression-deseq2.html"><a href="differential-expression-deseq2.html#questions-4"><i class="fa fa-check"></i><b>7.7</b> Questions</a></li>
+</ul></li>
+<li class="chapter" data-level="8" data-path="differential-expression-limma.html"><a href="differential-expression-limma.html"><i class="fa fa-check"></i><b>8</b> Differential Expression: limma</a>
+<ul>
+<li class="chapter" data-level="8.1" data-path="differential-expression-limma.html"><a href="differential-expression-limma.html#description-4"><i class="fa fa-check"></i><b>8.1</b> Description</a></li>
+<li class="chapter" data-level="8.2" data-path="differential-expression-limma.html"><a href="differential-expression-limma.html#learning-objectives"><i class="fa fa-check"></i><b>8.2</b> Learning Objectives</a></li>
+<li class="chapter" data-level="8.3" data-path="differential-expression-limma.html"><a href="differential-expression-limma.html#loading-in-the-count-data-file"><i class="fa fa-check"></i><b>8.3</b> Loading in the count data file</a></li>
+<li class="chapter" data-level="8.4" data-path="differential-expression-limma.html"><a href="differential-expression-limma.html#count-loading-and-annotation-2"><i class="fa fa-check"></i><b>8.4</b> Count loading and Annotation</a></li>
+<li class="chapter" data-level="8.5" data-path="differential-expression-limma.html"><a href="differential-expression-limma.html#filtering-to-remove-low-counts-2"><i class="fa fa-check"></i><b>8.5</b> Filtering to remove low counts</a></li>
+<li class="chapter" data-level="8.6" data-path="differential-expression-limma.html"><a href="differential-expression-limma.html#normalization-for-composition-bias-1"><i class="fa fa-check"></i><b>8.6</b> Normalization for composition bias</a></li>
+<li class="chapter" data-level="8.7" data-path="differential-expression-limma.html"><a href="differential-expression-limma.html#exploring-differences-between-libraries-1"><i class="fa fa-check"></i><b>8.7</b> Exploring differences between libraries</a></li>
+<li class="chapter" data-level="8.8" data-path="differential-expression-limma.html"><a href="differential-expression-limma.html#estimate-dispersion-1"><i class="fa fa-check"></i><b>8.8</b> Estimate Dispersion</a></li>
+<li class="chapter" data-level="8.9" data-path="differential-expression-limma.html"><a href="differential-expression-limma.html#testing-for-differential-expression-2"><i class="fa fa-check"></i><b>8.9</b> Testing for differential expression</a></li>
+<li class="chapter" data-level="8.10" data-path="differential-expression-limma.html"><a href="differential-expression-limma.html#examining-a-specific-contrast"><i class="fa fa-check"></i><b>8.10</b> Examining a specific contrast</a></li>
+<li class="chapter" data-level="8.11" data-path="differential-expression-limma.html"><a href="differential-expression-limma.html#visualization"><i class="fa fa-check"></i><b>8.11</b> Visualization</a>
+<ul>
+<li class="chapter" data-level="8.11.1" data-path="differential-expression-limma.html"><a href="differential-expression-limma.html#ma-lot"><i class="fa fa-check"></i><b>8.11.1</b> MA lot</a></li>
+</ul></li>
+<li class="chapter" data-level="8.12" data-path="differential-expression-limma.html"><a href="differential-expression-limma.html#treat-testing"><i class="fa fa-check"></i><b>8.12</b> <code>treat()</code> testing</a>
+<ul>
+<li class="chapter" data-level="8.12.1" data-path="differential-expression-limma.html"><a href="differential-expression-limma.html#visualize-de-genes-from-treat-using-lfc1"><i class="fa fa-check"></i><b>8.12.1</b> Visualize DE genes from <code>Treat</code> using lfc=1</a></li>
+</ul></li>
+<li class="chapter" data-level="8.13" data-path="differential-expression-limma.html"><a href="differential-expression-limma.html#comparing-de-analysis-softwares"><i class="fa fa-check"></i><b>8.13</b> Comparing DE analysis softwares</a></li>
+<li class="chapter" data-level="8.14" data-path="differential-expression-limma.html"><a href="differential-expression-limma.html#correlation-between-logfc-estimates-across-softwares"><i class="fa fa-check"></i><b>8.14</b> Correlation between logFC estimates across softwares</a></li>
+<li class="chapter" data-level="8.15" data-path="differential-expression-limma.html"><a href="differential-expression-limma.html#questions-5"><i class="fa fa-check"></i><b>8.15</b> Questions</a></li>
+</ul></li>
+<li class="chapter" data-level="9" data-path="visualizing-differential-expression-results.html"><a href="visualizing-differential-expression-results.html"><i class="fa fa-check"></i><b>9</b> Visualizing Differential Expression Results</a>
+<ul>
+<li class="chapter" data-level="9.1" data-path="visualizing-differential-expression-results.html"><a href="visualizing-differential-expression-results.html#description-5"><i class="fa fa-check"></i><b>9.1</b> Description</a></li>
+<li class="chapter" data-level="9.2" data-path="visualizing-differential-expression-results.html"><a href="visualizing-differential-expression-results.html#learning-outcomes-5"><i class="fa fa-check"></i><b>9.2</b> Learning Outcomes</a></li>
+<li class="chapter" data-level="9.3" data-path="visualizing-differential-expression-results.html"><a href="visualizing-differential-expression-results.html#ma-plot"><i class="fa fa-check"></i><b>9.3</b> MA-plot</a></li>
+<li class="chapter" data-level="9.4" data-path="visualizing-differential-expression-results.html"><a href="visualizing-differential-expression-results.html#volcano-plot"><i class="fa fa-check"></i><b>9.4</b> Volcano Plot</a></li>
+<li class="chapter" data-level="9.5" data-path="visualizing-differential-expression-results.html"><a href="visualizing-differential-expression-results.html#using-glimma-for-an-interactive-visualization"><i class="fa fa-check"></i><b>9.5</b> Using Glimma for an interactive visualization</a>
+<ul>
+<li class="chapter" data-level="9.5.1" data-path="visualizing-differential-expression-results.html"><a href="visualizing-differential-expression-results.html#ma-plots"><i class="fa fa-check"></i><b>9.5.1</b> MA plots</a></li>
+<li class="chapter" data-level="9.5.2" data-path="visualizing-differential-expression-results.html"><a href="visualizing-differential-expression-results.html#volcano-plots"><i class="fa fa-check"></i><b>9.5.2</b> Volcano Plots</a></li>
+</ul></li>
+<li class="chapter" data-level="9.6" data-path="visualizing-differential-expression-results.html"><a href="visualizing-differential-expression-results.html#generating-bar-graph-summaries"><i class="fa fa-check"></i><b>9.6</b> Generating bar graph summaries</a></li>
+<li class="chapter" data-level="9.7" data-path="visualizing-differential-expression-results.html"><a href="visualizing-differential-expression-results.html#exercise"><i class="fa fa-check"></i><b>9.7</b> Exercise</a></li>
+</ul></li>
+<li class="chapter" data-level="10" data-path="clustering.html"><a href="clustering.html"><i class="fa fa-check"></i><b>10</b> Clustering</a>
+<ul>
+<li class="chapter" data-level="10.1" data-path="clustering.html"><a href="clustering.html#description-6"><i class="fa fa-check"></i><b>10.1</b> Description</a></li>
+<li class="chapter" data-level="10.2" data-path="clustering.html"><a href="clustering.html#learning-outcomes-6"><i class="fa fa-check"></i><b>10.2</b> Learning outcomes</a></li>
+<li class="chapter" data-level="10.3" data-path="clustering.html"><a href="clustering.html#cluster-3.0"><i class="fa fa-check"></i><b>10.3</b> Cluster 3.0</a>
+<ul>
+<li class="chapter" data-level="10.3.1" data-path="clustering.html"><a href="clustering.html#generating-a-pcl-file"><i class="fa fa-check"></i><b>10.3.1</b> Generating a PCL file</a></li>
+<li class="chapter" data-level="10.3.2" data-path="clustering.html"><a href="clustering.html#filtering-data"><i class="fa fa-check"></i><b>10.3.2</b> Filtering data</a></li>
+<li class="chapter" data-level="10.3.3" data-path="clustering.html"><a href="clustering.html#hierarchical-clustering"><i class="fa fa-check"></i><b>10.3.3</b> Hierarchical Clustering</a></li>
+<li class="chapter" data-level="10.3.4" data-path="clustering.html"><a href="clustering.html#k-means-clustering"><i class="fa fa-check"></i><b>10.3.4</b> <em>K</em>-Means Clustering</a></li>
+</ul></li>
+<li class="chapter" data-level="10.4" data-path="clustering.html"><a href="clustering.html#visualizing-clusters-with-java-treeview"><i class="fa fa-check"></i><b>10.4</b> Visualizing Clusters with Java TreeView</a>
+<ul>
+<li class="chapter" data-level="10.4.1" data-path="clustering.html"><a href="clustering.html#changing-pixel-settings."><i class="fa fa-check"></i><b>10.4.1</b> Changing pixel settings.</a></li>
+<li class="chapter" data-level="10.4.2" data-path="clustering.html"><a href="clustering.html#selecting-groups-of-genes."><i class="fa fa-check"></i><b>10.4.2</b> Selecting groups of genes.</a></li>
+</ul></li>
+<li class="chapter" data-level="10.5" data-path="clustering.html"><a href="clustering.html#performing-clustering-on-yeast-stress-data"><i class="fa fa-check"></i><b>10.5</b> Performing clustering on yeast stress data</a></li>
+<li class="chapter" data-level="10.6" data-path="clustering.html"><a href="clustering.html#questions-6"><i class="fa fa-check"></i><b>10.6</b> Questions</a></li>
+</ul></li>
+<li class="chapter" data-level="11" data-path="kegg-analysis.html"><a href="kegg-analysis.html"><i class="fa fa-check"></i><b>11</b> KEGG Analysis</a>
+<ul>
+<li class="chapter" data-level="11.1" data-path="kegg-analysis.html"><a href="kegg-analysis.html#description-7"><i class="fa fa-check"></i><b>11.1</b> Description</a></li>
+<li class="chapter" data-level="11.2" data-path="kegg-analysis.html"><a href="kegg-analysis.html#learning-outcomes-7"><i class="fa fa-check"></i><b>11.2</b> Learning Outcomes</a></li>
+<li class="chapter" data-level="11.3" data-path="kegg-analysis.html"><a href="kegg-analysis.html#loading-in-the-edger-de-gene-file-output."><i class="fa fa-check"></i><b>11.3</b> Loading in the edgeR DE gene file output.</a></li>
+<li class="chapter" data-level="11.4" data-path="kegg-analysis.html"><a href="kegg-analysis.html#kegg-analysis-1"><i class="fa fa-check"></i><b>11.4</b> KEGG Analysis</a>
+<ul>
+<li class="chapter" data-level="11.4.1" data-path="kegg-analysis.html"><a href="kegg-analysis.html#using-kegga-from-limma"><i class="fa fa-check"></i><b>11.4.1</b> Using <code>kegga()</code> from limma</a></li>
+<li class="chapter" data-level="11.4.2" data-path="kegg-analysis.html"><a href="kegg-analysis.html#pathway-visualization"><i class="fa fa-check"></i><b>11.4.2</b> Pathway Visualization</a></li>
+</ul></li>
+<li class="chapter" data-level="11.5" data-path="kegg-analysis.html"><a href="kegg-analysis.html#visualize-on-the-kegg-website"><i class="fa fa-check"></i><b>11.5</b> Visualize on the KEGG website</a></li>
+<li class="chapter" data-level="11.6" data-path="kegg-analysis.html"><a href="kegg-analysis.html#comparing-paralogs-in-common-pathways"><i class="fa fa-check"></i><b>11.6</b> Comparing Paralogs in common pathways</a></li>
+<li class="chapter" data-level="11.7" data-path="kegg-analysis.html"><a href="kegg-analysis.html#additional-kegg-related-analyses"><i class="fa fa-check"></i><b>11.7</b> Additional KEGG-related analyses</a></li>
+<li class="chapter" data-level="11.8" data-path="kegg-analysis.html"><a href="kegg-analysis.html#dotplot"><i class="fa fa-check"></i><b>11.8</b> Dotplot</a></li>
+<li class="chapter" data-level="11.9" data-path="kegg-analysis.html"><a href="kegg-analysis.html#cnetplot"><i class="fa fa-check"></i><b>11.9</b> cnetplot</a></li>
+<li class="chapter" data-level="11.10" data-path="kegg-analysis.html"><a href="kegg-analysis.html#heatplot"><i class="fa fa-check"></i><b>11.10</b> heatplot</a></li>
+<li class="chapter" data-level="11.11" data-path="kegg-analysis.html"><a href="kegg-analysis.html#upsetplot"><i class="fa fa-check"></i><b>11.11</b> upsetplot</a></li>
+<li class="chapter" data-level="11.12" data-path="kegg-analysis.html"><a href="kegg-analysis.html#emapplot"><i class="fa fa-check"></i><b>11.12</b> emapplot</a></li>
+<li class="chapter" data-level="11.13" data-path="kegg-analysis.html"><a href="kegg-analysis.html#gsea"><i class="fa fa-check"></i><b>11.13</b> GSEA</a>
+<ul>
+<li class="chapter" data-level="11.13.1" data-path="kegg-analysis.html"><a href="kegg-analysis.html#gsekegg-vs-enrichkegg"><i class="fa fa-check"></i><b>11.13.1</b> <code>gseKEGG</code> vs <code>enrichKEGG</code></a></li>
+<li class="chapter" data-level="11.13.2" data-path="kegg-analysis.html"><a href="kegg-analysis.html#gsea-visualization"><i class="fa fa-check"></i><b>11.13.2</b> GSEA visualization</a></li>
+</ul></li>
+<li class="chapter" data-level="11.14" data-path="kegg-analysis.html"><a href="kegg-analysis.html#questions-7"><i class="fa fa-check"></i><b>11.14</b> Questions</a></li>
+</ul></li>
+<li class="chapter" data-level="12" data-path="motif-analysis-meme-suite.html"><a href="motif-analysis-meme-suite.html"><i class="fa fa-check"></i><b>12</b> Motif Analysis: MEME Suite</a>
+<ul>
+<li class="chapter" data-level="12.1" data-path="motif-analysis-meme-suite.html"><a href="motif-analysis-meme-suite.html#description-8"><i class="fa fa-check"></i><b>12.1</b> Description</a></li>
+<li class="chapter" data-level="12.2" data-path="motif-analysis-meme-suite.html"><a href="motif-analysis-meme-suite.html#learning-objectives-1"><i class="fa fa-check"></i><b>12.2</b> Learning Objectives</a></li>
+<li class="chapter" data-level="12.3" data-path="motif-analysis-meme-suite.html"><a href="motif-analysis-meme-suite.html#install-meme-suite"><i class="fa fa-check"></i><b>12.3</b> Install MEME suite</a>
+<ul>
+<li class="chapter" data-level="12.3.1" data-path="motif-analysis-meme-suite.html"><a href="motif-analysis-meme-suite.html#verify-meme-installation"><i class="fa fa-check"></i><b>12.3.1</b> Verify MEME Installation</a></li>
+</ul></li>
+<li class="chapter" data-level="12.4" data-path="motif-analysis-meme-suite.html"><a href="motif-analysis-meme-suite.html#analysis-motif-discovery-for-msn24-vs-wt-response-to-etoh"><i class="fa fa-check"></i><b>12.4</b> Analysis: Motif Discovery for <em>msn2/4</em>∆∆ vs WT Response to EtOH</a>
+<ul>
+<li class="chapter" data-level="12.4.1" data-path="motif-analysis-meme-suite.html"><a href="motif-analysis-meme-suite.html#retrieve-logfc-and-fdr-values"><i class="fa fa-check"></i><b>12.4.1</b> Retrieve LogFC and FDR values</a></li>
+<li class="chapter" data-level="12.4.2" data-path="motif-analysis-meme-suite.html"><a href="motif-analysis-meme-suite.html#selecting-an-ensembl-biomart-database-and-dataset"><i class="fa fa-check"></i><b>12.4.2</b> Selecting an Ensembl BioMart database and dataset</a></li>
+<li class="chapter" data-level="12.4.3" data-path="motif-analysis-meme-suite.html"><a href="motif-analysis-meme-suite.html#retrieve-upstream-sequences"><i class="fa fa-check"></i><b>12.4.3</b> Retrieve Upstream Sequences</a></li>
+</ul></li>
+<li class="chapter" data-level="12.5" data-path="motif-analysis-meme-suite.html"><a href="motif-analysis-meme-suite.html#motif-analysis-for-genes-downregulated-in-etoh-response"><i class="fa fa-check"></i><b>12.5</b> Motif Analysis for Genes Downregulated in EtOH Response</a>
+<ul>
+<li class="chapter" data-level="12.5.1" data-path="motif-analysis-meme-suite.html"><a href="motif-analysis-meme-suite.html#run-meme-enrichment"><i class="fa fa-check"></i><b>12.5.1</b> Run Meme enrichment</a></li>
+<li class="chapter" data-level="12.5.2" data-path="motif-analysis-meme-suite.html"><a href="motif-analysis-meme-suite.html#run-steme-enrichment"><i class="fa fa-check"></i><b>12.5.2</b> Run STEME enrichment</a></li>
+<li class="chapter" data-level="12.5.3" data-path="motif-analysis-meme-suite.html"><a href="motif-analysis-meme-suite.html#run-tomtom-analysis"><i class="fa fa-check"></i><b>12.5.3</b> Run TomTom analysis</a></li>
+</ul></li>
+<li class="chapter" data-level="12.6" data-path="motif-analysis-meme-suite.html"><a href="motif-analysis-meme-suite.html#skn7-exposed-to-salt."><i class="fa fa-check"></i><b>12.6</b> <em>skn7</em>∆ exposed to salt.</a></li>
+<li class="chapter" data-level="12.7" data-path="motif-analysis-meme-suite.html"><a href="motif-analysis-meme-suite.html#questions-8"><i class="fa fa-check"></i><b>12.7</b> Questions</a></li>
+</ul></li>
+<li class="divider"></li>
+<li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
+
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Genomic Data Analysis Course Exercises</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="motif-analysis-meme-suite" class="section level1 hasAnchor" number="12">
+<h1><span class="header-section-number">Chapter 12</span> Motif Analysis: MEME Suite<a href="motif-analysis-meme-suite.html#motif-analysis-meme-suite" class="anchor-section" aria-label="Anchor link to header"></a></h1>
+<p>last updated: 2023-10-27</p>
+<div id="description-8" class="section level2 hasAnchor" number="12.1">
+<h2><span class="header-section-number">12.1</span> Description<a href="motif-analysis-meme-suite.html#description-8" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>In this class exercise, we will explore the use of the MEME suite for
+motif analysis.</p>
+<p>In this exercise, we will learn to perform motif analysis using the MEME
+suite in R, covering tasks such as upstream sequence retrieval, motif
+identification, and comparison with external motif databases. Working
+with real yeast stress response data, we will gain proficiency in
+utilizing bioinformatics tools, and interpreting motif analysis results.</p>
+</div>
+<div id="learning-objectives-1" class="section level2 hasAnchor" number="12.2">
+<h2><span class="header-section-number">12.2</span> Learning Objectives<a href="motif-analysis-meme-suite.html#learning-objectives-1" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>At the end of this exercise, you should be able to:</p>
+<ul>
+<li><strong>Bioinformatics Libraries:</strong> load and utilize key bioinformatics
+libraries such as biomaRt, memes, and Biostrings.</li>
+<li><strong>Data Retrieval:</strong> Retrieve upstream DNA sequences for specific
+genes from the Ensembl database using <code>biomaRt</code>.</li>
+<li><strong>Motif Analysis:</strong>
+<ul>
+<li>Perform motif analysis using the MEME suite tools (<code>runMeme</code> and
+<code>runStreme</code>)</li>
+<li>Interpret results from motif analysis, including motif width and
+significance</li>
+</ul></li>
+<li><strong>TomTom Analysis:</strong> Use TomTom to compare identified motifs with
+known motifs in databases &amp; interpret results</li>
+</ul>
+<p><strong>Install Packages</strong></p>
+<div class="sourceCode" id="cb420"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb420-1"><a href="motif-analysis-meme-suite.html#cb420-1" tabindex="-1"></a><span class="co"># Ensure required packages are installed</span></span>
+<span id="cb420-2"><a href="motif-analysis-meme-suite.html#cb420-2" tabindex="-1"></a><span class="cf">if</span> (<span class="sc">!</span><span class="fu">require</span>(<span class="st">&quot;pacman&quot;</span>)) <span class="fu">install.packages</span>(<span class="st">&quot;pacman&quot;</span>); <span class="fu">library</span>(pacman)</span>
+<span id="cb420-3"><a href="motif-analysis-meme-suite.html#cb420-3" tabindex="-1"></a></span>
+<span id="cb420-4"><a href="motif-analysis-meme-suite.html#cb420-4" tabindex="-1"></a><span class="co"># Load necessary packages</span></span>
+<span id="cb420-5"><a href="motif-analysis-meme-suite.html#cb420-5" tabindex="-1"></a><span class="fu">p_load</span>(<span class="st">&quot;tidyverse&quot;</span>, <span class="st">&quot;knitr&quot;</span>, <span class="st">&quot;readr&quot;</span>, <span class="st">&quot;pander&quot;</span>, <span class="st">&quot;BiocManager&quot;</span>, </span>
+<span id="cb420-6"><a href="motif-analysis-meme-suite.html#cb420-6" tabindex="-1"></a>       <span class="st">&quot;dplyr&quot;</span>, <span class="st">&quot;stringr&quot;</span>, <span class="st">&quot;data.table&quot;</span>,</span>
+<span id="cb420-7"><a href="motif-analysis-meme-suite.html#cb420-7" tabindex="-1"></a>       <span class="st">&quot;biomaRt&quot;</span>, <span class="st">&quot;memes&quot;</span>, <span class="st">&quot;Biostrings&quot;</span>, <span class="st">&quot;curl&quot;</span>, <span class="st">&quot;universalmotif&quot;</span>)</span>
+<span id="cb420-8"><a href="motif-analysis-meme-suite.html#cb420-8" tabindex="-1"></a></span>
+<span id="cb420-9"><a href="motif-analysis-meme-suite.html#cb420-9" tabindex="-1"></a><span class="fu">library</span>(biomaRt)</span>
+<span id="cb420-10"><a href="motif-analysis-meme-suite.html#cb420-10" tabindex="-1"></a><span class="fu">library</span>(memes)</span>
+<span id="cb420-11"><a href="motif-analysis-meme-suite.html#cb420-11" tabindex="-1"></a><span class="fu">library</span>(curl)</span>
+<span id="cb420-12"><a href="motif-analysis-meme-suite.html#cb420-12" tabindex="-1"></a><span class="fu">library</span>(universalmotif)</span></code></pre></div>
+</div>
+<div id="install-meme-suite" class="section level2 hasAnchor" number="12.3">
+<h2><span class="header-section-number">12.3</span> Install MEME suite<a href="motif-analysis-meme-suite.html#install-meme-suite" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>You will need to install MEME software on your computer if you don’t
+already have it.</p>
+<p>The code below downloads &amp; installs the software for MacOS, if it not on
+your computer. The output when installing is VERY long, you can close
+the output by clicking the small x in the top right corner of the output
+box.</p>
+<p>The MEME suite does not currently support Windows OS, although it can be
+done with WSL. We will be using Mac for this analysis.</p>
+<div class="sourceCode" id="cb421"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb421-1"><a href="motif-analysis-meme-suite.html#cb421-1" tabindex="-1"></a><span class="co"># Check for XCode on Mac or prompt installation</span></span>
+<span id="cb421-2"><a href="motif-analysis-meme-suite.html#cb421-2" tabindex="-1"></a><span class="ex">xcode-select</span> <span class="at">--install</span></span>
+<span id="cb421-3"><a href="motif-analysis-meme-suite.html#cb421-3" tabindex="-1"></a><span class="bu">cd</span> ~</span>
+<span id="cb421-4"><a href="motif-analysis-meme-suite.html#cb421-4" tabindex="-1"></a><span class="co"># Define MEME version</span></span>
+<span id="cb421-5"><a href="motif-analysis-meme-suite.html#cb421-5" tabindex="-1"></a><span class="co"># Latest version as of 23 Oct 2023, </span></span>
+<span id="cb421-6"><a href="motif-analysis-meme-suite.html#cb421-6" tabindex="-1"></a><span class="va">version</span><span class="op">=</span><span class="st">&quot;5.5.4&quot;</span></span>
+<span id="cb421-7"><a href="motif-analysis-meme-suite.html#cb421-7" tabindex="-1"></a></span>
+<span id="cb421-8"><a href="motif-analysis-meme-suite.html#cb421-8" tabindex="-1"></a><span class="co"># Install MEME if not already installed</span></span>
+<span id="cb421-9"><a href="motif-analysis-meme-suite.html#cb421-9" tabindex="-1"></a><span class="cf">if</span> <span class="ot">! </span><span class="bu">command</span> <span class="at">-v</span> <span class="va">$HOME</span>/meme/bin/meme <span class="op">&amp;&gt;</span> /dev/null<span class="kw">;</span> <span class="cf">then</span></span>
+<span id="cb421-10"><a href="motif-analysis-meme-suite.html#cb421-10" tabindex="-1"></a>  <span class="ex">curl</span> <span class="at">-o</span> <span class="va">$HOME</span>/meme-<span class="va">$version</span>.tar.gz https://meme-suite.org/meme/meme-software/<span class="va">$version</span>/meme-<span class="va">$version</span>.tar.gz</span>
+<span id="cb421-11"><a href="motif-analysis-meme-suite.html#cb421-11" tabindex="-1"></a>  <span class="fu">tar</span> zxf meme-<span class="va">$version</span>.tar.gz</span>
+<span id="cb421-12"><a href="motif-analysis-meme-suite.html#cb421-12" tabindex="-1"></a>  <span class="bu">cd</span> meme-<span class="va">$version</span></span>
+<span id="cb421-13"><a href="motif-analysis-meme-suite.html#cb421-13" tabindex="-1"></a>  <span class="ex">./configure</span> <span class="at">--prefix</span><span class="op">=</span><span class="va">$HOME</span>/meme <span class="at">--with-url</span><span class="op">=</span>http://meme-suite.org/ <span class="at">--enable-build-libxml2</span> <span class="at">--enable-build-libxslt</span></span>
+<span id="cb421-14"><a href="motif-analysis-meme-suite.html#cb421-14" tabindex="-1"></a>  <span class="fu">make</span></span>
+<span id="cb421-15"><a href="motif-analysis-meme-suite.html#cb421-15" tabindex="-1"></a>  <span class="fu">make</span> test</span>
+<span id="cb421-16"><a href="motif-analysis-meme-suite.html#cb421-16" tabindex="-1"></a>  <span class="fu">make</span> install</span>
+<span id="cb421-17"><a href="motif-analysis-meme-suite.html#cb421-17" tabindex="-1"></a><span class="cf">fi</span></span></code></pre></div>
+<div id="verify-meme-installation" class="section level3 hasAnchor" number="12.3.1">
+<h3><span class="header-section-number">12.3.1</span> Verify MEME Installation<a href="motif-analysis-meme-suite.html#verify-meme-installation" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<div class="sourceCode" id="cb422"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb422-1"><a href="motif-analysis-meme-suite.html#cb422-1" tabindex="-1"></a><span class="co"># Check MEME installation</span></span>
+<span id="cb422-2"><a href="motif-analysis-meme-suite.html#cb422-2" tabindex="-1"></a><span class="fu">check_meme_install</span>()</span></code></pre></div>
+<pre><code>## checking main install</code></pre>
+<pre><code>## ✔ /Users/clstacy/meme/bin
+## checking util installs
+## 
+## ✔ /Users/clstacy/meme/bin/dreme
+## ✔ /Users/clstacy/meme/bin/ame
+## ✔ /Users/clstacy/meme/bin/fimo
+## ✔ /Users/clstacy/meme/bin/tomtom
+## ✔ /Users/clstacy/meme/bin/meme
+## ✔ /Users/clstacy/meme/bin/streme</code></pre>
+<p>If install didn’t work, troubleshooting is needed.</p>
+</div>
+</div>
+<div id="analysis-motif-discovery-for-msn24-vs-wt-response-to-etoh" class="section level2 hasAnchor" number="12.4">
+<h2><span class="header-section-number">12.4</span> Analysis: Motif Discovery for <em>msn2/4</em>∆∆ vs WT Response to EtOH<a href="motif-analysis-meme-suite.html#analysis-motif-discovery-for-msn24-vs-wt-response-to-etoh" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div id="retrieve-logfc-and-fdr-values" class="section level3 hasAnchor" number="12.4.1">
+<h3><span class="header-section-number">12.4.1</span> Retrieve LogFC and FDR values<a href="motif-analysis-meme-suite.html#retrieve-logfc-and-fdr-values" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Let’s load in the <code>DE_yeast_TF_stress.txt</code> file containing logFC and FDR
+values for a variety of yeast strains and stress conditions.</p>
+<div class="sourceCode" id="cb425"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb425-1"><a href="motif-analysis-meme-suite.html#cb425-1" tabindex="-1"></a><span class="co"># Load gene file used in clustering</span></span>
+<span id="cb425-2"><a href="motif-analysis-meme-suite.html#cb425-2" tabindex="-1"></a>FC_list <span class="ot">&lt;-</span> data.table<span class="sc">::</span><span class="fu">fread</span>(</span>
+<span id="cb425-3"><a href="motif-analysis-meme-suite.html#cb425-3" tabindex="-1"></a>  <span class="st">&quot;https://github.com/clstacy/GenomicDataAnalysis_Fa23/raw/main/data/DE_yeast_TF_stress.txt.gz&quot;</span>) <span class="sc">|&gt;</span></span>
+<span id="cb425-4"><a href="motif-analysis-meme-suite.html#cb425-4" tabindex="-1"></a>  <span class="fu">as_tibble</span>(<span class="at">.name_repair =</span> <span class="st">&quot;universal&quot;</span></span>
+<span id="cb425-5"><a href="motif-analysis-meme-suite.html#cb425-5" tabindex="-1"></a>)</span></code></pre></div>
+<pre><code>## New names:
+## • `logFC: WT NaCl response` -&gt; `logFC..WT.NaCl.response`
+## • `FDR: WT NaCl response` -&gt; `FDR..WT.NaCl.response`
+## • `logFC: msn24 mutant NaCl response` -&gt; `logFC..msn24.mutant.NaCl.response`
+## • `FDR: msn24 mutant NaCl response` -&gt; `FDR..msn24.mutant.NaCl.response`
+## • `logFC: yap1 mutant NaCl response` -&gt; `logFC..yap1.mutant.NaCl.response`
+## • `FDR: yap1 mutant NaCl response` -&gt; `FDR..yap1.mutant.NaCl.response`
+## • `logFC: skn7 mutant NaCl response` -&gt; `logFC..skn7.mutant.NaCl.response`
+## • `FDR: skn7 mutant NaCl response` -&gt; `FDR..skn7.mutant.NaCl.response`
+## • `logFC: WT EtOH response` -&gt; `logFC..WT.EtOH.response`
+## • `FDR: WT EtOH response` -&gt; `FDR..WT.EtOH.response`
+## • `logFC: msn24 mutant EtOH response` -&gt; `logFC...msn24.mutant.EtOH.response`
+## • `FDR: msn24 mutan EtOH response` -&gt; `FDR...msn24.mutan..EtOH.response`
+## • `logFC: yap1 mutant EtOH response` -&gt; `logFC...yap1.mutant.EtOH.response`
+## • `FDR: yap1 mutant EtOH response` -&gt; `FDR...yap1.mutant.EtOH.response`
+## • `logFC: skn7 mutant EtOH response` -&gt; `logFC...skn7.mutant.EtOH.response`
+## • `FDR: skn7 mutant EtOH response` -&gt; `FDR...skn7.mutant.EtOH.response`
+## • `logFC: WT v msn24 mutant: NaCl response` -&gt;
+##   `logFC..WT.v.msn24.mutant..NaCl.response`
+## • `FDR: WT v msn24 mutant: NaCl response` -&gt;
+##   `FDR..WT.v.msn24.mutant..NaCl.response`
+## • `logFC: WT v yap1 mutant: NaCl response` -&gt;
+##   `logFC..WT.v.yap1.mutant..NaCl.response`
+## • `FDR: WT v yap1 mutant: NaCl response` -&gt;
+##   `FDR..WT.v.yap1.mutant..NaCl.response`
+## • `logFC: WT v skn7 mutant: NaCl response` -&gt;
+##   `logFC..WT.v.skn7.mutant..NaCl.response`
+## • `FDR: WT v skn7 mutant NaCl response` -&gt;
+##   `FDR..WT.v.skn7.mutant.NaCl.response`
+## • `logFC: WT v msn24 mutant: EtOH response` -&gt;
+##   `logFC..WT.v.msn24.mutant..EtOH.response`
+## • `FDR: WT v msn24 mutant: EtOH response` -&gt;
+##   `FDR..WT.v.msn24.mutant..EtOH.response`
+## • `logFC: WT v yap1 mutant: EtOH response` -&gt;
+##   `logFC..WT.v.yap1.mutant..EtOH.response`
+## • `FDR: WT v yap1 mutant: EtOH response` -&gt;
+##   `FDR..WT.v.yap1.mutant..EtOH.response`
+## • `logFC: WT v skn7 mutant: EtOH response` -&gt;
+##   `logFC..WT.v.skn7.mutant..EtOH.response`
+## • `FDR: WT v skn7 mutant: EtOH response` -&gt;
+##   `FDR..WT.v.skn7.mutant..EtOH.response`</code></pre>
+</div>
+<div id="selecting-an-ensembl-biomart-database-and-dataset" class="section level3 hasAnchor" number="12.4.2">
+<h3><span class="header-section-number">12.4.2</span> Selecting an Ensembl BioMart database and dataset<a href="motif-analysis-meme-suite.html#selecting-an-ensembl-biomart-database-and-dataset" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<div class="sourceCode" id="cb427"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb427-1"><a href="motif-analysis-meme-suite.html#cb427-1" tabindex="-1"></a>ensembl <span class="ot">&lt;-</span> <span class="fu">useEnsembl</span>(<span class="at">biomart =</span> <span class="st">&quot;genes&quot;</span>)</span>
+<span id="cb427-2"><a href="motif-analysis-meme-suite.html#cb427-2" tabindex="-1"></a>ensembl</span></code></pre></div>
+<pre><code>## Object of class &#39;Mart&#39;:
+##   Using the ENSEMBL_MART_ENSEMBL BioMart database
+##   No dataset selected.</code></pre>
+<p>Not we have loaded the “gene” database, but haven’t selected a dataset
+yet. Let’s find the one we want:</p>
+<div class="sourceCode" id="cb429"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb429-1"><a href="motif-analysis-meme-suite.html#cb429-1" tabindex="-1"></a><span class="fu">searchDatasets</span>(<span class="at">mart =</span> ensembl, </span>
+<span id="cb429-2"><a href="motif-analysis-meme-suite.html#cb429-2" tabindex="-1"></a>               <span class="at">pattern =</span> <span class="st">&quot;scerevisiae&quot;</span>)</span></code></pre></div>
+<pre><code>##                      dataset                              description version
+## 173 scerevisiae_gene_ensembl Saccharomyces cerevisiae genes (R64-1-1) R64-1-1</code></pre>
+<p>So the dataset needs to be “scerevisiae_gene_ensembl” for yeast. Can you
+find it for your organism?</p>
+<div class="sourceCode" id="cb431"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb431-1"><a href="motif-analysis-meme-suite.html#cb431-1" tabindex="-1"></a><span class="co"># Assign ensembl with the desired dataset</span></span>
+<span id="cb431-2"><a href="motif-analysis-meme-suite.html#cb431-2" tabindex="-1"></a>ensembl <span class="ot">&lt;-</span> <span class="fu">useEnsembl</span>(<span class="at">biomart =</span> <span class="st">&quot;genes&quot;</span>, </span>
+<span id="cb431-3"><a href="motif-analysis-meme-suite.html#cb431-3" tabindex="-1"></a>                      <span class="at">dataset =</span> <span class="st">&quot;scerevisiae_gene_ensembl&quot;</span>)</span></code></pre></div>
+</div>
+<div id="retrieve-upstream-sequences" class="section level3 hasAnchor" number="12.4.3">
+<h3><span class="header-section-number">12.4.3</span> Retrieve Upstream Sequences<a href="motif-analysis-meme-suite.html#retrieve-upstream-sequences" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<div class="sourceCode" id="cb432"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb432-1"><a href="motif-analysis-meme-suite.html#cb432-1" tabindex="-1"></a><span class="co"># Retrieve the ORF IDs included in the dataset</span></span>
+<span id="cb432-2"><a href="motif-analysis-meme-suite.html#cb432-2" tabindex="-1"></a>ORFs_in_analysis <span class="ot">=</span> FC_list<span class="sc">$</span>ID</span>
+<span id="cb432-3"><a href="motif-analysis-meme-suite.html#cb432-3" tabindex="-1"></a></span>
+<span id="cb432-4"><a href="motif-analysis-meme-suite.html#cb432-4" tabindex="-1"></a><span class="co"># Get the upstream sequences for each gene and save in data.frame</span></span>
+<span id="cb432-5"><a href="motif-analysis-meme-suite.html#cb432-5" tabindex="-1"></a>seq <span class="ot">&lt;-</span> <span class="fu">getSequence</span>(<span class="at">id =</span> ORFs_in_analysis,</span>
+<span id="cb432-6"><a href="motif-analysis-meme-suite.html#cb432-6" tabindex="-1"></a>                 <span class="at">type=</span><span class="st">&quot;ensembl_gene_id&quot;</span>,</span>
+<span id="cb432-7"><a href="motif-analysis-meme-suite.html#cb432-7" tabindex="-1"></a>                 <span class="at">seqType=</span><span class="st">&quot;coding_gene_flank&quot;</span>,</span>
+<span id="cb432-8"><a href="motif-analysis-meme-suite.html#cb432-8" tabindex="-1"></a>                 <span class="at">upstream=</span><span class="dv">500</span>, </span>
+<span id="cb432-9"><a href="motif-analysis-meme-suite.html#cb432-9" tabindex="-1"></a>                 <span class="at">mart=</span>ensembl,</span>
+<span id="cb432-10"><a href="motif-analysis-meme-suite.html#cb432-10" tabindex="-1"></a>                 <span class="at">useCache =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb432-11"><a href="motif-analysis-meme-suite.html#cb432-11" tabindex="-1"></a></span>
+<span id="cb432-12"><a href="motif-analysis-meme-suite.html#cb432-12" tabindex="-1"></a><span class="co"># Filter out rows with no sequence found</span></span>
+<span id="cb432-13"><a href="motif-analysis-meme-suite.html#cb432-13" tabindex="-1"></a>seq <span class="ot">&lt;-</span> seq <span class="sc">|&gt;</span> <span class="fu">filter</span>(coding_gene_flank <span class="sc">!=</span> <span class="st">&quot;Sequence unavailable&quot;</span>)</span>
+<span id="cb432-14"><a href="motif-analysis-meme-suite.html#cb432-14" tabindex="-1"></a></span>
+<span id="cb432-15"><a href="motif-analysis-meme-suite.html#cb432-15" tabindex="-1"></a><span class="co"># Display obtained sequences</span></span>
+<span id="cb432-16"><a href="motif-analysis-meme-suite.html#cb432-16" tabindex="-1"></a><span class="fu">glimpse</span>(seq)</span></code></pre></div>
+<pre><code>## Rows: 5,717
+## Columns: 2
+## $ coding_gene_flank &lt;chr&gt; &quot;AATTGAATCTCATTTGTGCATTCTCCACGCTACTTCTAGCAATTTCCGCCT…
+## $ ensembl_gene_id   &lt;chr&gt; &quot;YBL091C&quot;, &quot;YAL033W&quot;, &quot;YAL064W&quot;, &quot;YBL066C&quot;, &quot;YBL089W…</code></pre>
+<p>Now we have the 500bp upstream sequences for (almost) all of the genes
+in the genome. Note that for yeast, this isn’t too much data for a
+laptop. If you’re working with a larger genome, you might need to subset
+the gene list down just to the genes in your gene list.</p>
+</div>
+</div>
+<div id="motif-analysis-for-genes-downregulated-in-etoh-response" class="section level2 hasAnchor" number="12.5">
+<h2><span class="header-section-number">12.5</span> Motif Analysis for Genes Downregulated in EtOH Response<a href="motif-analysis-meme-suite.html#motif-analysis-for-genes-downregulated-in-etoh-response" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>In order to continue, we need a list of genes.</p>
+<p>What gene list do you think has the most interesting biological meaning
+for motif analysis? One comparison to consider is the genes that are
+most different in the EtOH response between WT and <em>msn2/4</em>∆∆ samples.
+Let’s get that list of genes with large magnitude and statistically
+significant negative logFC values now:</p>
+<div class="sourceCode" id="cb434"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb434-1"><a href="motif-analysis-meme-suite.html#cb434-1" tabindex="-1"></a><span class="co"># Create gene list for downregulated genes</span></span>
+<span id="cb434-2"><a href="motif-analysis-meme-suite.html#cb434-2" tabindex="-1"></a>msn24_EtOH_down <span class="ot">&lt;-</span> FC_list <span class="sc">|&gt;</span></span>
+<span id="cb434-3"><a href="motif-analysis-meme-suite.html#cb434-3" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">filter</span>(logFC..WT.v.msn24.mutant..EtOH.response <span class="sc">&lt;</span> <span class="sc">-</span><span class="dv">2</span>) <span class="sc">|&gt;</span></span>
+<span id="cb434-4"><a href="motif-analysis-meme-suite.html#cb434-4" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">filter</span>(FDR..WT.v.msn24.mutant..EtOH.response<span class="sc">&lt;</span><span class="fl">0.01</span>) <span class="sc">|&gt;</span></span>
+<span id="cb434-5"><a href="motif-analysis-meme-suite.html#cb434-5" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">select</span>(ID) <span class="sc">%&gt;%</span></span>
+<span id="cb434-6"><a href="motif-analysis-meme-suite.html#cb434-6" tabindex="-1"></a>  <span class="co"># add the upstream sequences as a new column</span></span>
+<span id="cb434-7"><a href="motif-analysis-meme-suite.html#cb434-7" tabindex="-1"></a>  <span class="fu">left_join</span>(seq, <span class="at">by=</span><span class="fu">c</span>(<span class="st">&quot;ID&quot;</span> <span class="ot">=</span> <span class="st">&quot;ensembl_gene_id&quot;</span>)) <span class="sc">|&gt;</span></span>
+<span id="cb434-8"><a href="motif-analysis-meme-suite.html#cb434-8" tabindex="-1"></a>  <span class="fu">drop_na</span>(<span class="st">&quot;coding_gene_flank&quot;</span>)</span>
+<span id="cb434-9"><a href="motif-analysis-meme-suite.html#cb434-9" tabindex="-1"></a></span>
+<span id="cb434-10"><a href="motif-analysis-meme-suite.html#cb434-10" tabindex="-1"></a><span class="co"># Glimpse at the genes identified.</span></span>
+<span id="cb434-11"><a href="motif-analysis-meme-suite.html#cb434-11" tabindex="-1"></a><span class="fu">glimpse</span>(msn24_EtOH_down)</span></code></pre></div>
+<pre><code>## Rows: 107
+## Columns: 2
+## $ ID                &lt;chr&gt; &quot;YAL061W&quot;, &quot;YBL015W&quot;, &quot;YBL049W&quot;, &quot;YBL064C&quot;, &quot;YBR054W…
+## $ coding_gene_flank &lt;chr&gt; &quot;CGCTATTTTCTTTTTGTTCGTAACTATCTGTGTATGTAGTAGTGTAATCTA…</code></pre>
+<p>For MEME analysis, the gene list needs to be formatted like a fasta
+file. Here is how we can do that:</p>
+<div class="sourceCode" id="cb436"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb436-1"><a href="motif-analysis-meme-suite.html#cb436-1" tabindex="-1"></a><span class="co"># create Biostrings object</span></span>
+<span id="cb436-2"><a href="motif-analysis-meme-suite.html#cb436-2" tabindex="-1"></a>msn24_EtOH_down_fa <span class="ot">&lt;-</span> Biostrings<span class="sc">::</span><span class="fu">DNAStringSet</span>(msn24_EtOH_down<span class="sc">$</span>coding_gene_flank)</span>
+<span id="cb436-3"><a href="motif-analysis-meme-suite.html#cb436-3" tabindex="-1"></a><span class="co"># Add gene names</span></span>
+<span id="cb436-4"><a href="motif-analysis-meme-suite.html#cb436-4" tabindex="-1"></a><span class="fu">names</span>(msn24_EtOH_down_fa) <span class="ot">&lt;-</span> msn24_EtOH_down<span class="sc">$</span>ID</span></code></pre></div>
+<p>Let’s create a folder to which we can save output files.</p>
+<div class="sourceCode" id="cb437"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb437-1"><a href="motif-analysis-meme-suite.html#cb437-1" tabindex="-1"></a><span class="co"># Choose output directory for the output files to be saved</span></span>
+<span id="cb437-2"><a href="motif-analysis-meme-suite.html#cb437-2" tabindex="-1"></a>out_dir <span class="ot">&lt;-</span> <span class="fu">path.expand</span>(<span class="st">&quot;~/Desktop/Genomic_Data_Analysis/Analysis/memes/&quot;</span>)</span>
+<span id="cb437-3"><a href="motif-analysis-meme-suite.html#cb437-3" tabindex="-1"></a></span>
+<span id="cb437-4"><a href="motif-analysis-meme-suite.html#cb437-4" tabindex="-1"></a><span class="co"># Create out_dir directory if doesn&#39;t already exist</span></span>
+<span id="cb437-5"><a href="motif-analysis-meme-suite.html#cb437-5" tabindex="-1"></a><span class="cf">if</span> (<span class="sc">!</span><span class="fu">dir.exists</span>(out_dir)) {</span>
+<span id="cb437-6"><a href="motif-analysis-meme-suite.html#cb437-6" tabindex="-1"></a>  <span class="fu">dir.create</span>(out_dir, <span class="at">recursive =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb437-7"><a href="motif-analysis-meme-suite.html#cb437-7" tabindex="-1"></a>}</span></code></pre></div>
+<div id="run-meme-enrichment" class="section level3 hasAnchor" number="12.5.1">
+<h3><span class="header-section-number">12.5.1</span> Run Meme enrichment<a href="motif-analysis-meme-suite.html#run-meme-enrichment" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>This was the first algorithm developed in the MEME-suite, and is still
+widely used. However, it is not always the best approach. MEME is
+recommended when you have fewer than 50 sequences, while STREME is
+recommended when you have more. Also, the default parameter settings are
+often <strong>not</strong> the best options depending on your organism (e.g, bacteria
+tend to have longer motifs). We can adjust these settings in class to
+parameters better suited to our data (based on biological domain
+knowledge). See all of the parameter options at:
+<a href="https://meme-suite.org/meme/doc/meme.html" class="uri">https://meme-suite.org/meme/doc/meme.html</a></p>
+<div class="sourceCode" id="cb438"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb438-1"><a href="motif-analysis-meme-suite.html#cb438-1" tabindex="-1"></a><span class="co"># Run Meme</span></span>
+<span id="cb438-2"><a href="motif-analysis-meme-suite.html#cb438-2" tabindex="-1"></a>meme_msn24_EtOH_down <span class="ot">&lt;-</span> <span class="fu">runMeme</span>(msn24_EtOH_down_fa, </span>
+<span id="cb438-3"><a href="motif-analysis-meme-suite.html#cb438-3" tabindex="-1"></a>        <span class="at">minw =</span> <span class="dv">8</span>, <span class="co"># default is 8, for yeast I use 5</span></span>
+<span id="cb438-4"><a href="motif-analysis-meme-suite.html#cb438-4" tabindex="-1"></a>        <span class="at">maxw=</span> <span class="dv">50</span>, <span class="co">#default is 50, for yeast I use 20</span></span>
+<span id="cb438-5"><a href="motif-analysis-meme-suite.html#cb438-5" tabindex="-1"></a>        <span class="at">mod=</span> <span class="st">&quot;zoops&quot;</span>, <span class="co">#zero or one occurence per sequence</span></span>
+<span id="cb438-6"><a href="motif-analysis-meme-suite.html#cb438-6" tabindex="-1"></a>        <span class="at">parse_genomic_coord=</span><span class="cn">FALSE</span>,</span>
+<span id="cb438-7"><a href="motif-analysis-meme-suite.html#cb438-7" tabindex="-1"></a>        <span class="at">silent=</span>F,</span>
+<span id="cb438-8"><a href="motif-analysis-meme-suite.html#cb438-8" tabindex="-1"></a>        <span class="at">outdir =</span> <span class="fu">path.expand</span>(<span class="fu">paste0</span>(out_dir, <span class="st">&quot;meme_msn24_EtOH_down&quot;</span>))</span>
+<span id="cb438-9"><a href="motif-analysis-meme-suite.html#cb438-9" tabindex="-1"></a>        )</span></code></pre></div>
+<pre><code>## </code></pre>
+<div class="sourceCode" id="cb440"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb440-1"><a href="motif-analysis-meme-suite.html#cb440-1" tabindex="-1"></a><span class="co"># Display Meme results</span></span>
+<span id="cb440-2"><a href="motif-analysis-meme-suite.html#cb440-2" tabindex="-1"></a>meme_msn24_EtOH_down</span></code></pre></div>
+<pre><code>##          motif                  name altname             consensus alphabet
+## 1 &lt;mot:TTYT..&gt; TTYTTTTWYTTTTTTYTTBTT  MEME-1 YYYTTTTWYTTTYTTYNTYTT      DNA
+##   strand  icscore nsites    eval type pseudocount          bkg width
+## 1      + 17.79857     64 1.4e-61  PPM           1 0.311, 0....    21
+##     sites_hits
+## 1 c(&quot;YOR34....
+## 
+## [Hidden empty columns: family, organism, bkgsites, pval, qval.]</code></pre>
+</div>
+<div id="run-steme-enrichment" class="section level3 hasAnchor" number="12.5.2">
+<h3><span class="header-section-number">12.5.2</span> Run STEME enrichment<a href="motif-analysis-meme-suite.html#run-steme-enrichment" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>STEME is a newer MEME suite tool, that is better suited to looking for
+shorter motifs which are common in Eukaryotes.</p>
+<p>For <code>runStreme</code>, properly setting the <code>control</code> parameter is key to
+discovering biologically relevant motifs. Often, using
+<code>control = "shuffle"</code> will produce a suboptimal set of motifs; however,
+some discriminative analysis designs don’t have proper “control” regions
+other than to shuffle.</p>
+<p>For our analysis, we can use the promoter sequences from the entire
+genome as a background to model the null distribution, let’s create an
+object in R with all of the 500bp upstream sequences from <code>seq</code> to use
+as a control.</p>
+<div class="sourceCode" id="cb442"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb442-1"><a href="motif-analysis-meme-suite.html#cb442-1" tabindex="-1"></a><span class="co"># create a DNAStringSet object from our FC_list we created above.</span></span>
+<span id="cb442-2"><a href="motif-analysis-meme-suite.html#cb442-2" tabindex="-1"></a>background_fa <span class="ot">&lt;-</span> <span class="fu">DNAStringSet</span>(<span class="fu">left_join</span>(FC_list,seq, <span class="at">by=</span><span class="fu">c</span>(<span class="st">&quot;ID&quot;</span> <span class="ot">=</span> <span class="st">&quot;ensembl_gene_id&quot;</span>)) <span class="sc">|&gt;</span></span>
+<span id="cb442-3"><a href="motif-analysis-meme-suite.html#cb442-3" tabindex="-1"></a>                                       <span class="fu">drop_na</span>(<span class="st">&quot;coding_gene_flank&quot;</span>) <span class="sc">|&gt;</span> <span class="fu">pull</span>(coding_gene_flank))</span>
+<span id="cb442-4"><a href="motif-analysis-meme-suite.html#cb442-4" tabindex="-1"></a><span class="co"># add gene names</span></span>
+<span id="cb442-5"><a href="motif-analysis-meme-suite.html#cb442-5" tabindex="-1"></a><span class="fu">names</span>(background_fa) <span class="ot">&lt;-</span> <span class="fu">left_join</span>(FC_list,seq, <span class="at">by=</span><span class="fu">c</span>(<span class="st">&quot;ID&quot;</span> <span class="ot">=</span> <span class="st">&quot;ensembl_gene_id&quot;</span>)) <span class="sc">|&gt;</span></span>
+<span id="cb442-6"><a href="motif-analysis-meme-suite.html#cb442-6" tabindex="-1"></a>                                       <span class="fu">drop_na</span>(<span class="st">&quot;coding_gene_flank&quot;</span>) <span class="sc">|&gt;</span> <span class="fu">pull</span>(ID)</span></code></pre></div>
+<div class="sourceCode" id="cb443"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb443-1"><a href="motif-analysis-meme-suite.html#cb443-1" tabindex="-1"></a><span class="co"># Run Streme</span></span>
+<span id="cb443-2"><a href="motif-analysis-meme-suite.html#cb443-2" tabindex="-1"></a>streme_msn24_EtOH_down <span class="ot">&lt;-</span> <span class="fu">runStreme</span>(msn24_EtOH_down_fa, </span>
+<span id="cb443-3"><a href="motif-analysis-meme-suite.html#cb443-3" tabindex="-1"></a>        <span class="at">control=</span> background_fa,</span>
+<span id="cb443-4"><a href="motif-analysis-meme-suite.html#cb443-4" tabindex="-1"></a>        <span class="at">minw =</span> <span class="dv">8</span>, <span class="co"># default is 8, for yeast I use 5</span></span>
+<span id="cb443-5"><a href="motif-analysis-meme-suite.html#cb443-5" tabindex="-1"></a>        <span class="at">maxw=</span> <span class="dv">15</span>, <span class="co">#default is 15, for yeast i use 20</span></span>
+<span id="cb443-6"><a href="motif-analysis-meme-suite.html#cb443-6" tabindex="-1"></a>        <span class="at">parse_genomic_coord=</span><span class="cn">FALSE</span>,</span>
+<span id="cb443-7"><a href="motif-analysis-meme-suite.html#cb443-7" tabindex="-1"></a>        <span class="at">silent=</span><span class="cn">TRUE</span>,</span>
+<span id="cb443-8"><a href="motif-analysis-meme-suite.html#cb443-8" tabindex="-1"></a>        <span class="at">outdir =</span> <span class="fu">path.expand</span>(<span class="fu">paste0</span>(out_dir, <span class="st">&quot;streme_msn24_EtOH_down&quot;</span>))</span>
+<span id="cb443-9"><a href="motif-analysis-meme-suite.html#cb443-9" tabindex="-1"></a>        )</span>
+<span id="cb443-10"><a href="motif-analysis-meme-suite.html#cb443-10" tabindex="-1"></a></span>
+<span id="cb443-11"><a href="motif-analysis-meme-suite.html#cb443-11" tabindex="-1"></a><span class="co"># Display Streme results</span></span>
+<span id="cb443-12"><a href="motif-analysis-meme-suite.html#cb443-12" tabindex="-1"></a>streme_msn24_EtOH_down</span></code></pre></div>
+<pre><code>##                           motif               name  altname       consensus
+## m1_RCCCCTTACC      &lt;mot:m1_R..&gt;      m1_RCCCCTTACC STREME-1      RCCCCTTACC
+## m2_AAAGAAGCAGGAAGH &lt;mot:m2_A..&gt; m2_AAAGAAGCAGGAAGH STREME-2 AAAGAWGYAKGRAGH
+## m3_AAGGGGAT        &lt;mot:m3_A..&gt;        m3_AAGGGGAT STREME-3        AAGGGGAT
+## m4_CAACAAGG        &lt;mot:m4_C..&gt;        m4_CAACAAGG STREME-4        CAACAAGG
+## m5_CCTTATATAD      &lt;mot:m5_C..&gt;      m5_CCTTATATAD STREME-5      CCKTATATAN
+## m6_AYAGGGGT        &lt;mot:m6_A..&gt;        m6_AYAGGGGT STREME-6        AYAGGGGT
+## m7_AAGGGAGAAAB     &lt;mot:m7_A..&gt;     m7_AAGGGAGAAAB STREME-7     AAGGGAGAAAN
+## m8_MAGGGGCWGRANA   &lt;mot:m8_M..&gt;   m8_MAGGGGCWGRANA STREME-8   MAGGGGCWGRANA
+## m9_CCTTTTTCCC      &lt;mot:m9_C..&gt;      m9_CCTTTTTCCC STREME-9      CCTTTTTCCC
+##                    alphabet strand  icscore nsites    pval type pseudocount
+## m1_RCCCCTTACC           DNA     +- 11.03072     84 7.9e-06  PCM           0
+## m2_AAAGAAGCAGGAAGH      DNA     +- 21.39292      9 1.7e-02  PCM           0
+## m3_AAGGGGAT             DNA     +- 12.59474     27 2.1e-02  PCM           0
+## m4_CAACAAGG             DNA     +- 13.63451     16 3.9e-02  PCM           0
+## m5_CCTTATATAD           DNA     +- 15.67707     17 4.3e-02  PCM           0
+## m6_AYAGGGGT             DNA     +- 11.95501     21 4.7e-02  PCM           0
+## m7_AAGGGAGAAAB          DNA     +- 13.59987     26 1.2e-01  PCM           0
+## m8_MAGGGGCWGRANA        DNA     +- 14.77500     24 1.0e+00  PCM           0
+## m9_CCTTTTTCCC           DNA     +- 12.59822     28 1.0e+00  PCM           0
+##                             bkg width initial_width            seed
+## m1_RCCCCTTACC      0.315, 0....    10             9      ACCCCTTACC
+## m2_AAAGAAGCAGGAAGH 0.315, 0....    15            12 AAAGAAGCAGGAAGC
+## m3_AAGGGGAT        0.315, 0....     8             8        AAGGGGAT
+## m4_CAACAAGG        0.315, 0....     8             8        CAACAAGG
+## m5_CCTTATATAD      0.315, 0....    10             9      CCTTATATAG
+## m6_AYAGGGGT        0.315, 0....     8             6        ACAGGGGT
+## m7_AAGGGAGAAAB     0.315, 0....    11             7     AAGGGAGAAAT
+## m8_MAGGGGCWGRANA   0.315, 0....    13             7   CAGGGGCAGGACA
+## m9_CCTTTTTCCC      0.315, 0....    10            10      CCTTTTTCCC
+##                    score_threshold pos_count neg_count log_pval log_evalue
+## m1_RCCCCTTACC              9.70716         8        81 -5.10131   -4.14707
+## m2_AAAGAAGCAGGAAGH          17.469         1         0 -1.76418  -0.809934
+## m3_AAGGGGAT                11.0408         3        34 -1.67894  -0.724701
+## m4_CAACAAGG                13.4256         2        17 -1.40874    -0.4545
+## m5_CCTTATATAD              13.0759         2        18 -1.36701  -0.412767
+## m6_AYAGGGGT                11.4254         2        19 -1.32757  -0.373326
+## m7_AAGGGAGAAAB             12.0575         2        33 -0.93161  0.0226326
+## m8_MAGGGGCWGRANA           14.0348         0         8        0   0.954243
+## m9_CCTTTTTCCC              11.8246         0        31        0   0.954243
+##                      evalue dtc bernoulli train_pos_count train_neg_count
+## m1_RCCCCTTACC      7.1e-005  -1        -1              76             857
+## m2_AAAGAAGCAGGAAGH 1.5e-001  -1        -1               8              17
+## m3_AAGGGGAT        1.9e-001  -1        -1              24             300
+## m4_CAACAAGG        3.5e-001  -1        -1              14             179
+## m5_CCTTATATAD      3.9e-001  -1        -1              15             153
+## m6_AYAGGGGT        4.2e-001  -1        -1              19             234
+## m7_AAGGGAGAAAB     1.1e+000  -1        -1              24             254
+## m8_MAGGGGCWGRANA   9.0e+000  -1        -1              24              76
+## m9_CCTTTTTCCC      9.0e+000  -1        -1              28             227
+##                    train_log_pval train_pval train_dtc train_bernoulli npassing
+## m1_RCCCCTTACC            -38.7377    1.8e-39        -1              -1     1022
+## m2_AAAGAAGCAGGAAGH       -8.06722    8.6e-09        -1              -1       26
+## m3_AAGGGGAT              -8.63793    2.3e-09        -1              -1      361
+## m4_CAACAAGG              -5.00297    9.9e-06        -1              -1      212
+## m5_CCTTATATAD            -6.48842    3.2e-07        -1              -1      188
+## m6_AYAGGGGT              -6.93183    1.2e-07        -1              -1      274
+## m7_AAGGGAGAAAB           -10.0161    9.6e-11        -1              -1      313
+## m8_MAGGGGCWGRANA         -20.4613    3.5e-21        -1              -1      108
+## m9_CCTTTTTCCC            -14.4287    3.7e-15        -1              -1      286
+##                    is_palindromic elapsed_time total_sites
+## m1_RCCCCTTACC                  no         12.1          76
+## m2_AAAGAAGCAGGAAGH             no         64.3           8
+## m3_AAGGGGAT                    no         44.1          24
+## m4_CAACAAGG                    no          130          14
+## m5_CCTTATATAD                  no         81.1          15
+## m6_AYAGGGGT                    no        114.5          19
+## m7_AAGGGAGAAAB                 no        146.8          24
+## m8_MAGGGGCWGRANA               no         28.4          24
+## m9_CCTTTTTCCC                  no         98.5          28
+##                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    site_distr
+## m1_RCCCCTTACC           0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 1 0 0 0 0 0 0 1 0 1 0 0 1 1 0 1 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 1 1 1 0 0 0 0 1 0 0 0 0 0 0 0 0 1 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 1 0 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 1 1 0 0 1 0 0 0 1 0 0 1 1 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 2 0 0 0 1 0 0 0 0 0 0 0 0 0 1 0 0 1 0 0 0 0 0 0 0 1 2 1 0 0 0 1 0 0 0 0 0 0 0 0 0 1 1 1 0 0 3 0 0 0 0 1 0 0 1 0 0 0 1 0 1 1 1 0 0 0 1 1 0 0 0 0 0 0 0 0 1 0 1 0 0 0 0 0 0 1 1 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 2 0 1 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 1 0 0 0 0 1 0 0 0 1 1 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1
+## m2_AAAGAAGCAGGAAGH                0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+## m3_AAGGGGAT         1 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 1 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+## m4_CAACAAGG         0 0 2 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+## m5_CCTTATATAD           0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+## m6_AYAGGGGT         0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 1 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 1 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 1 0 0 1 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+## m7_AAGGGAGAAAB            0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 1 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 1 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 1 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0
+## m8_MAGGGGCWGRANA              0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 1 0 0 0 0 0 1 0 0 1 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 1 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 2 0 1 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 1 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+## m9_CCTTTTTCCC           0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 1 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 1 0 0 0 1 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+##                    max_sites          site_hist
+## m1_RCCCCTTACC              7  0 48 20 3 4 0 0 1
+## m2_AAAGAAGCAGGAAGH         1                0 8
+## m3_AAGGGGAT                2             0 23 1
+## m4_CAACAAGG                1               0 14
+## m5_CCTTATATAD              1               0 15
+## m6_AYAGGGGT                2             0 16 3
+## m7_AAGGGAGAAAB             2             0 23 1
+## m8_MAGGGGCWGRANA           1               0 24
+## m9_CCTTTTTCCC              2             0 27 1
+## 
+## [Hidden empty columns: family, organism, bkgsites, qval, eval.]</code></pre>
+</div>
+<div id="run-tomtom-analysis" class="section level3 hasAnchor" number="12.5.3">
+<h3><span class="header-section-number">12.5.3</span> Run TomTom analysis<a href="motif-analysis-meme-suite.html#run-tomtom-analysis" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Now, we can see if any of those identified motifs correspond to known
+motifs in databases. The TomTom algorithm, part of the MEME-suite,
+allows us to just that, comparing our identified motifs to known motifs
+in annotation databases.</p>
+<p>First, we need to download the YEASTRACT database file called
+(YEASTRACT_20130918.meme). We will pull this file from Github, but you
+can see and download all of the available databases at:
+<a href="https://meme-suite.org/meme/doc/download.html" class="uri">https://meme-suite.org/meme/doc/download.html</a>.</p>
+<div class="sourceCode" id="cb445"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb445-1"><a href="motif-analysis-meme-suite.html#cb445-1" tabindex="-1"></a><span class="co"># Download YEASTRACT database .meme</span></span>
+<span id="cb445-2"><a href="motif-analysis-meme-suite.html#cb445-2" tabindex="-1"></a></span>
+<span id="cb445-3"><a href="motif-analysis-meme-suite.html#cb445-3" tabindex="-1"></a><span class="co"># Define URL where data is located</span></span>
+<span id="cb445-4"><a href="motif-analysis-meme-suite.html#cb445-4" tabindex="-1"></a>URL_to_download <span class="ot">&lt;-</span></span>
+<span id="cb445-5"><a href="motif-analysis-meme-suite.html#cb445-5" tabindex="-1"></a>  <span class="st">&quot;https://github.com/clstacy/GenomicDataAnalysis_Fa23/raw/main/reference/YEAST/YEASTRACT_20130918.meme&quot;</span></span>
+<span id="cb445-6"><a href="motif-analysis-meme-suite.html#cb445-6" tabindex="-1"></a></span>
+<span id="cb445-7"><a href="motif-analysis-meme-suite.html#cb445-7" tabindex="-1"></a><span class="co"># Choose desired destination for the reference database file</span></span>
+<span id="cb445-8"><a href="motif-analysis-meme-suite.html#cb445-8" tabindex="-1"></a>db_destination <span class="ot">&lt;-</span></span>
+<span id="cb445-9"><a href="motif-analysis-meme-suite.html#cb445-9" tabindex="-1"></a>  <span class="fu">path.expand</span>(<span class="st">&quot;~/Desktop/Genomic_Data_Analysis/Reference/YEASTRACT_20130918.meme&quot;</span>)</span>
+<span id="cb445-10"><a href="motif-analysis-meme-suite.html#cb445-10" tabindex="-1"></a></span>
+<span id="cb445-11"><a href="motif-analysis-meme-suite.html#cb445-11" tabindex="-1"></a><span class="co"># Download the file and save to db_destination</span></span>
+<span id="cb445-12"><a href="motif-analysis-meme-suite.html#cb445-12" tabindex="-1"></a>curl<span class="sc">::</span><span class="fu">curl_download</span>(</span>
+<span id="cb445-13"><a href="motif-analysis-meme-suite.html#cb445-13" tabindex="-1"></a>  <span class="at">url =</span> URL_to_download,</span>
+<span id="cb445-14"><a href="motif-analysis-meme-suite.html#cb445-14" tabindex="-1"></a>  <span class="at">destfile =</span> db_destination,</span>
+<span id="cb445-15"><a href="motif-analysis-meme-suite.html#cb445-15" tabindex="-1"></a>  <span class="at">quiet =</span> <span class="cn">FALSE</span>,</span>
+<span id="cb445-16"><a href="motif-analysis-meme-suite.html#cb445-16" tabindex="-1"></a>  <span class="at">mode =</span> <span class="st">&quot;wb&quot;</span></span>
+<span id="cb445-17"><a href="motif-analysis-meme-suite.html#cb445-17" tabindex="-1"></a>)</span></code></pre></div>
+<div class="sourceCode" id="cb446"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb446-1"><a href="motif-analysis-meme-suite.html#cb446-1" tabindex="-1"></a><span class="co"># Run TomTom on motifs found by runMeme()</span></span>
+<span id="cb446-2"><a href="motif-analysis-meme-suite.html#cb446-2" tabindex="-1"></a>meme_tomtom_msn24_EtOH_down <span class="ot">&lt;-</span></span>
+<span id="cb446-3"><a href="motif-analysis-meme-suite.html#cb446-3" tabindex="-1"></a>  <span class="fu">runTomTom</span>(</span>
+<span id="cb446-4"><a href="motif-analysis-meme-suite.html#cb446-4" tabindex="-1"></a>    <span class="at">input =</span> meme_msn24_EtOH_down,</span>
+<span id="cb446-5"><a href="motif-analysis-meme-suite.html#cb446-5" tabindex="-1"></a>    <span class="at">norc =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb446-6"><a href="motif-analysis-meme-suite.html#cb446-6" tabindex="-1"></a>    <span class="at">thresh =</span> <span class="dv">10</span>,</span>
+<span id="cb446-7"><a href="motif-analysis-meme-suite.html#cb446-7" tabindex="-1"></a>    <span class="at">motif_pseudo =</span> <span class="fl">0.1</span>,</span>
+<span id="cb446-8"><a href="motif-analysis-meme-suite.html#cb446-8" tabindex="-1"></a>    <span class="at">database =</span> db_destination,</span>
+<span id="cb446-9"><a href="motif-analysis-meme-suite.html#cb446-9" tabindex="-1"></a>    <span class="at">outdir =</span> <span class="fu">path.expand</span>(<span class="fu">paste0</span>(out_dir, <span class="st">&quot;tomtom_meme_msn24_EtOH_down&quot;</span>))</span>
+<span id="cb446-10"><a href="motif-analysis-meme-suite.html#cb446-10" tabindex="-1"></a>  )</span>
+<span id="cb446-11"><a href="motif-analysis-meme-suite.html#cb446-11" tabindex="-1"></a></span>
+<span id="cb446-12"><a href="motif-analysis-meme-suite.html#cb446-12" tabindex="-1"></a><span class="co"># View Meme TomTom results</span></span>
+<span id="cb446-13"><a href="motif-analysis-meme-suite.html#cb446-13" tabindex="-1"></a><span class="fu">view_motifs</span>(meme_tomtom_msn24_EtOH_down<span class="sc">$</span>best_match_motif)</span></code></pre></div>
+<p><img src="_main_files/figure-html/run-tomtom-meme-motif-1.png" width="672" /></p>
+<p>Go to the <code>out_dir</code> directory on your computer, and open the tomtom.html
+file. How convincing are those matches? With the default options, I’m
+not impressed.</p>
+<p>Let’s run TomTom on the output of the <code>runStreme()</code> command above, and
+see what we find.</p>
+<div class="sourceCode" id="cb447"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb447-1"><a href="motif-analysis-meme-suite.html#cb447-1" tabindex="-1"></a><span class="co"># Run TomTom on motifs found by runStreme()</span></span>
+<span id="cb447-2"><a href="motif-analysis-meme-suite.html#cb447-2" tabindex="-1"></a>streme_tomtom_msn24_EtOH_down <span class="ot">&lt;-</span></span>
+<span id="cb447-3"><a href="motif-analysis-meme-suite.html#cb447-3" tabindex="-1"></a>  <span class="fu">runTomTom</span>(</span>
+<span id="cb447-4"><a href="motif-analysis-meme-suite.html#cb447-4" tabindex="-1"></a>    <span class="at">input =</span> streme_msn24_EtOH_down,</span>
+<span id="cb447-5"><a href="motif-analysis-meme-suite.html#cb447-5" tabindex="-1"></a>    <span class="at">norc =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb447-6"><a href="motif-analysis-meme-suite.html#cb447-6" tabindex="-1"></a>    <span class="at">thresh =</span> <span class="dv">10</span>,</span>
+<span id="cb447-7"><a href="motif-analysis-meme-suite.html#cb447-7" tabindex="-1"></a>    <span class="at">motif_pseudo =</span> <span class="fl">0.1</span>,</span>
+<span id="cb447-8"><a href="motif-analysis-meme-suite.html#cb447-8" tabindex="-1"></a>    <span class="at">database =</span> db_destination,</span>
+<span id="cb447-9"><a href="motif-analysis-meme-suite.html#cb447-9" tabindex="-1"></a>    <span class="at">outdir =</span> <span class="fu">path.expand</span>(<span class="fu">paste0</span>(out_dir, <span class="st">&quot;tomtom_streme_msn24_EtOH_down&quot;</span>))</span>
+<span id="cb447-10"><a href="motif-analysis-meme-suite.html#cb447-10" tabindex="-1"></a>  )</span>
+<span id="cb447-11"><a href="motif-analysis-meme-suite.html#cb447-11" tabindex="-1"></a></span>
+<span id="cb447-12"><a href="motif-analysis-meme-suite.html#cb447-12" tabindex="-1"></a><span class="co"># View Streme TomTom results</span></span>
+<span id="cb447-13"><a href="motif-analysis-meme-suite.html#cb447-13" tabindex="-1"></a><span class="fu">view_motifs</span>(streme_tomtom_msn24_EtOH_down<span class="sc">$</span>best_match_motif,</span>
+<span id="cb447-14"><a href="motif-analysis-meme-suite.html#cb447-14" tabindex="-1"></a>            <span class="at">relative_entropy =</span> <span class="cn">FALSE</span>, </span>
+<span id="cb447-15"><a href="motif-analysis-meme-suite.html#cb447-15" tabindex="-1"></a>            <span class="at">normalise.scores =</span> <span class="cn">TRUE</span>, </span>
+<span id="cb447-16"><a href="motif-analysis-meme-suite.html#cb447-16" tabindex="-1"></a>            <span class="at">use.type =</span> <span class="st">&quot;ICM&quot;</span>, </span>
+<span id="cb447-17"><a href="motif-analysis-meme-suite.html#cb447-17" tabindex="-1"></a>            <span class="at">method =</span> <span class="st">&quot;WPCC&quot;</span>,</span>
+<span id="cb447-18"><a href="motif-analysis-meme-suite.html#cb447-18" tabindex="-1"></a>            <span class="at">tryRC =</span> <span class="cn">FALSE</span>)</span></code></pre></div>
+<p><img src="_main_files/figure-html/run-tomtom-streme-motif-1.png" width="672" /></p>
+<p>It can sometimes be helpful to manually look at the alignments to see if
+there’s anything unexpected going on. We can use the command
+<code>view_tomtom_hits()</code> to do this. The figures aren’t publication quality,
+but can be useful to see.</p>
+<div class="sourceCode" id="cb448"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb448-1"><a href="motif-analysis-meme-suite.html#cb448-1" tabindex="-1"></a><span class="fu">view_tomtom_hits</span>(streme_tomtom_msn24_EtOH_down, <span class="at">top_n =</span> <span class="dv">3</span>)</span></code></pre></div>
+<pre><code>## $m6_AYAGGGGT</code></pre>
+<p><img src="_main_files/figure-html/view-streme-tomtom-motif-1.png" width="672" /></p>
+<pre><code>## 
+## $m1_RCCCCTTACC</code></pre>
+<p><img src="_main_files/figure-html/view-streme-tomtom-motif-2.png" width="672" /></p>
+<pre><code>## 
+## $m8_MAGGGGCWGRANA</code></pre>
+<p><img src="_main_files/figure-html/view-streme-tomtom-motif-3.png" width="672" /></p>
+<pre><code>## 
+## $m7_AAGGGAGAAAB</code></pre>
+<p><img src="_main_files/figure-html/view-streme-tomtom-motif-4.png" width="672" /></p>
+<pre><code>## 
+## $m3_AAGGGGAT</code></pre>
+<p><img src="_main_files/figure-html/view-streme-tomtom-motif-5.png" width="672" /></p>
+<pre><code>## 
+## $m4_CAACAAGG</code></pre>
+<p><img src="_main_files/figure-html/view-streme-tomtom-motif-6.png" width="672" /></p>
+<pre><code>## 
+## $m9_CCTTTTTCCC</code></pre>
+<p><img src="_main_files/figure-html/view-streme-tomtom-motif-7.png" width="672" /></p>
+<pre><code>## 
+## $m5_CCTTATATAD</code></pre>
+<p><img src="_main_files/figure-html/view-streme-tomtom-motif-8.png" width="672" /></p>
+<pre><code>## 
+## $m2_AAAGAAGCAGGAAGH</code></pre>
+<p><img src="_main_files/figure-html/view-streme-tomtom-motif-9.png" width="672" /></p>
+<p>Cool! We see Msn2/4 promoter sequence motif is strongly enriched in the
+promoter sequences of the genes that are lower in Msn2/4∆∆ vs WT
+response to EtOH.</p>
+<p>Let’s do a sanity check, and do the exact same thing but for genes that
+were <em>higher</em> in the same contrast, and see what enrichments if any are
+found. We can put just the code we need:</p>
+<div class="sourceCode" id="cb458"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb458-1"><a href="motif-analysis-meme-suite.html#cb458-1" tabindex="-1"></a><span class="co"># Create gene list</span></span>
+<span id="cb458-2"><a href="motif-analysis-meme-suite.html#cb458-2" tabindex="-1"></a>msn24_EtOH_up <span class="ot">&lt;-</span> FC_list <span class="sc">|&gt;</span></span>
+<span id="cb458-3"><a href="motif-analysis-meme-suite.html#cb458-3" tabindex="-1"></a>  <span class="co"># I want more than 8 genes, so I lowered the FC cutoff</span></span>
+<span id="cb458-4"><a href="motif-analysis-meme-suite.html#cb458-4" tabindex="-1"></a>  <span class="fu">filter</span>(logFC..WT.v.msn24.mutant..EtOH.response <span class="sc">&gt;</span> <span class="dv">1</span>) <span class="sc">|&gt;</span></span>
+<span id="cb458-5"><a href="motif-analysis-meme-suite.html#cb458-5" tabindex="-1"></a>  <span class="fu">filter</span>(FDR..WT.v.msn24.mutant..EtOH.response<span class="sc">&lt;</span><span class="fl">0.01</span>) <span class="sc">|&gt;</span></span>
+<span id="cb458-6"><a href="motif-analysis-meme-suite.html#cb458-6" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">select</span>(ID) <span class="sc">%&gt;%</span></span>
+<span id="cb458-7"><a href="motif-analysis-meme-suite.html#cb458-7" tabindex="-1"></a>  <span class="co"># add the upstream seqs as a new column</span></span>
+<span id="cb458-8"><a href="motif-analysis-meme-suite.html#cb458-8" tabindex="-1"></a>  <span class="fu">left_join</span>(seq, <span class="at">by=</span><span class="fu">c</span>(<span class="st">&quot;ID&quot;</span> <span class="ot">=</span> <span class="st">&quot;ensembl_gene_id&quot;</span>)) <span class="sc">|&gt;</span></span>
+<span id="cb458-9"><a href="motif-analysis-meme-suite.html#cb458-9" tabindex="-1"></a>  <span class="fu">drop_na</span>(<span class="st">&quot;coding_gene_flank&quot;</span>)</span>
+<span id="cb458-10"><a href="motif-analysis-meme-suite.html#cb458-10" tabindex="-1"></a></span>
+<span id="cb458-11"><a href="motif-analysis-meme-suite.html#cb458-11" tabindex="-1"></a><span class="co"># create Biostrings object</span></span>
+<span id="cb458-12"><a href="motif-analysis-meme-suite.html#cb458-12" tabindex="-1"></a>msn24_EtOH_up_fa <span class="ot">&lt;-</span> <span class="fu">DNAStringSet</span>(msn24_EtOH_up<span class="sc">$</span>coding_gene_flank)</span>
+<span id="cb458-13"><a href="motif-analysis-meme-suite.html#cb458-13" tabindex="-1"></a><span class="co"># add gene names</span></span>
+<span id="cb458-14"><a href="motif-analysis-meme-suite.html#cb458-14" tabindex="-1"></a><span class="fu">names</span>(msn24_EtOH_up_fa) <span class="ot">&lt;-</span> msn24_EtOH_up<span class="sc">$</span>ID</span>
+<span id="cb458-15"><a href="motif-analysis-meme-suite.html#cb458-15" tabindex="-1"></a></span>
+<span id="cb458-16"><a href="motif-analysis-meme-suite.html#cb458-16" tabindex="-1"></a></span>
+<span id="cb458-17"><a href="motif-analysis-meme-suite.html#cb458-17" tabindex="-1"></a><span class="co"># we already have background genes, so don&#39;t need to put that code again...</span></span>
+<span id="cb458-18"><a href="motif-analysis-meme-suite.html#cb458-18" tabindex="-1"></a></span>
+<span id="cb458-19"><a href="motif-analysis-meme-suite.html#cb458-19" tabindex="-1"></a><span class="co"># Run Streme</span></span>
+<span id="cb458-20"><a href="motif-analysis-meme-suite.html#cb458-20" tabindex="-1"></a>streme_msn24_EtOH_up <span class="ot">&lt;-</span> <span class="fu">runStreme</span>(msn24_EtOH_up_fa, </span>
+<span id="cb458-21"><a href="motif-analysis-meme-suite.html#cb458-21" tabindex="-1"></a>        <span class="at">control=</span> background_fa,</span>
+<span id="cb458-22"><a href="motif-analysis-meme-suite.html#cb458-22" tabindex="-1"></a>        <span class="co"># control= &quot;shuffle&quot;,</span></span>
+<span id="cb458-23"><a href="motif-analysis-meme-suite.html#cb458-23" tabindex="-1"></a>        <span class="at">minw =</span> <span class="dv">5</span>, <span class="co"># default is 8, for yeast I use 5</span></span>
+<span id="cb458-24"><a href="motif-analysis-meme-suite.html#cb458-24" tabindex="-1"></a>        <span class="at">maxw=</span> <span class="dv">20</span>, <span class="co">#default is 15, for yeast I use 20</span></span>
+<span id="cb458-25"><a href="motif-analysis-meme-suite.html#cb458-25" tabindex="-1"></a>        <span class="at">parse_genomic_coord=</span><span class="cn">FALSE</span>,</span>
+<span id="cb458-26"><a href="motif-analysis-meme-suite.html#cb458-26" tabindex="-1"></a>        <span class="at">silent=</span><span class="cn">TRUE</span>,</span>
+<span id="cb458-27"><a href="motif-analysis-meme-suite.html#cb458-27" tabindex="-1"></a>  <span class="at">outdir =</span> <span class="fu">path.expand</span>(<span class="fu">paste0</span>(out_dir, <span class="st">&quot;streme_msn24_EtOH_up&quot;</span>))</span>
+<span id="cb458-28"><a href="motif-analysis-meme-suite.html#cb458-28" tabindex="-1"></a>        )</span>
+<span id="cb458-29"><a href="motif-analysis-meme-suite.html#cb458-29" tabindex="-1"></a></span>
+<span id="cb458-30"><a href="motif-analysis-meme-suite.html#cb458-30" tabindex="-1"></a><span class="co"># Run TomTom analysis</span></span>
+<span id="cb458-31"><a href="motif-analysis-meme-suite.html#cb458-31" tabindex="-1"></a>streme_tomtom_msn24_EtOH_up <span class="ot">&lt;-</span> <span class="fu">runTomTom</span>(</span>
+<span id="cb458-32"><a href="motif-analysis-meme-suite.html#cb458-32" tabindex="-1"></a>  <span class="at">input =</span> streme_msn24_EtOH_up,</span>
+<span id="cb458-33"><a href="motif-analysis-meme-suite.html#cb458-33" tabindex="-1"></a>  <span class="at">norc =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb458-34"><a href="motif-analysis-meme-suite.html#cb458-34" tabindex="-1"></a>  <span class="at">thresh =</span> <span class="dv">10</span>,</span>
+<span id="cb458-35"><a href="motif-analysis-meme-suite.html#cb458-35" tabindex="-1"></a>  <span class="at">motif_pseudo =</span> <span class="fl">0.1</span>,</span>
+<span id="cb458-36"><a href="motif-analysis-meme-suite.html#cb458-36" tabindex="-1"></a>  <span class="at">database =</span> db_destination,</span>
+<span id="cb458-37"><a href="motif-analysis-meme-suite.html#cb458-37" tabindex="-1"></a>  <span class="at">outdir =</span> <span class="fu">path.expand</span>(<span class="fu">paste0</span>(out_dir, <span class="st">&quot;tomtom_streme_msn24_EtOH_up&quot;</span>))</span>
+<span id="cb458-38"><a href="motif-analysis-meme-suite.html#cb458-38" tabindex="-1"></a>  )</span></code></pre></div>
+<p>Are Msn2/4 motifs enriched here? What biological meaning can we take
+away from this?</p>
+</div>
+</div>
+<div id="skn7-exposed-to-salt." class="section level2 hasAnchor" number="12.6">
+<h2><span class="header-section-number">12.6</span> <em>skn7</em>∆ exposed to salt.<a href="motif-analysis-meme-suite.html#skn7-exposed-to-salt." class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Now, let’s take a look another mutant from this study exposed to a
+different stressor.</p>
+<div class="sourceCode" id="cb459"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb459-1"><a href="motif-analysis-meme-suite.html#cb459-1" tabindex="-1"></a><span class="co"># create gene list</span></span>
+<span id="cb459-2"><a href="motif-analysis-meme-suite.html#cb459-2" tabindex="-1"></a>skn7_NaCl_down <span class="ot">&lt;-</span> FC_list <span class="sc">|&gt;</span></span>
+<span id="cb459-3"><a href="motif-analysis-meme-suite.html#cb459-3" tabindex="-1"></a>  <span class="fu">filter</span>(logFC..WT.v.skn7.mutant..NaCl.response <span class="sc">&lt;</span> <span class="sc">-</span><span class="dv">2</span>) <span class="sc">|&gt;</span></span>
+<span id="cb459-4"><a href="motif-analysis-meme-suite.html#cb459-4" tabindex="-1"></a>  <span class="fu">filter</span>(FDR..WT.v.skn7.mutant.NaCl.response<span class="sc">&lt;</span><span class="fl">0.00001</span>) <span class="sc">|&gt;</span></span>
+<span id="cb459-5"><a href="motif-analysis-meme-suite.html#cb459-5" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">select</span>(ID) <span class="sc">%&gt;%</span></span>
+<span id="cb459-6"><a href="motif-analysis-meme-suite.html#cb459-6" tabindex="-1"></a>  <span class="co"># add the upstream seqs as a new column</span></span>
+<span id="cb459-7"><a href="motif-analysis-meme-suite.html#cb459-7" tabindex="-1"></a>  <span class="fu">left_join</span>(seq, <span class="at">by=</span><span class="fu">c</span>(<span class="st">&quot;ID&quot;</span> <span class="ot">=</span> <span class="st">&quot;ensembl_gene_id&quot;</span>)) <span class="sc">|&gt;</span></span>
+<span id="cb459-8"><a href="motif-analysis-meme-suite.html#cb459-8" tabindex="-1"></a>  <span class="fu">drop_na</span>(<span class="st">&quot;coding_gene_flank&quot;</span>)</span>
+<span id="cb459-9"><a href="motif-analysis-meme-suite.html#cb459-9" tabindex="-1"></a></span>
+<span id="cb459-10"><a href="motif-analysis-meme-suite.html#cb459-10" tabindex="-1"></a><span class="co"># create Biostrings object</span></span>
+<span id="cb459-11"><a href="motif-analysis-meme-suite.html#cb459-11" tabindex="-1"></a>skn7_NaCl_down_fa <span class="ot">&lt;-</span> <span class="fu">DNAStringSet</span>(skn7_NaCl_down<span class="sc">$</span>coding_gene_flank)</span>
+<span id="cb459-12"><a href="motif-analysis-meme-suite.html#cb459-12" tabindex="-1"></a><span class="co"># add gene names</span></span>
+<span id="cb459-13"><a href="motif-analysis-meme-suite.html#cb459-13" tabindex="-1"></a><span class="fu">names</span>(skn7_NaCl_down_fa) <span class="ot">&lt;-</span> skn7_NaCl_down<span class="sc">$</span>ID</span>
+<span id="cb459-14"><a href="motif-analysis-meme-suite.html#cb459-14" tabindex="-1"></a></span>
+<span id="cb459-15"><a href="motif-analysis-meme-suite.html#cb459-15" tabindex="-1"></a><span class="co"># we already have background genes, so don&#39;t need to put that code again...</span></span>
+<span id="cb459-16"><a href="motif-analysis-meme-suite.html#cb459-16" tabindex="-1"></a></span>
+<span id="cb459-17"><a href="motif-analysis-meme-suite.html#cb459-17" tabindex="-1"></a><span class="co"># Run Streme</span></span>
+<span id="cb459-18"><a href="motif-analysis-meme-suite.html#cb459-18" tabindex="-1"></a>streme_skn7_NaCl_down <span class="ot">&lt;-</span> <span class="fu">runStreme</span>(skn7_NaCl_down_fa, </span>
+<span id="cb459-19"><a href="motif-analysis-meme-suite.html#cb459-19" tabindex="-1"></a>        <span class="at">control=</span> background_fa,</span>
+<span id="cb459-20"><a href="motif-analysis-meme-suite.html#cb459-20" tabindex="-1"></a>        <span class="co"># control= &quot;shuffle&quot;,</span></span>
+<span id="cb459-21"><a href="motif-analysis-meme-suite.html#cb459-21" tabindex="-1"></a>        <span class="at">minw =</span> <span class="dv">8</span>, <span class="co"># default is 8, for yeast I use 5</span></span>
+<span id="cb459-22"><a href="motif-analysis-meme-suite.html#cb459-22" tabindex="-1"></a>        <span class="at">maxw=</span> <span class="dv">15</span>, <span class="co">#default is 15, for yeast I use 20</span></span>
+<span id="cb459-23"><a href="motif-analysis-meme-suite.html#cb459-23" tabindex="-1"></a>        <span class="at">evalue=</span><span class="cn">TRUE</span>,</span>
+<span id="cb459-24"><a href="motif-analysis-meme-suite.html#cb459-24" tabindex="-1"></a>        <span class="at">parse_genomic_coord=</span><span class="cn">FALSE</span>,</span>
+<span id="cb459-25"><a href="motif-analysis-meme-suite.html#cb459-25" tabindex="-1"></a>        <span class="at">silent=</span><span class="cn">TRUE</span>,</span>
+<span id="cb459-26"><a href="motif-analysis-meme-suite.html#cb459-26" tabindex="-1"></a>        <span class="at">outdir =</span> <span class="fu">path.expand</span>(<span class="fu">paste0</span>(out_dir, <span class="st">&quot;streme_skn7_NaCl_down&quot;</span>))</span>
+<span id="cb459-27"><a href="motif-analysis-meme-suite.html#cb459-27" tabindex="-1"></a>        )</span></code></pre></div>
+<pre><code>## Warning: No hold-out set was created because the primary hold-out set</code></pre>
+<pre><code>##          would have had fewer than 5 sequences.</code></pre>
+<pre><code>## Warning: Ignoring &lt;thresh&gt; (0.05) and setting &lt;nmotifs&gt; to 5.</code></pre>
+<div class="sourceCode" id="cb463"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb463-1"><a href="motif-analysis-meme-suite.html#cb463-1" tabindex="-1"></a><span class="co"># Run TomTom analysis</span></span>
+<span id="cb463-2"><a href="motif-analysis-meme-suite.html#cb463-2" tabindex="-1"></a>streme_tomtom_skn7_NaCl_down <span class="ot">&lt;-</span> <span class="fu">runTomTom</span>(</span>
+<span id="cb463-3"><a href="motif-analysis-meme-suite.html#cb463-3" tabindex="-1"></a>  <span class="at">input =</span> streme_skn7_NaCl_down,</span>
+<span id="cb463-4"><a href="motif-analysis-meme-suite.html#cb463-4" tabindex="-1"></a>  <span class="co"># norc = TRUE,</span></span>
+<span id="cb463-5"><a href="motif-analysis-meme-suite.html#cb463-5" tabindex="-1"></a>  <span class="at">thresh =</span> <span class="dv">20</span>,</span>
+<span id="cb463-6"><a href="motif-analysis-meme-suite.html#cb463-6" tabindex="-1"></a>  <span class="at">motif_pseudo =</span> <span class="fl">0.1</span>,</span>
+<span id="cb463-7"><a href="motif-analysis-meme-suite.html#cb463-7" tabindex="-1"></a>  <span class="at">database =</span> db_destination,</span>
+<span id="cb463-8"><a href="motif-analysis-meme-suite.html#cb463-8" tabindex="-1"></a>  <span class="at">outdir =</span> <span class="fu">path.expand</span>(<span class="fu">paste0</span>(out_dir, <span class="st">&quot;tomtom_streme_skn7_NaCl_down&quot;</span>))</span>
+<span id="cb463-9"><a href="motif-analysis-meme-suite.html#cb463-9" tabindex="-1"></a>  )</span></code></pre></div>
+<p>Notice we have fewer genes this time, let’s try meme instead</p>
+<div class="sourceCode" id="cb464"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb464-1"><a href="motif-analysis-meme-suite.html#cb464-1" tabindex="-1"></a><span class="co"># Run Meme</span></span>
+<span id="cb464-2"><a href="motif-analysis-meme-suite.html#cb464-2" tabindex="-1"></a>meme_skn7_NaCl_down <span class="ot">&lt;-</span> <span class="fu">runMeme</span>(</span>
+<span id="cb464-3"><a href="motif-analysis-meme-suite.html#cb464-3" tabindex="-1"></a>  skn7_NaCl_down_fa,</span>
+<span id="cb464-4"><a href="motif-analysis-meme-suite.html#cb464-4" tabindex="-1"></a>  <span class="co"># control= &quot;shuffle&quot;, #background_fa,</span></span>
+<span id="cb464-5"><a href="motif-analysis-meme-suite.html#cb464-5" tabindex="-1"></a>  <span class="co"># objfun=&quot;de&quot;,</span></span>
+<span id="cb464-6"><a href="motif-analysis-meme-suite.html#cb464-6" tabindex="-1"></a>  <span class="at">parse_genomic_coord =</span> <span class="cn">FALSE</span>,</span>
+<span id="cb464-7"><a href="motif-analysis-meme-suite.html#cb464-7" tabindex="-1"></a>  <span class="at">minw =</span> <span class="dv">5</span>,</span>
+<span id="cb464-8"><a href="motif-analysis-meme-suite.html#cb464-8" tabindex="-1"></a>  <span class="at">maxw =</span> <span class="dv">20</span>,</span>
+<span id="cb464-9"><a href="motif-analysis-meme-suite.html#cb464-9" tabindex="-1"></a>  <span class="at">markov_order =</span> <span class="dv">2</span>,</span>
+<span id="cb464-10"><a href="motif-analysis-meme-suite.html#cb464-10" tabindex="-1"></a>  <span class="at">mod=</span> <span class="st">&quot;zoops&quot;</span>, <span class="co">#zero or one occurence per sequence</span></span>
+<span id="cb464-11"><a href="motif-analysis-meme-suite.html#cb464-11" tabindex="-1"></a>  <span class="at">seed =</span> <span class="dv">0</span>,</span>
+<span id="cb464-12"><a href="motif-analysis-meme-suite.html#cb464-12" tabindex="-1"></a>  <span class="at">dna =</span> T,</span>
+<span id="cb464-13"><a href="motif-analysis-meme-suite.html#cb464-13" tabindex="-1"></a>  <span class="at">revcomp =</span> T,</span>
+<span id="cb464-14"><a href="motif-analysis-meme-suite.html#cb464-14" tabindex="-1"></a>  <span class="at">evt =</span> <span class="fl">0.1</span>,</span>
+<span id="cb464-15"><a href="motif-analysis-meme-suite.html#cb464-15" tabindex="-1"></a>  <span class="at">outdir =</span> <span class="fu">path.expand</span>(<span class="fu">paste0</span>(out_dir, <span class="st">&quot;meme_skn7_NaCl_down&quot;</span>))</span>
+<span id="cb464-16"><a href="motif-analysis-meme-suite.html#cb464-16" tabindex="-1"></a>)</span>
+<span id="cb464-17"><a href="motif-analysis-meme-suite.html#cb464-17" tabindex="-1"></a></span>
+<span id="cb464-18"><a href="motif-analysis-meme-suite.html#cb464-18" tabindex="-1"></a><span class="co"># Run TomTom analysis</span></span>
+<span id="cb464-19"><a href="motif-analysis-meme-suite.html#cb464-19" tabindex="-1"></a>meme_tomtom_skn7_NaCl_down <span class="ot">&lt;-</span> <span class="fu">runTomTom</span>(</span>
+<span id="cb464-20"><a href="motif-analysis-meme-suite.html#cb464-20" tabindex="-1"></a>  <span class="at">input =</span> meme_skn7_NaCl_down,</span>
+<span id="cb464-21"><a href="motif-analysis-meme-suite.html#cb464-21" tabindex="-1"></a>  <span class="co"># norc = TRUE,</span></span>
+<span id="cb464-22"><a href="motif-analysis-meme-suite.html#cb464-22" tabindex="-1"></a>  <span class="at">thresh =</span> <span class="dv">10</span>,</span>
+<span id="cb464-23"><a href="motif-analysis-meme-suite.html#cb464-23" tabindex="-1"></a>  <span class="at">motif_pseudo =</span> <span class="fl">0.1</span>,</span>
+<span id="cb464-24"><a href="motif-analysis-meme-suite.html#cb464-24" tabindex="-1"></a>  <span class="at">min_overlap =</span> <span class="dv">5</span>,</span>
+<span id="cb464-25"><a href="motif-analysis-meme-suite.html#cb464-25" tabindex="-1"></a>  <span class="at">database =</span> db_destination,</span>
+<span id="cb464-26"><a href="motif-analysis-meme-suite.html#cb464-26" tabindex="-1"></a>  <span class="at">outdir =</span> <span class="fu">path.expand</span>(<span class="fu">paste0</span>(out_dir, <span class="st">&quot;tomtom_meme_skn7_NaCl_down&quot;</span>))</span>
+<span id="cb464-27"><a href="motif-analysis-meme-suite.html#cb464-27" tabindex="-1"></a>  )</span></code></pre></div>
+</div>
+<div id="questions-8" class="section level2 hasAnchor" number="12.7">
+<h2><span class="header-section-number">12.7</span> Questions<a href="motif-analysis-meme-suite.html#questions-8" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<ol style="list-style-type: decimal">
+<li><p>What is the difference in motifs when you change the settings for
+analyzing the msn2/4 mutant vs wild-type ethanol response using
+“zoops” or “anr” as the setting?</p></li>
+<li><p>Perform MEME and STREME on the wild-type salt response and wild-type
+ethanol response (using a log2 FC of 3 and FDR &lt; 0.01) to identify
+motifs in genes that are strongly induced for each stress, and then
+follow that analysis with TOMTOM. What TFs may be shared and what
+TFs may be different between the two stress responses?</p></li>
+</ol>
+<p>Be sure to knit this file into a pdf or html file once you’re finished.</p>
+<p>System information for reproducibility:</p>
+<div class="sourceCode" id="cb465"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb465-1"><a href="motif-analysis-meme-suite.html#cb465-1" tabindex="-1"></a>pander<span class="sc">::</span><span class="fu">pander</span>(<span class="fu">sessionInfo</span>())</span></code></pre></div>
+<p><strong>R version 4.3.1 (2023-06-16)</strong></p>
+<p><strong>Platform:</strong> aarch64-apple-darwin20 (64-bit)</p>
+<p><strong>locale:</strong>
+en_US.UTF-8||en_US.UTF-8||en_US.UTF-8||C||en_US.UTF-8||en_US.UTF-8</p>
+<p><strong>attached base packages:</strong>
+<em>stats4</em>, <em>stats</em>, <em>graphics</em>, <em>grDevices</em>, <em>utils</em>, <em>datasets</em>, <em>methods</em> and <em>base</em></p>
+<p><strong>other attached packages:</strong>
+<em>NbClust(v.3.0.1)</em>, <em>factoextra(v.1.0.7)</em>, <em>universalmotif(v.1.20.0)</em>, <em>curl(v.5.1.0)</em>, <em>memes(v.1.10.0)</em>, <em>biomaRt(v.2.58.0)</em>, <em>data.table(v.1.14.8)</em>, <em>ggfx(v.1.0.1)</em>, <em>patchwork(v.1.1.3)</em>, <em>ggkegg(v.0.99.4)</em>, <em>tidygraph(v.1.2.3)</em>, <em>XML(v.3.99-0.14)</em>, <em>ggraph(v.2.1.0)</em>, <em>KEGGgraph(v.1.62.0)</em>, <em>ggupset(v.0.3.0)</em>, <em>pathview(v.1.42.0)</em>, <em>BiocFileCache(v.2.10.0)</em>, <em>dbplyr(v.2.3.4)</em>, <em>DOSE(v.3.28.0)</em>, <em>ggrepel(v.0.9.4)</em>, <em>viridis(v.0.6.4)</em>, <em>viridisLite(v.0.4.2)</em>, <em>scales(v.1.2.1)</em>, <em>Glimma(v.2.12.0)</em>, <em>DESeq2(v.1.41.12)</em>, <em>edgeR(v.3.99.5)</em>, <em>limma(v.3.58.0)</em>, <em>reactable(v.0.4.4)</em>, <em>webshot2(v.0.1.1)</em>, <em>statmod(v.1.5.0)</em>, <em>Rsubread(v.2.16.0)</em>, <em>ShortRead(v.1.60.0)</em>, <em>GenomicAlignments(v.1.38.0)</em>, <em>SummarizedExperiment(v.1.32.0)</em>, <em>MatrixGenerics(v.1.14.0)</em>, <em>matrixStats(v.1.0.0)</em>, <em>Rsamtools(v.2.18.0)</em>, <em>GenomicRanges(v.1.54.0)</em>, <em>Biostrings(v.2.70.1)</em>, <em>GenomeInfoDb(v.1.38.0)</em>, <em>XVector(v.0.42.0)</em>, <em>BiocParallel(v.1.36.0)</em>, <em>Rfastp(v.1.12.0)</em>, <em>org.Sc.sgd.db(v.3.18.0)</em>, <em>AnnotationDbi(v.1.64.0)</em>, <em>IRanges(v.2.36.0)</em>, <em>S4Vectors(v.0.40.0)</em>, <em>Biobase(v.2.62.0)</em>, <em>BiocGenerics(v.0.48.0)</em>, <em>clusterProfiler(v.4.10.0)</em>, <em>ggVennDiagram(v.1.2.3)</em>, <em>tidytree(v.0.4.5)</em>, <em>igraph(v.1.5.1)</em>, <em>janitor(v.2.2.0)</em>, <em>BiocManager(v.1.30.22)</em>, <em>pander(v.0.6.5)</em>, <em>knitr(v.1.44)</em>, <em>here(v.1.0.1)</em>, <em>lubridate(v.1.9.3)</em>, <em>forcats(v.1.0.0)</em>, <em>stringr(v.1.5.0)</em>, <em>dplyr(v.1.1.3)</em>, <em>purrr(v.1.0.2)</em>, <em>readr(v.2.1.4)</em>, <em>tidyr(v.1.3.0)</em>, <em>tibble(v.3.2.1)</em>, <em>ggplot2(v.3.4.4)</em>, <em>tidyverse(v.2.0.0)</em> and <em>pacman(v.0.5.1)</em></p>
+<p><strong>loaded via a namespace (and not attached):</strong>
+<em>fs(v.1.6.3)</em>, <em>bitops(v.1.0-7)</em>, <em>enrichplot(v.1.22.0)</em>, <em>HDO.db(v.0.99.1)</em>, <em>httr(v.1.4.7)</em>, <em>RColorBrewer(v.1.1-3)</em>, <em>Rgraphviz(v.2.46.0)</em>, <em>tools(v.4.3.1)</em>, <em>utf8(v.1.2.4)</em>, <em>R6(v.2.5.1)</em>, <em>lazyeval(v.0.2.2)</em>, <em>GetoptLong(v.1.0.5)</em>, <em>withr(v.2.5.1)</em>, <em>prettyunits(v.1.2.0)</em>, <em>gridExtra(v.2.3)</em>, <em>textshaping(v.0.3.7)</em>, <em>cli(v.3.6.1)</em>, <em>Cairo(v.1.6-1)</em>, <em>scatterpie(v.0.2.1)</em>, <em>sass(v.0.4.7)</em>, <em>systemfonts(v.1.0.5)</em>, <em>yulab.utils(v.0.1.0)</em>, <em>gson(v.0.1.0)</em>, <em>R.utils(v.2.12.2)</em>, <em>rstudioapi(v.0.15.0)</em>, <em>RSQLite(v.2.3.1)</em>, <em>generics(v.0.1.3)</em>, <em>gridGraphics(v.0.5-1)</em>, <em>hwriter(v.1.3.2.1)</em>, <em>GO.db(v.3.18.0)</em>, <em>Matrix(v.1.6-1.1)</em>, <em>interp(v.1.1-4)</em>, <em>fansi(v.1.0.5)</em>, <em>abind(v.1.4-5)</em>, <em>R.methodsS3(v.1.8.2)</em>, <em>lifecycle(v.1.0.3)</em>, <em>yaml(v.2.3.7)</em>, <em>snakecase(v.0.11.1)</em>, <em>qvalue(v.2.34.0)</em>, <em>SparseArray(v.1.2.0)</em>, <em>grid(v.4.3.1)</em>, <em>blob(v.1.2.4)</em>, <em>promises(v.1.2.1)</em>, <em>crayon(v.1.5.2)</em>, <em>lattice(v.0.22-5)</em>, <em>cowplot(v.1.1.1)</em>, <em>chromote(v.0.1.2)</em>, <em>KEGGREST(v.1.42.0)</em>, <em>magick(v.2.8.1)</em>, <em>pillar(v.1.9.0)</em>, <em>fgsea(v.1.28.0)</em>, <em>rjson(v.0.2.21)</em>, <em>codetools(v.0.2-19)</em>, <em>fastmatch(v.1.1-4)</em>, <em>glue(v.1.6.2)</em>, <em>ggfun(v.0.1.3)</em>, <em>remotes(v.2.4.2.1)</em>, <em>vctrs(v.0.6.4)</em>, <em>png(v.0.1-8)</em>, <em>treeio(v.1.26.0)</em>, <em>testthat(v.3.2.0)</em>, <em>gtable(v.0.3.4)</em>, <em>cachem(v.1.0.8)</em>, <em>xfun(v.0.40)</em>, <em>S4Arrays(v.1.2.0)</em>, <em>mime(v.0.12)</em>, <em>RVenn(v.1.1.0)</em>, <em>interactiveDisplayBase(v.1.40.0)</em>, <em>ellipsis(v.0.3.2)</em>, <em>nlme(v.3.1-163)</em>, <em>ggtree(v.3.10.0)</em>, <em>bit64(v.4.0.5)</em>, <em>progress(v.1.2.2)</em>, <em>filelock(v.1.0.2)</em>, <em>rprojroot(v.2.0.3)</em>, <em>bslib(v.0.5.1)</em>, <em>colorspace(v.2.1-0)</em>, <em>DBI(v.1.1.3)</em>, <em>tidyselect(v.1.2.0)</em>, <em>processx(v.3.8.2)</em>, <em>bit(v.4.0.5)</em>, <em>compiler(v.4.3.1)</em>, <em>graph(v.1.80.0)</em>, <em>xml2(v.1.3.5)</em>, <em>desc(v.1.4.2)</em>, <em>DelayedArray(v.0.28.0)</em>, <em>bookdown(v.0.36)</em>, <em>shadowtext(v.0.1.2)</em>, <em>rappdirs(v.0.3.3)</em>, <em>digest(v.0.6.33)</em>, <em>rmarkdown(v.2.25)</em>, <em>htmltools(v.0.5.6.1)</em>, <em>pkgconfig(v.2.0.3)</em>, <em>jpeg(v.0.1-10)</em>, <em>fastmap(v.1.1.1)</em>, <em>rlang(v.1.1.1)</em>, <em>GlobalOptions(v.0.1.2)</em>, <em>htmlwidgets(v.1.6.2)</em>, <em>shiny(v.1.7.5.1)</em>, <em>farver(v.2.1.1)</em>, <em>jquerylib(v.0.1.4)</em>, <em>jsonlite(v.1.8.7)</em>, <em>R.oo(v.1.25.0)</em>, <em>GOSemSim(v.2.28.0)</em>, <em>RCurl(v.1.98-1.12)</em>, <em>magrittr(v.2.0.3)</em>, <em>GenomeInfoDbData(v.1.2.11)</em>, <em>ggplotify(v.0.1.2)</em>, <em>munsell(v.0.5.0)</em>, <em>Rcpp(v.1.0.11)</em>, <em>ape(v.5.7-1)</em>, <em>stringi(v.1.7.12)</em>, <em>brio(v.1.1.3)</em>, <em>zlibbioc(v.1.48.0)</em>, <em>MASS(v.7.3-60)</em>, <em>AnnotationHub(v.3.10.0)</em>, <em>plyr(v.1.8.9)</em>, <em>org.Hs.eg.db(v.3.18.0)</em>, <em>ggseqlogo(v.0.1)</em>, <em>parallel(v.4.3.1)</em>, <em>HPO.db(v.0.99.2)</em>, <em>deldir(v.1.0-9)</em>, <em>graphlayouts(v.1.0.1)</em>, <em>splines(v.4.3.1)</em>, <em>hms(v.1.1.3)</em>, <em>locfit(v.1.5-9.8)</em>, <em>ps(v.1.7.5)</em>, <em>pkgload(v.1.3.3)</em>, <em>reshape2(v.1.4.4)</em>, <em>BiocVersion(v.3.18.0)</em>, <em>evaluate(v.0.22)</em>, <em>latticeExtra(v.0.6-30)</em>, <em>tzdb(v.0.4.0)</em>, <em>tweenr(v.2.0.2)</em>, <em>httpuv(v.1.6.12)</em>, <em>polyclip(v.1.10-6)</em>, <em>ggforce(v.0.4.1)</em>, <em>xtable(v.1.8-4)</em>, <em>MPO.db(v.0.99.7)</em>, <em>later(v.1.3.1)</em>, <em>ragg(v.1.2.6)</em>, <em>websocket(v.1.4.1)</em>, <em>aplot(v.0.2.2)</em>, <em>memoise(v.2.0.1)</em>, <em>timechange(v.0.2.0)</em> and <em>cmdfun(v.1.0.2)</em></p>
+
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="kegg-analysis.html" class="navigation navigation-prev navigation-unique" aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": false,
+"facebook": true,
+"twitter": true,
+"linkedin": false,
+"weibo": false,
+"instapaper": false,
+"vk": false,
+"whatsapp": false,
+"all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": "https://github.com/USERNAME/REPO/edit/BRANCH/12-motif_analysis.Rmd",
+"text": "Edit"
+},
+"history": {
+"link": null,
+"text": null
+},
+"view": {
+"link": null,
+"text": null
+},
+"download": ["_main.pdf", "_main.epub"],
+"search": {
+"engine": "fuse",
+"options": null
+},
+"toc": {
+"collapse": "subsection"
+}
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.9/latest.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>

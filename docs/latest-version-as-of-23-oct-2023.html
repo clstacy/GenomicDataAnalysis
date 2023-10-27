@@ -1,0 +1,482 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>Chapter 14 Latest version as of 23 Oct 2023, | Genomic Data Analysis Course Exercises</title>
+  <meta name="description" content="These are exercises created for the 2023 course: Genomic Data Analysis at the University of Arkansas." />
+  <meta name="generator" content="bookdown 0.36 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="Chapter 14 Latest version as of 23 Oct 2023, | Genomic Data Analysis Course Exercises" />
+  <meta property="og:type" content="book" />
+  
+  <meta property="og:description" content="These are exercises created for the 2023 course: Genomic Data Analysis at the University of Arkansas." />
+  <meta name="github-repo" content="clstacy/GenomicDataAnalysis" />
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Chapter 14 Latest version as of 23 Oct 2023, | Genomic Data Analysis Course Exercises" />
+  
+  <meta name="twitter:description" content="These are exercises created for the 2023 course: Genomic Data Analysis at the University of Arkansas." />
+  
+
+<meta name="author" content="Carson Stacy &amp; Jeffrey Lewis" />
+
+
+<meta name="date" content="2023-10-27" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="define-meme-version.html"/>
+<link rel="next" href="install-meme-if-not-already-installed.html"/>
+<script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+<link href="libs/anchor-sections-1.1.0/anchor-sections.css" rel="stylesheet" />
+<link href="libs/anchor-sections-1.1.0/anchor-sections-hash.css" rel="stylesheet" />
+<script src="libs/anchor-sections-1.1.0/anchor-sections.js"></script>
+<script src="libs/core-js-2.5.3/shim.min.js"></script>
+<script src="libs/react-18.2.0/react.min.js"></script>
+<script src="libs/react-18.2.0/react-dom.min.js"></script>
+<script src="libs/reactwidget-1.0.0/react-tools.js"></script>
+<script src="libs/htmlwidgets-1.6.2/htmlwidgets.js"></script>
+<link href="libs/reactable-0.4.4/reactable.css" rel="stylesheet" />
+<script src="libs/reactable-binding-0.4.4/reactable.js"></script>
+<link href="libs/datatables-1/datatables.css" rel="stylesheet" />
+<script src="libs/datatables-1/datatables.min.js"></script>
+<link href="libs/vega-1/vega_plots.css" rel="stylesheet" />
+<script src="libs/vega-1/vega.min.js"></script>
+<link href="libs/vega-tooltip-1/vega-tooltip.css" rel="stylesheet" />
+<script src="libs/vega-tooltip-1/vega-tooltip.js"></script>
+<script src="libs/FileSaver-1/FileSaver.js"></script>
+<script src="libs/GlimmaV2-1/XYSpecs.js"></script>
+<script src="libs/GlimmaV2-1/MDSSpecs.js"></script>
+<script src="libs/GlimmaV2-1/expressionSpec.js"></script>
+<script src="libs/GlimmaV2-1/makeTooltip.js"></script>
+<script src="libs/GlimmaV2-1/saveTools.js"></script>
+<script src="libs/glimmaXY-binding-2.10.0/glimmaXY.js"></script>
+
+
+<style type="text/css">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+<style type="text/css">
+  
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+</style>
+
+<link rel="stylesheet" href="style.css" type="text/css" />
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li><a href="./">Genomic Data Analysis Exercises</a></li>
+
+<li class="divider"></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Preface</a>
+<ul>
+<li class="chapter" data-level="0.1" data-path="index.html"><a href="index.html#usage"><i class="fa fa-check"></i><b>0.1</b> Usage</a></li>
+<li class="chapter" data-level="0.2" data-path="index.html"><a href="index.html#key-features"><i class="fa fa-check"></i><b>0.2</b> <strong>Key Features</strong></a></li>
+<li class="chapter" data-level="0.3" data-path="index.html"><a href="index.html#disclaimer"><i class="fa fa-check"></i><b>0.3</b> Disclaimer</a></li>
+</ul></li>
+<li class="chapter" data-level="1" data-path="getting-started-in-r.html"><a href="getting-started-in-r.html"><i class="fa fa-check"></i><b>1</b> Getting Started in R</a>
+<ul>
+<li class="chapter" data-level="1.1" data-path="getting-started-in-r.html"><a href="getting-started-in-r.html#exercise-description"><i class="fa fa-check"></i><b>1.1</b> Exercise Description</a></li>
+<li class="chapter" data-level="1.2" data-path="getting-started-in-r.html"><a href="getting-started-in-r.html#learning-outcomes"><i class="fa fa-check"></i><b>1.2</b> Learning outcomes</a></li>
+<li class="chapter" data-level="1.3" data-path="getting-started-in-r.html"><a href="getting-started-in-r.html#using-r-and-rstudio"><i class="fa fa-check"></i><b>1.3</b> Using R and RStudio</a></li>
+<li class="chapter" data-level="1.4" data-path="getting-started-in-r.html"><a href="getting-started-in-r.html#load-data-directly-from-the-url"><i class="fa fa-check"></i><b>1.4</b> Load data directly from the URL</a></li>
+<li class="chapter" data-level="1.5" data-path="getting-started-in-r.html"><a href="getting-started-in-r.html#working-with-data-in-r"><i class="fa fa-check"></i><b>1.5</b> Working with data in R</a></li>
+<li class="chapter" data-level="1.6" data-path="getting-started-in-r.html"><a href="getting-started-in-r.html#looking-at-data-in-rstudio"><i class="fa fa-check"></i><b>1.6</b> Looking at Data in RStudio</a></li>
+<li class="chapter" data-level="1.7" data-path="getting-started-in-r.html"><a href="getting-started-in-r.html#exploring-the-data"><i class="fa fa-check"></i><b>1.7</b> Exploring the data</a></li>
+</ul></li>
+<li class="chapter" data-level="2" data-path="gene-ontology.html"><a href="gene-ontology.html"><i class="fa fa-check"></i><b>2</b> Gene Ontology</a>
+<ul>
+<li class="chapter" data-level="2.1" data-path="gene-ontology.html"><a href="gene-ontology.html#description"><i class="fa fa-check"></i><b>2.1</b> Description</a></li>
+<li class="chapter" data-level="2.2" data-path="gene-ontology.html"><a href="gene-ontology.html#learning-outcomes-1"><i class="fa fa-check"></i><b>2.2</b> Learning outcomes</a></li>
+<li class="chapter" data-level="2.3" data-path="gene-ontology.html"><a href="gene-ontology.html#analysis-workflow"><i class="fa fa-check"></i><b>2.3</b> Analysis Workflow</a></li>
+<li class="chapter" data-level="2.4" data-path="gene-ontology.html"><a href="gene-ontology.html#get-de-gene-list"><i class="fa fa-check"></i><b>2.4</b> Get DE gene list</a>
+<ul>
+<li class="chapter" data-level="2.4.1" data-path="gene-ontology.html"><a href="gene-ontology.html#saving-ggplot-output-to-a-file"><i class="fa fa-check"></i><b>2.4.1</b> Saving ggplot output to a file</a></li>
+</ul></li>
+<li class="chapter" data-level="2.5" data-path="gene-ontology.html"><a href="gene-ontology.html#the-hypergeometric-distribution-in-practice"><i class="fa fa-check"></i><b>2.5</b> The Hypergeometric Distribution in practice</a></li>
+<li class="chapter" data-level="2.6" data-path="gene-ontology.html"><a href="gene-ontology.html#now-it-is-your-turn"><i class="fa fa-check"></i><b>2.6</b> Now it is your turn</a>
+<ul>
+<li class="chapter" data-level="2.6.1" data-path="gene-ontology.html"><a href="gene-ontology.html#run-enrichment"><i class="fa fa-check"></i><b>2.6.1</b> Run Enrichment</a></li>
+<li class="chapter" data-level="2.6.2" data-path="gene-ontology.html"><a href="gene-ontology.html#see-the-data"><i class="fa fa-check"></i><b>2.6.2</b> see the data</a></li>
+<li class="chapter" data-level="2.6.3" data-path="gene-ontology.html"><a href="gene-ontology.html#create-plots"><i class="fa fa-check"></i><b>2.6.3</b> create plots</a></li>
+</ul></li>
+<li class="chapter" data-level="2.7" data-path="gene-ontology.html"><a href="gene-ontology.html#questions"><i class="fa fa-check"></i><b>2.7</b> Questions</a></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="working-with-sequences-raw-data-quality-control.html"><a href="working-with-sequences-raw-data-quality-control.html"><i class="fa fa-check"></i><b>3</b> Working with Sequences: Raw Data &amp; Quality Control</a>
+<ul>
+<li class="chapter" data-level="3.1" data-path="working-with-sequences-raw-data-quality-control.html"><a href="working-with-sequences-raw-data-quality-control.html#description-1"><i class="fa fa-check"></i><b>3.1</b> Description</a></li>
+<li class="chapter" data-level="3.2" data-path="working-with-sequences-raw-data-quality-control.html"><a href="working-with-sequences-raw-data-quality-control.html#learning-outcomes-2"><i class="fa fa-check"></i><b>3.2</b> Learning outcomes</a></li>
+<li class="chapter" data-level="3.3" data-path="working-with-sequences-raw-data-quality-control.html"><a href="working-with-sequences-raw-data-quality-control.html#download-fastq"><i class="fa fa-check"></i><b>3.3</b> Download fastq</a></li>
+<li class="chapter" data-level="3.4" data-path="working-with-sequences-raw-data-quality-control.html"><a href="working-with-sequences-raw-data-quality-control.html#examining-fastq"><i class="fa fa-check"></i><b>3.4</b> Examining fastq</a></li>
+<li class="chapter" data-level="3.5" data-path="working-with-sequences-raw-data-quality-control.html"><a href="working-with-sequences-raw-data-quality-control.html#trimming"><i class="fa fa-check"></i><b>3.5</b> Trimming</a>
+<ul>
+<li class="chapter" data-level="3.5.1" data-path="working-with-sequences-raw-data-quality-control.html"><a href="working-with-sequences-raw-data-quality-control.html#automate-for-list-of-files"><i class="fa fa-check"></i><b>3.5.1</b> Automate for list of files</a></li>
+</ul></li>
+<li class="chapter" data-level="3.6" data-path="working-with-sequences-raw-data-quality-control.html"><a href="working-with-sequences-raw-data-quality-control.html#batch-file-processing"><i class="fa fa-check"></i><b>3.6</b> Batch file processing</a>
+<ul>
+<li class="chapter" data-level="3.6.1" data-path="working-with-sequences-raw-data-quality-control.html"><a href="working-with-sequences-raw-data-quality-control.html#running-rfastp-creates-several-files"><i class="fa fa-check"></i><b>3.6.1</b> Running RfastP creates several files:</a></li>
+</ul></li>
+<li class="chapter" data-level="3.7" data-path="working-with-sequences-raw-data-quality-control.html"><a href="working-with-sequences-raw-data-quality-control.html#qc-and-adapters"><i class="fa fa-check"></i><b>3.7</b> QC and adapters</a></li>
+<li class="chapter" data-level="3.8" data-path="working-with-sequences-raw-data-quality-control.html"><a href="working-with-sequences-raw-data-quality-control.html#running-fastqc"><i class="fa fa-check"></i><b>3.8</b> Running fastqc</a></li>
+<li class="chapter" data-level="3.9" data-path="working-with-sequences-raw-data-quality-control.html"><a href="working-with-sequences-raw-data-quality-control.html#multiqc-for-qc-on-mutliple-samples"><i class="fa fa-check"></i><b>3.9</b> Multiqc for QC on mutliple samples</a></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="read-mapping.html"><a href="read-mapping.html"><i class="fa fa-check"></i><b>4</b> Read Mapping</a>
+<ul>
+<li class="chapter" data-level="4.1" data-path="read-mapping.html"><a href="read-mapping.html#alignment"><i class="fa fa-check"></i><b>4.1</b> Alignment</a></li>
+<li class="chapter" data-level="4.2" data-path="read-mapping.html"><a href="read-mapping.html#retrieve-the-genome"><i class="fa fa-check"></i><b>4.2</b> Retrieve the genome</a></li>
+<li class="chapter" data-level="4.3" data-path="read-mapping.html"><a href="read-mapping.html#build-rsubread-index"><i class="fa fa-check"></i><b>4.3</b> Build Rsubread Index</a></li>
+<li class="chapter" data-level="4.4" data-path="read-mapping.html"><a href="read-mapping.html#pseudomapping-with-salmon"><i class="fa fa-check"></i><b>4.4</b> Pseudomapping with Salmon</a>
+<ul>
+<li class="chapter" data-level="4.4.1" data-path="read-mapping.html"><a href="read-mapping.html#create-conda-env"><i class="fa fa-check"></i><b>4.4.1</b> Create Conda Env</a></li>
+<li class="chapter" data-level="4.4.2" data-path="read-mapping.html"><a href="read-mapping.html#download-transcriptome"><i class="fa fa-check"></i><b>4.4.2</b> Download transcriptome</a></li>
+<li class="chapter" data-level="4.4.3" data-path="read-mapping.html"><a href="read-mapping.html#building-the-salmon-index"><i class="fa fa-check"></i><b>4.4.3</b> Building the Salmon index</a></li>
+</ul></li>
+<li class="chapter" data-level="4.5" data-path="read-mapping.html"><a href="read-mapping.html#questions-1"><i class="fa fa-check"></i><b>4.5</b> Questions</a>
+<ul>
+<li class="chapter" data-level="4.5.1" data-path="read-mapping.html"><a href="read-mapping.html#with-rsubread"><i class="fa fa-check"></i><b>4.5.1</b> With Rsubread:</a></li>
+<li class="chapter" data-level="4.5.2" data-path="read-mapping.html"><a href="read-mapping.html#with-salmon"><i class="fa fa-check"></i><b>4.5.2</b> With Salmon:</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="5" data-path="read-counting.html"><a href="read-counting.html"><i class="fa fa-check"></i><b>5</b> Read Counting</a>
+<ul>
+<li class="chapter" data-level="5.1" data-path="read-counting.html"><a href="read-counting.html#featurecounts"><i class="fa fa-check"></i><b>5.1</b> featureCounts</a>
+<ul>
+<li class="chapter" data-level="5.1.1" data-path="read-counting.html"><a href="read-counting.html#locate-bam-files"><i class="fa fa-check"></i><b>5.1.1</b> Locate BAM files</a></li>
+<li class="chapter" data-level="5.1.2" data-path="read-counting.html"><a href="read-counting.html#retrieve-the-genome-annotation"><i class="fa fa-check"></i><b>5.1.2</b> Retrieve the genome annotation</a></li>
+<li class="chapter" data-level="5.1.3" data-path="read-counting.html"><a href="read-counting.html#counting-with-featurecounts"><i class="fa fa-check"></i><b>5.1.3</b> Counting with FeatureCounts</a></li>
+<li class="chapter" data-level="5.1.4" data-path="read-counting.html"><a href="read-counting.html#counts-object"><i class="fa fa-check"></i><b>5.1.4</b> Counts object</a></li>
+<li class="chapter" data-level="5.1.5" data-path="read-counting.html"><a href="read-counting.html#saving-fc-object-for-future-use"><i class="fa fa-check"></i><b>5.1.5</b> Saving <code>fc</code> object for future use</a></li>
+<li class="chapter" data-level="5.1.6" data-path="read-counting.html"><a href="read-counting.html#rsubread-qc"><i class="fa fa-check"></i><b>5.1.6</b> RSubread QC</a></li>
+</ul></li>
+<li class="chapter" data-level="5.2" data-path="read-counting.html"><a href="read-counting.html#salmon"><i class="fa fa-check"></i><b>5.2</b> Salmon</a>
+<ul>
+<li class="chapter" data-level="5.2.1" data-path="read-counting.html"><a href="read-counting.html#pseudomapping-counting"><i class="fa fa-check"></i><b>5.2.1</b> Pseudomapping &amp; Counting</a></li>
+</ul></li>
+<li class="chapter" data-level="5.3" data-path="read-counting.html"><a href="read-counting.html#questions-2"><i class="fa fa-check"></i><b>5.3</b> Questions</a></li>
+</ul></li>
+<li class="chapter" data-level="6" data-path="differential-expression-edger.html"><a href="differential-expression-edger.html"><i class="fa fa-check"></i><b>6</b> Differential Expression: EdgeR</a>
+<ul>
+<li class="chapter" data-level="6.1" data-path="differential-expression-edger.html"><a href="differential-expression-edger.html#description-2"><i class="fa fa-check"></i><b>6.1</b> Description</a></li>
+<li class="chapter" data-level="6.2" data-path="differential-expression-edger.html"><a href="differential-expression-edger.html#learning-outcomes-3"><i class="fa fa-check"></i><b>6.2</b> Learning outcomes</a></li>
+<li class="chapter" data-level="6.3" data-path="differential-expression-edger.html"><a href="differential-expression-edger.html#loading-in-the-featurecounts-object"><i class="fa fa-check"></i><b>6.3</b> Loading in the featureCounts object</a></li>
+<li class="chapter" data-level="6.4" data-path="differential-expression-edger.html"><a href="differential-expression-edger.html#count-loading-and-annotation"><i class="fa fa-check"></i><b>6.4</b> Count loading and Annotation</a></li>
+<li class="chapter" data-level="6.5" data-path="differential-expression-edger.html"><a href="differential-expression-edger.html#filtering-to-remove-low-counts"><i class="fa fa-check"></i><b>6.5</b> Filtering to remove low counts</a></li>
+<li class="chapter" data-level="6.6" data-path="differential-expression-edger.html"><a href="differential-expression-edger.html#normalization-for-composition-bias"><i class="fa fa-check"></i><b>6.6</b> Normalization for composition bias</a></li>
+<li class="chapter" data-level="6.7" data-path="differential-expression-edger.html"><a href="differential-expression-edger.html#mds-plots"><i class="fa fa-check"></i><b>6.7</b> MDS plots</a></li>
+<li class="chapter" data-level="6.8" data-path="differential-expression-edger.html"><a href="differential-expression-edger.html#exploring-differences-between-libraries"><i class="fa fa-check"></i><b>6.8</b> Exploring differences between libraries</a></li>
+<li class="chapter" data-level="6.9" data-path="differential-expression-edger.html"><a href="differential-expression-edger.html#estimate-dispersion"><i class="fa fa-check"></i><b>6.9</b> Estimate Dispersion</a></li>
+<li class="chapter" data-level="6.10" data-path="differential-expression-edger.html"><a href="differential-expression-edger.html#testing-for-differential-expression"><i class="fa fa-check"></i><b>6.10</b> Testing for differential expression</a></li>
+<li class="chapter" data-level="6.11" data-path="differential-expression-edger.html"><a href="differential-expression-edger.html#looking-at-all-contrasts-at-once"><i class="fa fa-check"></i><b>6.11</b> Looking at all contrasts at once</a></li>
+<li class="chapter" data-level="6.12" data-path="differential-expression-edger.html"><a href="differential-expression-edger.html#questions-3"><i class="fa fa-check"></i><b>6.12</b> Questions</a></li>
+<li class="chapter" data-level="6.13" data-path="differential-expression-edger.html"><a href="differential-expression-edger.html#a-template-set-of-code-chunks-for-doing-this-is-below"><i class="fa fa-check"></i><b>6.13</b> A template set of code chunks for doing this is below:</a></li>
+</ul></li>
+<li class="chapter" data-level="7" data-path="differential-expression-deseq2.html"><a href="differential-expression-deseq2.html"><i class="fa fa-check"></i><b>7</b> Differential Expression: DESeq2</a>
+<ul>
+<li class="chapter" data-level="7.1" data-path="differential-expression-deseq2.html"><a href="differential-expression-deseq2.html#description-3"><i class="fa fa-check"></i><b>7.1</b> Description</a></li>
+<li class="chapter" data-level="7.2" data-path="differential-expression-deseq2.html"><a href="differential-expression-deseq2.html#learning-outcomes-4"><i class="fa fa-check"></i><b>7.2</b> Learning outcomes</a></li>
+<li class="chapter" data-level="7.3" data-path="differential-expression-deseq2.html"><a href="differential-expression-deseq2.html#loading-in-the-featurecounts-object-1"><i class="fa fa-check"></i><b>7.3</b> Loading in the featureCounts object</a></li>
+<li class="chapter" data-level="7.4" data-path="differential-expression-deseq2.html"><a href="differential-expression-deseq2.html#count-loading-and-annotation-1"><i class="fa fa-check"></i><b>7.4</b> Count loading and Annotation</a></li>
+<li class="chapter" data-level="7.5" data-path="differential-expression-deseq2.html"><a href="differential-expression-deseq2.html#filtering-to-remove-low-counts-1"><i class="fa fa-check"></i><b>7.5</b> Filtering to remove low counts</a></li>
+<li class="chapter" data-level="7.6" data-path="differential-expression-deseq2.html"><a href="differential-expression-deseq2.html#testing-for-differential-expression-1"><i class="fa fa-check"></i><b>7.6</b> Testing for differential expression</a></li>
+<li class="chapter" data-level="7.7" data-path="differential-expression-deseq2.html"><a href="differential-expression-deseq2.html#questions-4"><i class="fa fa-check"></i><b>7.7</b> Questions</a></li>
+</ul></li>
+<li class="chapter" data-level="8" data-path="differential-expression-limma.html"><a href="differential-expression-limma.html"><i class="fa fa-check"></i><b>8</b> Differential Expression: limma</a>
+<ul>
+<li class="chapter" data-level="8.1" data-path="differential-expression-limma.html"><a href="differential-expression-limma.html#description-4"><i class="fa fa-check"></i><b>8.1</b> Description</a></li>
+<li class="chapter" data-level="8.2" data-path="differential-expression-limma.html"><a href="differential-expression-limma.html#learning-objectives"><i class="fa fa-check"></i><b>8.2</b> Learning Objectives</a></li>
+<li class="chapter" data-level="8.3" data-path="differential-expression-limma.html"><a href="differential-expression-limma.html#loading-in-the-count-data-file"><i class="fa fa-check"></i><b>8.3</b> Loading in the count data file</a></li>
+<li class="chapter" data-level="8.4" data-path="differential-expression-limma.html"><a href="differential-expression-limma.html#count-loading-and-annotation-2"><i class="fa fa-check"></i><b>8.4</b> Count loading and Annotation</a></li>
+<li class="chapter" data-level="8.5" data-path="differential-expression-limma.html"><a href="differential-expression-limma.html#filtering-to-remove-low-counts-2"><i class="fa fa-check"></i><b>8.5</b> Filtering to remove low counts</a></li>
+<li class="chapter" data-level="8.6" data-path="differential-expression-limma.html"><a href="differential-expression-limma.html#normalization-for-composition-bias-1"><i class="fa fa-check"></i><b>8.6</b> Normalization for composition bias</a></li>
+<li class="chapter" data-level="8.7" data-path="differential-expression-limma.html"><a href="differential-expression-limma.html#exploring-differences-between-libraries-1"><i class="fa fa-check"></i><b>8.7</b> Exploring differences between libraries</a></li>
+<li class="chapter" data-level="8.8" data-path="differential-expression-limma.html"><a href="differential-expression-limma.html#estimate-dispersion-1"><i class="fa fa-check"></i><b>8.8</b> Estimate Dispersion</a></li>
+<li class="chapter" data-level="8.9" data-path="differential-expression-limma.html"><a href="differential-expression-limma.html#testing-for-differential-expression-2"><i class="fa fa-check"></i><b>8.9</b> Testing for differential expression</a></li>
+<li class="chapter" data-level="8.10" data-path="differential-expression-limma.html"><a href="differential-expression-limma.html#examining-a-specific-contrast"><i class="fa fa-check"></i><b>8.10</b> Examining a specific contrast</a></li>
+<li class="chapter" data-level="8.11" data-path="differential-expression-limma.html"><a href="differential-expression-limma.html#visualization"><i class="fa fa-check"></i><b>8.11</b> Visualization</a>
+<ul>
+<li class="chapter" data-level="8.11.1" data-path="differential-expression-limma.html"><a href="differential-expression-limma.html#ma-lot"><i class="fa fa-check"></i><b>8.11.1</b> MA lot</a></li>
+</ul></li>
+<li class="chapter" data-level="8.12" data-path="differential-expression-limma.html"><a href="differential-expression-limma.html#treat-testing"><i class="fa fa-check"></i><b>8.12</b> <code>treat()</code> testing</a>
+<ul>
+<li class="chapter" data-level="8.12.1" data-path="differential-expression-limma.html"><a href="differential-expression-limma.html#visualize-de-genes-from-treat-using-lfc1"><i class="fa fa-check"></i><b>8.12.1</b> Visualize DE genes from <code>Treat</code> using lfc=1</a></li>
+</ul></li>
+<li class="chapter" data-level="8.13" data-path="differential-expression-limma.html"><a href="differential-expression-limma.html#comparing-de-analysis-softwares"><i class="fa fa-check"></i><b>8.13</b> Comparing DE analysis softwares</a></li>
+<li class="chapter" data-level="8.14" data-path="differential-expression-limma.html"><a href="differential-expression-limma.html#correlation-between-logfc-estimates-across-softwares"><i class="fa fa-check"></i><b>8.14</b> Correlation between logFC estimates across softwares</a></li>
+<li class="chapter" data-level="8.15" data-path="differential-expression-limma.html"><a href="differential-expression-limma.html#questions-5"><i class="fa fa-check"></i><b>8.15</b> Questions</a></li>
+</ul></li>
+<li class="chapter" data-level="9" data-path="visualizing-differential-expression-results.html"><a href="visualizing-differential-expression-results.html"><i class="fa fa-check"></i><b>9</b> Visualizing Differential Expression Results</a>
+<ul>
+<li class="chapter" data-level="9.1" data-path="visualizing-differential-expression-results.html"><a href="visualizing-differential-expression-results.html#description-5"><i class="fa fa-check"></i><b>9.1</b> Description</a></li>
+<li class="chapter" data-level="9.2" data-path="visualizing-differential-expression-results.html"><a href="visualizing-differential-expression-results.html#learning-outcomes-5"><i class="fa fa-check"></i><b>9.2</b> Learning Outcomes</a></li>
+<li class="chapter" data-level="9.3" data-path="visualizing-differential-expression-results.html"><a href="visualizing-differential-expression-results.html#ma-plot"><i class="fa fa-check"></i><b>9.3</b> MA-plot</a></li>
+<li class="chapter" data-level="9.4" data-path="visualizing-differential-expression-results.html"><a href="visualizing-differential-expression-results.html#volcano-plot"><i class="fa fa-check"></i><b>9.4</b> Volcano Plot</a></li>
+<li class="chapter" data-level="9.5" data-path="visualizing-differential-expression-results.html"><a href="visualizing-differential-expression-results.html#using-glimma-for-an-interactive-visualization"><i class="fa fa-check"></i><b>9.5</b> Using Glimma for an interactive visualization</a>
+<ul>
+<li class="chapter" data-level="9.5.1" data-path="visualizing-differential-expression-results.html"><a href="visualizing-differential-expression-results.html#ma-plots"><i class="fa fa-check"></i><b>9.5.1</b> MA plots</a></li>
+<li class="chapter" data-level="9.5.2" data-path="visualizing-differential-expression-results.html"><a href="visualizing-differential-expression-results.html#volcano-plots"><i class="fa fa-check"></i><b>9.5.2</b> Volcano Plots</a></li>
+</ul></li>
+<li class="chapter" data-level="9.6" data-path="visualizing-differential-expression-results.html"><a href="visualizing-differential-expression-results.html#generating-bar-graph-summaries"><i class="fa fa-check"></i><b>9.6</b> Generating bar graph summaries</a></li>
+<li class="chapter" data-level="9.7" data-path="visualizing-differential-expression-results.html"><a href="visualizing-differential-expression-results.html#exercise"><i class="fa fa-check"></i><b>9.7</b> Exercise</a></li>
+</ul></li>
+<li class="chapter" data-level="10" data-path="clustering.html"><a href="clustering.html"><i class="fa fa-check"></i><b>10</b> Clustering</a>
+<ul>
+<li class="chapter" data-level="10.1" data-path="clustering.html"><a href="clustering.html#description-6"><i class="fa fa-check"></i><b>10.1</b> Description</a></li>
+<li class="chapter" data-level="10.2" data-path="clustering.html"><a href="clustering.html#learning-outcomes-6"><i class="fa fa-check"></i><b>10.2</b> Learning outcomes</a></li>
+<li class="chapter" data-level="10.3" data-path="clustering.html"><a href="clustering.html#cluster-3.0"><i class="fa fa-check"></i><b>10.3</b> Cluster 3.0</a>
+<ul>
+<li class="chapter" data-level="10.3.1" data-path="clustering.html"><a href="clustering.html#generating-a-pcl-file"><i class="fa fa-check"></i><b>10.3.1</b> Generating a PCL file</a></li>
+<li class="chapter" data-level="10.3.2" data-path="clustering.html"><a href="clustering.html#filtering-data"><i class="fa fa-check"></i><b>10.3.2</b> Filtering data</a></li>
+<li class="chapter" data-level="10.3.3" data-path="clustering.html"><a href="clustering.html#hierarchical-clustering"><i class="fa fa-check"></i><b>10.3.3</b> Hierarchical Clustering</a></li>
+<li class="chapter" data-level="10.3.4" data-path="clustering.html"><a href="clustering.html#k-means-clustering"><i class="fa fa-check"></i><b>10.3.4</b> <em>K</em>-Means Clustering</a></li>
+</ul></li>
+<li class="chapter" data-level="10.4" data-path="clustering.html"><a href="clustering.html#visualizing-clusters-with-java-treeview"><i class="fa fa-check"></i><b>10.4</b> Visualizing Clusters with Java TreeView</a>
+<ul>
+<li class="chapter" data-level="10.4.1" data-path="clustering.html"><a href="clustering.html#changing-pixel-settings."><i class="fa fa-check"></i><b>10.4.1</b> Changing pixel settings.</a></li>
+<li class="chapter" data-level="10.4.2" data-path="clustering.html"><a href="clustering.html#selecting-groups-of-genes."><i class="fa fa-check"></i><b>10.4.2</b> Selecting groups of genes.</a></li>
+</ul></li>
+<li class="chapter" data-level="10.5" data-path="clustering.html"><a href="clustering.html#performing-clustering-on-yeast-stress-data"><i class="fa fa-check"></i><b>10.5</b> Performing clustering on yeast stress data</a></li>
+<li class="chapter" data-level="10.6" data-path="clustering.html"><a href="clustering.html#questions-6"><i class="fa fa-check"></i><b>10.6</b> Questions</a></li>
+</ul></li>
+<li class="chapter" data-level="11" data-path="kegg-analysis.html"><a href="kegg-analysis.html"><i class="fa fa-check"></i><b>11</b> KEGG Analysis</a>
+<ul>
+<li class="chapter" data-level="11.1" data-path="kegg-analysis.html"><a href="kegg-analysis.html#description-7"><i class="fa fa-check"></i><b>11.1</b> Description</a></li>
+<li class="chapter" data-level="11.2" data-path="kegg-analysis.html"><a href="kegg-analysis.html#learning-outcomes-7"><i class="fa fa-check"></i><b>11.2</b> Learning Outcomes</a></li>
+<li class="chapter" data-level="11.3" data-path="kegg-analysis.html"><a href="kegg-analysis.html#loading-in-the-edger-de-gene-file-output."><i class="fa fa-check"></i><b>11.3</b> Loading in the edgeR DE gene file output.</a></li>
+<li class="chapter" data-level="11.4" data-path="kegg-analysis.html"><a href="kegg-analysis.html#kegg-analysis-1"><i class="fa fa-check"></i><b>11.4</b> KEGG Analysis</a>
+<ul>
+<li class="chapter" data-level="11.4.1" data-path="kegg-analysis.html"><a href="kegg-analysis.html#using-kegga-from-limma"><i class="fa fa-check"></i><b>11.4.1</b> Using <code>kegga()</code> from limma</a></li>
+<li class="chapter" data-level="11.4.2" data-path="kegg-analysis.html"><a href="kegg-analysis.html#pathway-visualization"><i class="fa fa-check"></i><b>11.4.2</b> Pathway Visualization</a></li>
+</ul></li>
+<li class="chapter" data-level="11.5" data-path="kegg-analysis.html"><a href="kegg-analysis.html#visualize-on-the-kegg-website"><i class="fa fa-check"></i><b>11.5</b> Visualize on the KEGG website</a></li>
+<li class="chapter" data-level="11.6" data-path="kegg-analysis.html"><a href="kegg-analysis.html#comparing-paralogs-in-common-pathways"><i class="fa fa-check"></i><b>11.6</b> Comparing Paralogs in common pathways</a></li>
+<li class="chapter" data-level="11.7" data-path="kegg-analysis.html"><a href="kegg-analysis.html#additional-kegg-related-analyses"><i class="fa fa-check"></i><b>11.7</b> Additional KEGG-related analyses</a></li>
+<li class="chapter" data-level="11.8" data-path="kegg-analysis.html"><a href="kegg-analysis.html#dotplot"><i class="fa fa-check"></i><b>11.8</b> Dotplot</a></li>
+<li class="chapter" data-level="11.9" data-path="kegg-analysis.html"><a href="kegg-analysis.html#cnetplot"><i class="fa fa-check"></i><b>11.9</b> cnetplot</a></li>
+<li class="chapter" data-level="11.10" data-path="kegg-analysis.html"><a href="kegg-analysis.html#heatplot"><i class="fa fa-check"></i><b>11.10</b> heatplot</a></li>
+<li class="chapter" data-level="11.11" data-path="kegg-analysis.html"><a href="kegg-analysis.html#upsetplot"><i class="fa fa-check"></i><b>11.11</b> upsetplot</a></li>
+<li class="chapter" data-level="11.12" data-path="kegg-analysis.html"><a href="kegg-analysis.html#emapplot"><i class="fa fa-check"></i><b>11.12</b> emapplot</a></li>
+<li class="chapter" data-level="11.13" data-path="kegg-analysis.html"><a href="kegg-analysis.html#gsea"><i class="fa fa-check"></i><b>11.13</b> GSEA</a>
+<ul>
+<li class="chapter" data-level="11.13.1" data-path="kegg-analysis.html"><a href="kegg-analysis.html#gsekegg-vs-enrichkegg"><i class="fa fa-check"></i><b>11.13.1</b> <code>gseKEGG</code> vs <code>enrichKEGG</code></a></li>
+<li class="chapter" data-level="11.13.2" data-path="kegg-analysis.html"><a href="kegg-analysis.html#gsea-visualization"><i class="fa fa-check"></i><b>11.13.2</b> GSEA visualization</a></li>
+</ul></li>
+<li class="chapter" data-level="11.14" data-path="kegg-analysis.html"><a href="kegg-analysis.html#questions-7"><i class="fa fa-check"></i><b>11.14</b> Questions</a></li>
+</ul></li>
+<li class="chapter" data-level="12" data-path="motif-analysis-meme-suite.html"><a href="motif-analysis-meme-suite.html"><i class="fa fa-check"></i><b>12</b> Motif Analysis: MEME Suite</a>
+<ul>
+<li class="chapter" data-level="12.1" data-path="motif-analysis-meme-suite.html"><a href="motif-analysis-meme-suite.html#description-8"><i class="fa fa-check"></i><b>12.1</b> Description</a></li>
+<li class="chapter" data-level="12.2" data-path="motif-analysis-meme-suite.html"><a href="motif-analysis-meme-suite.html#learning-objectives-1"><i class="fa fa-check"></i><b>12.2</b> Learning Objectives</a></li>
+<li class="chapter" data-level="12.3" data-path="motif-analysis-meme-suite.html"><a href="motif-analysis-meme-suite.html#install-meme-suite"><i class="fa fa-check"></i><b>12.3</b> Install MEME suite</a></li>
+</ul></li>
+<li class="chapter" data-level="13" data-path="define-meme-version.html"><a href="define-meme-version.html"><i class="fa fa-check"></i><b>13</b> Define MEME version</a></li>
+<li class="chapter" data-level="14" data-path="latest-version-as-of-23-oct-2023.html"><a href="latest-version-as-of-23-oct-2023.html"><i class="fa fa-check"></i><b>14</b> Latest version as of 23 Oct 2023,</a></li>
+<li class="chapter" data-level="15" data-path="install-meme-if-not-already-installed.html"><a href="install-meme-if-not-already-installed.html"><i class="fa fa-check"></i><b>15</b> Install MEME if not already installed</a>
+<ul>
+<li class="chapter" data-level="15.1" data-path="install-meme-if-not-already-installed.html"><a href="install-meme-if-not-already-installed.html#analysis-motif-discovery-for-msn24-vs-wt-response-to-etoh"><i class="fa fa-check"></i><b>15.1</b> Analysis: Motif Discovery for <em>msn2/4</em>∆∆ vs WT Response to EtOH</a>
+<ul>
+<li class="chapter" data-level="15.1.1" data-path="install-meme-if-not-already-installed.html"><a href="install-meme-if-not-already-installed.html#retrieve-logfc-and-fdr-values"><i class="fa fa-check"></i><b>15.1.1</b> Retrieve LogFC and FDR values</a></li>
+<li class="chapter" data-level="15.1.2" data-path="install-meme-if-not-already-installed.html"><a href="install-meme-if-not-already-installed.html#selecting-an-ensembl-biomart-database-and-dataset"><i class="fa fa-check"></i><b>15.1.2</b> Selecting an Ensembl BioMart database and dataset</a></li>
+<li class="chapter" data-level="15.1.3" data-path="install-meme-if-not-already-installed.html"><a href="install-meme-if-not-already-installed.html#retrieve-upstream-sequences"><i class="fa fa-check"></i><b>15.1.3</b> Retrieve Upstream Sequences</a></li>
+</ul></li>
+<li class="chapter" data-level="15.2" data-path="install-meme-if-not-already-installed.html"><a href="install-meme-if-not-already-installed.html#motif-analysis-for-genes-downregulated-in-etoh-response"><i class="fa fa-check"></i><b>15.2</b> Motif Analysis for Genes Downregulated in EtOH Response</a>
+<ul>
+<li class="chapter" data-level="15.2.1" data-path="install-meme-if-not-already-installed.html"><a href="install-meme-if-not-already-installed.html#run-meme-enrichment"><i class="fa fa-check"></i><b>15.2.1</b> Run Meme enrichment</a></li>
+<li class="chapter" data-level="15.2.2" data-path="install-meme-if-not-already-installed.html"><a href="install-meme-if-not-already-installed.html#run-steme-enrichment"><i class="fa fa-check"></i><b>15.2.2</b> Run STEME enrichment</a></li>
+<li class="chapter" data-level="15.2.3" data-path="install-meme-if-not-already-installed.html"><a href="install-meme-if-not-already-installed.html#run-tomtom-analysis"><i class="fa fa-check"></i><b>15.2.3</b> Run TomTom analysis</a></li>
+</ul></li>
+<li class="chapter" data-level="15.3" data-path="install-meme-if-not-already-installed.html"><a href="install-meme-if-not-already-installed.html#skn7-exposed-to-salt."><i class="fa fa-check"></i><b>15.3</b> <em>skn7</em>∆ exposed to salt.</a></li>
+<li class="chapter" data-level="15.4" data-path="install-meme-if-not-already-installed.html"><a href="install-meme-if-not-already-installed.html#questions-8"><i class="fa fa-check"></i><b>15.4</b> Questions</a></li>
+</ul></li>
+<li class="divider"></li>
+<li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
+
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Genomic Data Analysis Course Exercises</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="latest-version-as-of-23-oct-2023" class="section level1 hasAnchor" number="14">
+<h1><span class="header-section-number">Chapter 14</span> Latest version as of 23 Oct 2023,<a href="latest-version-as-of-23-oct-2023.html#latest-version-as-of-23-oct-2023" class="anchor-section" aria-label="Anchor link to header"></a></h1>
+<p>version=“5.5.4”</p>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="define-meme-version.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="install-meme-if-not-already-installed.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": false,
+"facebook": true,
+"twitter": true,
+"linkedin": false,
+"weibo": false,
+"instapaper": false,
+"vk": false,
+"whatsapp": false,
+"all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": "https://github.com/USERNAME/REPO/edit/BRANCH/12-motif_analysis.Rmd",
+"text": "Edit"
+},
+"history": {
+"link": null,
+"text": null
+},
+"view": {
+"link": null,
+"text": null
+},
+"download": ["_main.pdf", "_main.epub"],
+"search": {
+"engine": "fuse",
+"options": null
+},
+"toc": {
+"collapse": "subsection"
+}
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.9/latest.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>
