@@ -280,10 +280,10 @@ KEGG_data <- kegg_results %>%
 
 # process thsi data to visualize
 graph.data <- KEGG_data$data %>%
-  filter(type == "gene") %>%
+  filter(type == "gene") %>% #View()
   mutate(showname = strsplit(name, " ") %>% str_remove_all("sce:")) %>%
   mutate(showname = gsub('c\\(|\\)|"|"|,', '', showname)) %>%
-  separate_rows(showname, sep = " ") %>%
+  separate_rows(showname, sep = " ") %>% #View()
   left_join(rownames_to_column(res_all$table),
             by = c("showname" = "rowname")) %>%
   left_join(KEGG_reactions, by = "reaction") %>%
@@ -302,7 +302,7 @@ max_fc <-
 # create graph for WT stress response
 WT.graph <- graph.data %>%
   ggplot(aes(x = x, y = y)) +
-  overlay_raw_map(pathway_to_graph) +
+  overlay_raw_map(pathway_to_graph, transparent_colors = c("#cccccc","#FFFFFF","#BFBFFF","#BFFFBF")) +
   ggrepel::geom_label_repel(
     aes(label = gene_name, fill = logFC.EtOHvsMOCK.WT),
     box.padding = 0.05,
@@ -324,7 +324,7 @@ WT.graph <- graph.data %>%
 # create graph for mutant stress response
 msn24.graph <- graph.data %>%
   ggplot(aes(x = x, y = y)) +
-  overlay_raw_map(pathway_to_graph) +
+  overlay_raw_map(pathway_to_graph, transparent_colors = c("#ffffff"))+
   ggrepel::geom_label_repel(
     aes(label = gene_name, fill = logFC.EtOHvsMOCK.MSN24dd),
     box.padding = 0.05,
@@ -352,6 +352,17 @@ side_by_side_graph <- WT.graph + msn24.graph +
 
 # display the graph
 side_by_side_graph
+```
+TESTING:::
+```{r}
+g <- pathway(pathway_to_graph,group_rect_nudge=0) ## Obtain pathway graph (don't show grouping rect)
+gg <- ggraph(g, layout="manual", x=x, y=y)+
+  # geom_node_point(aes(filter=type=="compound"), color="blue", size=2)+
+  overlay_raw_map(pathway_to_graph)+
+  geom_node_rect(color="white",fill="white",aes(filter=type=="gene"))+
+  geom_node_rect(color="white",fill="white",aes(filter=type=="ortholog"))+
+  theme_void()
+gg
 ```
 
 Once we are happy with our graph. We might want to save it. We can save it like this
